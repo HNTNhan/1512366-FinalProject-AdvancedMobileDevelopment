@@ -123,9 +123,9 @@ const ListCourses = (props) => {
   const searchView = () => {
     return <View style={{flexDirection: 'row', margin: 5}}>
       <TextInput style={{flex: 1, borderWidth: 1, borderColor: 'gray'}} placeholder='Search text'/>
-      <Button onPress={() => {
-        console.log('Search')
-      }} title='Search'  style={{width: 60, height:40, backgroundColor: 'white'}}/>
+      <Button onPress={() => { console.log('Search')}}
+              title='Search'
+              style={{width: 60, height:40, backgroundColor: 'white'}}/>
     </View>
   }
 

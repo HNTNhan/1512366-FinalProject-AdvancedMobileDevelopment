@@ -1,5 +1,6 @@
 import React from 'react';
 import {View, Image, Text, StyleSheet, TouchableOpacity, Alert, Share} from 'react-native';
+import SubCourseInfo from "../../Common/sub-course-info";
 
 const ListCourseItems = (props) => {
   return <TouchableOpacity style={styles.item}
@@ -24,11 +25,7 @@ const ListCourseItems = (props) => {
                            }}
   >
     <Image style={styles.image} source={require('../../../../assets/ic_course.png')} />
-    <View style={styles.detail}>
-      <Text>{props.item.title}</Text>
-      <Text style={styles.darkText}>{props.item.author}</Text>
-      <Text style={styles.darkText}>{`${props.item.level} . ${props.item.released} . ${props.item.duration}`}</Text>
-    </View>
+    <SubCourseInfo itme={props.item} />
   </TouchableOpacity>
 };
 
@@ -42,12 +39,6 @@ const styles = StyleSheet.create({
   image: {
     width: 100,
     height: 50,
-  },
-  detail: {
-    margin: 5,
-  },
-  darkText: {
-    color: 'darkgray',
   },
 })
 

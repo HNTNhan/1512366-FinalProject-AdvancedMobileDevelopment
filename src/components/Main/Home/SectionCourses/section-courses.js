@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, ScrollView} from 'react-native';
+import {View, Text, ScrollView, TouchableOpacity, StyleSheet} from 'react-native';
 import SectionCourseItems from "../SectionCourseItems/section-course-items";
 import PathItems from "../PathItems/path-items";
 
@@ -45,7 +45,7 @@ const SectionCourses = (props) => {
       duration: '17 Hours'
     },
     {
-      id: 2,
+      id: 3,
       title: 'Google: Associate Android Developer (AAD)',
       no_courses: '8 Courses',
       duration: '28 Hours'
@@ -60,14 +60,37 @@ const SectionCourses = (props) => {
     return paths.map( item => <PathItems key={item.id} item={item} />);
   }
 
-  return <View>
-    <View>
-      <Text>{props.title}</Text>
+  return <View style={styles.container}>
+    <View style={styles.header}>
+      <Text style={{fontSize: 18}}>{props.title}</Text>
+      <TouchableOpacity style={styles.button}
+                        onPress={() => { console.log('See all')}}>
+        <Text>  See all >  </Text>
+      </TouchableOpacity>
     </View>
     <ScrollView horizontal={true}>
       {props.title!=='Path' ? renderListItems(courses) : renderPathItems(paths)}
     </ScrollView>
   </View>
 };
+
+const styles = StyleSheet.create({
+  container: {
+    marginBottom: 10,
+  },
+  header: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 5,
+  },
+  button: {
+    backgroundColor: 'rgb(219, 221, 231)',
+    padding: 2,
+    borderRadius: 10,
+    marginRight: 20,
+    textAlign: 'center',
+  }
+})
 
 export default SectionCourses;
