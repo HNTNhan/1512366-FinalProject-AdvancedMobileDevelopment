@@ -1,6 +1,7 @@
 import React from 'react';
 import {View, Text, ScrollView} from 'react-native';
 import SectionCourseItems from "../SectionCourseItems/section-course-items";
+import PathItems from "../PathItems/path-items";
 
 const SectionCourses = (props) => {
   const courses = [
@@ -29,17 +30,42 @@ const SectionCourses = (props) => {
       duration: '3h 15m',
     },
   ];
-  
+
+  const paths = [
+    {
+      id: 1,
+      title: '.NET Base Class Library',
+      no_courses: '6 Courses',
+      duration: '18 Hours'
+    },
+    {
+      id: 2,
+      title: 'Android Development with Kotlin — App Fundamentals',
+      no_courses: '5 Courses',
+      duration: '17 Hours'
+    },
+    {
+      id: 2,
+      title: 'Google: Associate Android Developer (AAD)',
+      no_courses: '8 Courses',
+      duration: '28 Hours'
+    }
+  ];
+
   const renderListItems = (courses) => {
     return courses.map( item => <SectionCourseItems key={item.id} item={item} />);
   }
-  
+
+  const renderPathItems = (paths) => {
+    return paths.map( item => <PathItems key={item.id} item={item} />);
+  }
+
   return <View>
     <View>
       <Text>{props.title}</Text>
     </View>
     <ScrollView horizontal={true}>
-      {renderListItems(courses)}
+      {props.title!=='Path' ? renderListItems(courses) : renderPathItems(paths)}
     </ScrollView>
   </View>
 };
