@@ -89,7 +89,6 @@ const styles = StyleSheet.create({
     padding: 2,
     borderRadius: 10,
     marginRight: 20,
-    textAlign: 'center',
   },
   titleText: {
     fontSize: 18,

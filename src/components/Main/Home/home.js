@@ -17,9 +17,4 @@ const Home = (props) => {
   </ScrollView>
 };
 
-const styles = StyleSheet.create({
-  section: {
-
-  }
-})
 export default Home;

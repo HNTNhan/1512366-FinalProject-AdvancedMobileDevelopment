@@ -1,20 +1,42 @@
-import React from 'react';
-import {View, TextInput, TouchableOpacity, StyleSheet, Text} from 'react-native';
+import React, {useState} from 'react';
+import {View, TextInput, TouchableOpacity, StyleSheet, Text, Keyboard } from 'react-native';
 import BeforeSearch from "./BeforeSearch/before-search";
+import WhileSearch from "./WhileSearch/while-search";
 
 const Search = (props) => {
+  const [isDisplayCancel, setDisplayCancel] = useState(false);
+  let [searchKey, setSearchKey] = useState('');
 
   return <View style={styles.container}>
-    <View style={styles.searchContainer}>
-      <TextInput style={styles.searchInput} placeholder='Search' placeholderTextColor='darkgray'/>
-      <TouchableOpacity
-        onPress={() => { console.log('Search')}}
-        title='Search'
-        style={styles.cancelButton}>
-        <Text style={styles.buttonText}>Cancel</Text>
-      </TouchableOpacity>
+      <View style={styles.searchContainer}>
+        <TextInput
+          style={styles.searchInput}
+          placeholder='Search'
+          placeholderTextColor='darkgray'
+          onChangeText={(text) => setSearchKey(text)}
+          value={searchKey}
+          returnKeyType={"search"}
+          onSubmitEditing={(target) => {
+            console.log(target.nativeEvent)
+          }}
+        />
+        { searchKey!=='' ?
+          <TouchableOpacity
+            onPress={() => {
+              setSearchKey('')
+              setDisplayCancel(false)
+            }}
+            title='Cancel'
+            style={styles.cancelButton}>
+            <Text style={styles.buttonText}>Cancel</Text>
+          </TouchableOpacity>
+          : null
+        }
     </View>
-    <BeforeSearch/>
+    {
+      searchKey==='' ?  <BeforeSearch /> : <WhileSearch searchKey={searchKey} />
+    }
+
 
   </View>
 };
@@ -37,7 +59,7 @@ const styles = StyleSheet.create({
   },
   cancelButton: {
     width: 60,
-    height:40,
+    height:30,
     justifyContent: 'center',
 
   },
