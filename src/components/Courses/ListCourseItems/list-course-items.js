@@ -25,7 +25,7 @@ const ListCourseItems = (props) => {
                            }}
   >
     <Image style={styles.image} source={require('../../../../assets/ic_course.png')} />
-    <SubCourseInfo itme={props.item} />
+    <SubCourseInfo item={props.item} />
   </TouchableOpacity>
 };
 
@@ -33,8 +33,6 @@ const styles = StyleSheet.create({
   item: {
     flexDirection: 'row',
     margin: 5,
-    borderBottomColor: 'gray',
-    borderBottomWidth: 1,
   },
   image: {
     width: 100,

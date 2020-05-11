@@ -61,14 +61,14 @@ const SectionCourses = (props) => {
   }
 
   return <View style={styles.container}>
-    <View style={styles.header}>
-      <Text style={{fontSize: 18}}>{props.title}</Text>
+    <View style={styles.title}>
+      <Text style={styles.titleText}>{props.title}</Text>
       <TouchableOpacity style={styles.button}
-                        onPress={() => { console.log('See all')}}>
+                        onPress={props.onPress}>
         <Text>  See all >  </Text>
       </TouchableOpacity>
     </View>
-    <ScrollView horizontal={true}>
+    <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
       {props.title!=='Path' ? renderListItems(courses) : renderPathItems(paths)}
     </ScrollView>
   </View>
@@ -78,7 +78,7 @@ const styles = StyleSheet.create({
   container: {
     marginBottom: 10,
   },
-  header: {
+  title: {
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -90,6 +90,10 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginRight: 20,
     textAlign: 'center',
+  },
+  titleText: {
+    fontSize: 18,
+    fontWeight: 'bold',
   }
 })
 

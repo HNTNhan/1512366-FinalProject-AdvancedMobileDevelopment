@@ -11,7 +11,8 @@ const SubCourseInfo = (props) => {
 
 const styles = StyleSheet.create({
   detail: {
-    margin: 5,
+    marginLeft: 5,
+    flexShrink: 1,
   },
   darkText: {
     color: 'darkgray',
