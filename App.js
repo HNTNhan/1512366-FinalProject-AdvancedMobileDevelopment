@@ -5,6 +5,9 @@ import ListCourses from "./src/components/Courses/ListCourses/list-courses";
 import Download from "./src/components/Main/Download/download";
 import Browse from "./src/components/Main/Browse/browse";
 import Search from "./src/components/Main/Search/search";
+import AccountManagement from "./src/components/AccountManagement/AccountManagement";
+import Profile from "./src/components/AccountManagement/Profile/profile";
+import Setting from "./src/components/AccountManagement/Setting/setting";
 
 export default function App() {
   return (
@@ -13,7 +16,10 @@ export default function App() {
       {/*<ListCourses />*/}
       {/*<Download />*/}
       {/*<Browse />*/}
-      <Search />
+      {/*<Search />*/}
+      {/*<AccountManagement />*/}
+      {/*<Profile userName={"Thien Nhan"}/>*/}
+      <Setting userName={"Thien Nhan"} email={'123@gmail.com'}/>
     </View>
   );
 }

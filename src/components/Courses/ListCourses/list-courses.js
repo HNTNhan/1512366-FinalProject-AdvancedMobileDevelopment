@@ -123,7 +123,6 @@ const styles = StyleSheet.create({
     height: 1,
     width: "100%",
     backgroundColor: "darkgray",
-
   },
 })
 export default ListCourses;

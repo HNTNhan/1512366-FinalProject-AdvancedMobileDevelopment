@@ -1,49 +1,53 @@
 import React from 'react';
-import {ScrollView, StyleSheet, Text, View, TouchableOpacity} from 'react-native';
+import {ScrollView, StyleSheet, Text, View, TouchableOpacity, Image} from 'react-native';
 
 const PopularSkills = (props) => {
   const skills = [
       {
         id: 1,
         name: 'Angular',
-        check: false,
+        checked: false,
       },
       {
         id: 2,
         name: 'JavaScript',
-        check: true,
+        checked: true,
       },
       {
         id: 3,
         name: 'C#',
-        check: false,
+        checked: false,
       },
       {
         id: 4,
         name: 'Java',
-        check: false,
+        checked: false,
       },
       {
         id: 5,
         name: 'Data Analysis',
-        check: false,
+        checked: false,
       },
       {
         id: 6,
         name: 'Python',
-        check: false,
+        checked: false,
       },
       {
         id: 7,
         name: 'React',
-        check: true,
+        checked: true,
       },
   ]
 
   const renderListItems = (skills) => {
     return skills.map( (item) =>
       <TouchableOpacity key={item.id} style={styles.button}>
-        <Text style={{textAlign: 'center'}}>  {item.name}  </Text>
+        {
+          item.checked===true ? <Image source={require('../../../../../assets/ic_check.png')} style={styles.image}/>
+             : null
+        }
+        <Text style={{textAlign: 'center'}}> {item.name}</Text>
       </TouchableOpacity>
     );
   }
@@ -71,10 +75,17 @@ const styles = StyleSheet.create({
     padding: 2,
     borderRadius: 10,
     marginRight: 20,
+    flexDirection: 'row',
+    paddingHorizontal: 10,
   },
   titleText: {
     fontSize: 18,
     fontWeight: 'bold',
+  },
+  image: {
+    width: 20,
+    height: 20,
+    borderRadius: 50,
   }
 })
 
