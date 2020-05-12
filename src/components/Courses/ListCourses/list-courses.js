@@ -1,12 +1,15 @@
 import React from 'react';
 import {View, FlatList, TextInput, Button, SectionList, Text, StyleSheet} from 'react-native';
 import ListCourseItems from "../ListCourseItems/list-course-items";
+import ListPathItems from "../ListPathItems/list-path-items";
+import ListAuthorItems from "../ListAuthorItems/list-author-items";
+import SectionTitle from "../../Common/section-title";
 
 const ListCourses = (props) => {
-
   const courses =[
     {
-      title: 'Mobile',
+      title: 'Courses',
+      num: '42 results',
       data: [
         {
           id: 1,
@@ -35,60 +38,47 @@ const ListCourses = (props) => {
       ]
     },
     {
-      title: 'Web',
+      title: 'Paths',
+      num: '8 results',
       data: [
         {
           id: 1,
-          title: 'Building Mobile Apps with Visual Studio Tools for Apache Cordova',
-          author: 'Matt Honeycutt',
-          level: 'Beginner',
-          released: 'Jan 17, 2017',
-          duration: '3h 41m',
+          title: '.NET Base Class Library',
+          no_courses: '6 Courses',
+          duration: '18 Hours'
         },
         {
           id: 2,
-          title: 'Building Hybrid Mobile Applications with HTML5',
-          author: 'Jon Flanders',
-          level: 'Intermediate',
-          released: 'Mar 9, 2012',
-          duration: '4h 25m',
+          title: 'Android Development with Kotlin — App Fundamentals',
+          no_courses: '5 Courses',
+          duration: '17 Hours'
         },
         {
           id: 3,
-          title: 'Building Cross-Platform Mobile Apps with Telerik AppBuilder',
-          author: 'Steve Michelotti',
-          level: 'Intermediate',
-          released: 'Jan 18, 2014',
-          duration: '3h 15m',
+          title: 'Google: Associate Android Developer (AAD)',
+          no_courses: '8 Courses',
+          duration: '28 Hours'
         },
       ]
     },
     {
-      title: '123',
+      title: 'Authors',
+      num: '11 results',
       data: [
         {
           id: 1,
-          title: 'Building Mobile Apps with Visual Studio Tools for Apache Cordova',
           author: 'Matt Honeycutt',
-          level: 'Beginner',
-          released: 'Jan 17, 2017',
-          duration: '3h 41m',
+          no_courses: '5 course',
         },
         {
           id: 2,
-          title: 'Building Hybrid Mobile Applications with HTML5',
           author: 'Jon Flanders',
-          level: 'Intermediate',
-          released: 'Mar 9, 2012',
-          duration: '4h 25m',
+          no_courses: '10 course',
         },
         {
           id: 3,
-          title: 'Building Cross-Platform Mobile Apps with Telerik AppBuilder',
           author: 'Steve Michelotti',
-          level: 'Intermediate',
-          released: 'Jan 18, 2014',
-          duration: '3h 15m',
+          no_courses: '8 course',
         },
       ]
     },
@@ -118,8 +108,11 @@ const ListCourses = (props) => {
 
     <SectionList
       sections={courses}
-      renderItem={({item}) => <ListCourseItems item={item}/>}
-      renderSectionHeader={({section: {title}}) => <Text>{title}</Text>}
+      renderItem={({item}) =>
+        Object.keys(item).length===6 ? <ListCourseItems item={item}/>
+                : Object.keys(item).length==4 ? <ListPathItems item={item}/> : <ListAuthorItems item={item}/>
+      }
+      renderSectionHeader={({section: {title, num}}) => <SectionTitle title={title} button={num}/>}
       ItemSeparatorComponent= {renderSeparator}
     />
   </View>
@@ -130,7 +123,7 @@ const styles = StyleSheet.create({
     height: 1,
     width: "100%",
     backgroundColor: "darkgray",
-    marginLeft: 105,
+
   },
 })
 export default ListCourses;

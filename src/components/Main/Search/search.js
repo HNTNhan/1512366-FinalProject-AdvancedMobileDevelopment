@@ -2,10 +2,12 @@ import React, {useState} from 'react';
 import {View, TextInput, TouchableOpacity, StyleSheet, Text, Keyboard } from 'react-native';
 import BeforeSearch from "./BeforeSearch/before-search";
 import WhileSearch from "./WhileSearch/while-search";
+import ResultSearch from "./ResultSearch/result_search";
 
 const Search = (props) => {
   const [isDisplayCancel, setDisplayCancel] = useState(false);
-  let [searchKey, setSearchKey] = useState('');
+  const [searchKey, setSearchKey] = useState('');
+  const [showResult, setShowResult] = useState(false)
 
   return <View style={styles.container}>
       <View style={styles.searchContainer}>
@@ -13,11 +15,15 @@ const Search = (props) => {
           style={styles.searchInput}
           placeholder='Search'
           placeholderTextColor='darkgray'
-          onChangeText={(text) => setSearchKey(text)}
+          onChangeText={(text) => {
+            setSearchKey(text)
+            setShowResult(false)
+          }}
           value={searchKey}
           returnKeyType={"search"}
           onSubmitEditing={(target) => {
             console.log(target.nativeEvent)
+            setShowResult(true)
           }}
         />
         { searchKey!=='' ?
@@ -34,7 +40,8 @@ const Search = (props) => {
         }
     </View>
     {
-      searchKey==='' ?  <BeforeSearch /> : <WhileSearch searchKey={searchKey} />
+      showResult===false ? searchKey==='' ?  <BeforeSearch /> : <WhileSearch searchKey={searchKey} />
+      : <ResultSearch />
     }
 
 

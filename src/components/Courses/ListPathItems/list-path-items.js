@@ -1,0 +1,31 @@
+import React from 'react';
+import {View, StyleSheet, Image, Text, TouchableOpacity} from 'react-native';
+
+const ListPathItems = (props) => {
+  return <TouchableOpacity style={styles.item}>
+    <Image source={require('../../../../assets/ic_course.png')} style={styles.image}/>
+    <View style={styles.detail}>
+      <Text>{props.item.title}</Text>
+      <Text style={styles.darkText}>{props.item.no_courses}</Text>
+    </View>
+  </TouchableOpacity>
+};
+
+const styles = StyleSheet.create({
+  item: {
+    flexDirection: 'row',
+    marginVertical: 10,
+  },
+  image: {
+    width: 100,
+    height: 50,
+  },
+  detail: {
+    margin: 5,
+  },
+  darkText: {
+    color: 'darkgray',
+  },
+})
+
+export default ListPathItems;
