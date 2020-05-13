@@ -8,6 +8,7 @@ import Search from "./src/components/Main/Search/search";
 import AccountManagement from "./src/components/AccountManagement/AccountManagement";
 import Profile from "./src/components/AccountManagement/Profile/profile";
 import Setting from "./src/components/AccountManagement/Setting/setting";
+import Authentication from "./src/components/Authentication/Authentication";
 
 export default function App() {
   return (
@@ -19,7 +20,8 @@ export default function App() {
       {/*<Search />*/}
       {/*<AccountManagement />*/}
       {/*<Profile userName={"Thien Nhan"}/>*/}
-      <Setting userName={"Thien Nhan"} email={'123@gmail.com'}/>
+      {/*<Setting userName={"Thien Nhan"} email={'123@gmail.com'}/>*/}
+      <Authentication />
     </View>
   );
 }
@@ -28,6 +30,5 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     marginTop: 24,
-    padding: 10,
   },
 });
