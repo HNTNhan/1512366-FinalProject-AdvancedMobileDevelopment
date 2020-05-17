@@ -9,6 +9,8 @@ import AccountManagement from "./src/components/AccountManagement/AccountManagem
 import Profile from "./src/components/AccountManagement/Profile/profile";
 import Setting from "./src/components/AccountManagement/Setting/setting";
 import Authentication from "./src/components/Authentication/Authentication";
+import CourseDetail from "./src/components/CourseDetail/course-detail";
+import LocationMap from "./src/components/Others/LocationMap/location-map";
 
 export default function App() {
   return (
@@ -21,7 +23,9 @@ export default function App() {
       {/*<AccountManagement />*/}
       {/*<Profile userName={"Thien Nhan"}/>*/}
       {/*<Setting userName={"Thien Nhan"} email={'123@gmail.com'}/>*/}
-      <Authentication />
+      {/*<Authentication />*/}
+      {/*<CourseDetail />*/}
+      <LocationMap />
     </View>
   );
 }

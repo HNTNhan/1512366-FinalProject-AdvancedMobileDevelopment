@@ -2,9 +2,13 @@ import React, {useState} from 'react';
 import {ScrollView, StyleSheet, View} from 'react-native';
 import {Button, CheckBox, Text} from "react-native-elements";
 import InputTextSae from "../../Common/input-text-sae";
+import RNPickerSelect from 'react-native-picker-select';
+import countryList from 'react-select-country-list'
 
 const Register = (props) => {
   const [check, setCheck] = useState(false);
+  const countries = countryList().getData();
+  const [country, setCountry] = useState('');
 
   return <View style={{flex: 1}}>
     <ScrollView style={styles.container} contentContainerStyle={{paddingBottom: 100}}>
@@ -13,7 +17,14 @@ const Register = (props) => {
       <InputTextSae title={'First name*'}/>
       <InputTextSae title={'Last name*'}/>
       <InputTextSae title={'Phone'}/>
-      <InputTextSae title={'Country'}/>
+      <RNPickerSelect
+        placeholder={{label: "Select Country", value: null, color: '#03A9F4'}}
+        items={countries}
+        onValueChange={(value) => setCountry(value)}
+        style={{ ...picker}}
+        useNativeAndroidPickerStyle={false}
+      />
+
       <Text style={styles.text}>* Required field</Text>
       <CheckBox
         checked={check}
@@ -25,12 +36,34 @@ const Register = (props) => {
       <Button
         buttonStyle={styles.button}
         titleStyle={styles.buttonText}
-        onPress={() => console.log('Send email')}
+        onPress={() => console.log('Create Account')}
         title ='Create Account' />
     </ScrollView>
   </View>
 };
-
+const picker = StyleSheet.create({
+  inputAndroid: {
+    borderRadius: 7,
+    marginBottom: 5,
+    padding: 10,
+    color: 'white',
+    fontWeight: '600',
+    fontSize: 16,
+    backgroundColor: 'rgba(255, 255, 255, 0.15)',
+  },
+  inputIOS: {
+    borderRadius: 7,
+    marginBottom: 5,
+    padding: 10,
+    color: 'white',
+    fontWeight: '600',
+    fontSize: 16,
+    backgroundColor: 'rgba(255, 255, 255, 0.15)',
+  },
+  placeholder: {
+    color: '#03A9F4',
+  },
+})
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -47,23 +80,6 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 18,
   },
-  saeContainer: {
-    borderRadius: 7,
-    marginBottom: 5,
-    backgroundColor: 'rgba(255, 255, 255, 0.15)'
-  },
-  saeLabel: {
-    color: '#03A9F4',
-    fontWeight: '600',
-    paddingBottom: 12,
-    paddingHorizontal: 10,
-  },
-  saeInput: {
-    color: 'white',
-    marginHorizontal: 10,
-    fontSize: 16,
-    marginBottom: -5,
-  },
   button: {
     marginVertical: 5,
     borderRadius: 5,
@@ -73,6 +89,13 @@ const styles = StyleSheet.create({
     color: 'white',
     textAlign: 'center',
     fontSize: 18,
+  },
+  saeContainer: {
+    borderRadius: 7,
+    marginBottom: 5,
+    padding: 10,
+    color: 'white',
+    backgroundColor: 'rgba(255, 255, 255, 0.5)'
   },
 })
 export default Register;

@@ -108,9 +108,9 @@ const ListCourses = (props) => {
 
     <SectionList
       sections={courses}
-      renderItem={({item}) =>
-        Object.keys(item).length===6 ? <ListCourseItems item={item}/>
-                : Object.keys(item).length==4 ? <ListPathItems item={item}/> : <ListAuthorItems item={item}/>
+      renderItem={({item,index, section}) =>
+        section.title==="Courses" ? <ListCourseItems item={item}/>
+                : section.title==="Paths" ? <ListPathItems item={item}/> : <ListAuthorItems item={item}/>
       }
       renderSectionHeader={({section: {title, num}}) => <SectionTitle title={title} button={num}/>}
       ItemSeparatorComponent= {renderSeparator}
