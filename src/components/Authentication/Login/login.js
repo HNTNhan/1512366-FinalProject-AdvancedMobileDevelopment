@@ -1,12 +1,19 @@
-import React, {createRef, useState} from 'react';
+import React, {createRef, useEffect, useState} from 'react';
 import {View, TouchableOpacity, Text, StyleSheet, ScrollView} from 'react-native';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import { Sae } from 'react-native-textinput-effects';
 import {Button} from "react-native-elements";
+import {login} from "../../../core/services/authentication-services";
 
 const Login = (props) => {
-  const [userName, setUserName] = useState('');
-  const [password, setPassword] = useState('');
+  const [username, setUsername] = useState('admin');
+  const [password, setPassword] = useState('123456');
+  const [status, setStatus] = useState(null);
+  useEffect(() => {
+    if(status && status.status === 200){
+      props.navigation.navigate('Main')
+    }
+  }, [status])
 
   const saeInputText = (title, onChangeText) => {
     return <Sae
@@ -21,28 +28,44 @@ const Login = (props) => {
       borderHeight={2}
       autoCapitalize={'none'}
       autoCorrect={false}
+      caretHidden={true}
       style={styles.saeContainer}
+      value={title==='Password' ? password: username || ''}
       onChangeText={(text) => {
-        title==='Password' ? setPassword(text): setUserName(text)
-        console.log(title)
+        title==='Password' ? setPassword(text): setUsername(text)
       }}
     />
   }
 
+  const RenderLoginStatus = () => {
+    if(!status) {
+      return <View />
+    } else if(status.status === 200){
+      return <Text>Login successed!</Text>
+    } else {
+      return <View>
+        <Text>{status.errorString}</Text>
+      </View>
+    }
+  }
+
   return <View style={{flex: 1}}>
         <ScrollView style={styles.container} contentContainerStyle={{paddingBottom: 100}}>
+          <RenderLoginStatus />
           {saeInputText('Username (or Email)')}
           {saeInputText('Password')}
 
           <Button buttonStyle={styles.signInButton}
                   titleStyle={styles.signInButtonText}
-                  onPress={() => console.log('sign out')}
-                  disabled={userName.length>=3 ? password.length < 6 : true}
+                  onPress={() => {
+                    setStatus(login(username, password))
+                    //props.navigation.navigate('Main')
+                  }}
                   title = 'SIGN IN' />
           <Button
             buttonStyle={styles.button}
             titleStyle={styles.buttonText}
-            onPress={() => console.log('123')}
+            onPress={() => props.navigation.navigate('ForgetPassword')}
             title ='FORGOT PASSWORD' />
 
           <Button
@@ -54,7 +77,7 @@ const Login = (props) => {
           <Button
             buttonStyle={styles.button}
             titleStyle={styles.buttonText}
-            onPress={() => console.log('789')}
+            onPress={() => props.navigation.navigate('Register')}
             title= 'SIGN UP FREE' />
         </ScrollView>
   </View>
@@ -65,12 +88,14 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 30,
     paddingTop: 80,
-    backgroundColor: 'rgba(255, 255, 255, 0.05)'
+    backgroundColor: 'white'
   },
   saeContainer: {
     borderRadius: 7,
+    borderWidth: 2,
+    borderColor: 'gainsboro',
     marginBottom: 5,
-    backgroundColor: 'rgba(255, 255, 255, 0.15)'
+    backgroundColor: 'rgba(255, 255, 255, 0.8)'
   },
   saeLabel: {
     color: '#03A9F4',
@@ -79,7 +104,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
   },
   saeInput: {
-    color: 'white',
+    color: 'black',
     marginHorizontal: 10,
     fontSize: 16,
     marginBottom: -5,

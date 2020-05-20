@@ -1,16 +1,18 @@
 import {View} from "react-native";
 import React from "react";
+import {globleStyles} from "./styles";
 
 export const renderSeparator = () => {
   return (
-    <View style={styles.separator} />
+    <View style={globleStyles.separator} />
   );
 };
-// const styles = StyleSheet.create({
-//   separator: {
-//     height: 1,
-//     width: "100%",
-//     backgroundColor: "darkgray",
-//     marginLeft: 105,
-//   },
-// })
+
+export const colors = {
+  bottomTab: {
+    activeTintColor: '#1297E0',
+    inactiveTintColor: '#909090',
+  }
+}
+
+

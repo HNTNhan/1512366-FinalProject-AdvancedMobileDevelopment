@@ -17,6 +17,7 @@ const InputTextSae = (props) => {
     autoCapitalize={'none'}
     autoCorrect={false}
     style={styles.saeContainer}
+    onChangeText={(text) => console.log(text)}
   />
 };
 

@@ -5,7 +5,7 @@ import ListCourseItems from "../../Courses/ListCourseItems/list-course-items";
 const Download = (props) => {
   const courses =[
     {
-      id: 1,
+      id: '1',
       title: 'Building Mobile Apps with Visual Studio Tools for Apache Cordova',
       author: 'Matt Honeycutt',
       level: 'Beginner',
@@ -13,7 +13,7 @@ const Download = (props) => {
       duration: '3h 41m',
     },
     {
-      id: 2,
+      id: '2',
       title: 'Building Hybrid Mobile Applications with HTML5',
       author: 'Jon Flanders',
       level: 'Intermediate',
@@ -21,7 +21,7 @@ const Download = (props) => {
       duration: '4h 25m',
     },
     {
-      id: 3,
+      id: '3',
       title: 'Building Cross-Platform Mobile Apps with Telerik AppBuilder',
       author: 'Steve Michelotti',
       level: 'Intermediate',

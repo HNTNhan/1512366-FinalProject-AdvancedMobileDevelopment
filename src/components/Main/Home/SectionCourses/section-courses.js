@@ -76,7 +76,7 @@ const SectionCourses = (props) => {
 
 const styles = StyleSheet.create({
   container: {
-    marginBottom: 10,
+    marginVertical: 5,
   },
   title: {
     flex: 1,
