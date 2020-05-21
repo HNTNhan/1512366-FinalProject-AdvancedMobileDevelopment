@@ -46,10 +46,14 @@ const Download = (props) => {
     </View>
   }
 
+  const onPress = () => {
+    props.navigation.navigate('CourseDetail');
+  }
+
   return <View style={{backgroundColor: 'rgb(240, 239, 245)'}}>
     <FlatList
       data={courses}
-      renderItem={({item}) => <ListCourseItems item={item}/>}
+      renderItem={({item}) => <ListCourseItems item={item} onPress={onPress}/>}
       ItemSeparatorComponent= {renderSeparator}
       ListHeaderComponent = {renderHeader}
     />

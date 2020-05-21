@@ -7,10 +7,10 @@ import AllAuthorResult from "./AllAuthorResult/all-author-result";
 
 const ResultSearch = (props) => {
   return <View>
-    <AllResultSearch />
+    {/*<AllResultSearch />*/}
     {/*<AllCourseResult />*/}
     {/*<AllPathResult />*/}
-    {/*<AllAuthorResult />*/}
+    <AllAuthorResult />
   </View>
 };
 

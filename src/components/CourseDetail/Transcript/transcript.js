@@ -36,6 +36,7 @@ const Transcript = (props) => {
   }
   return <SectionList
     sections={transcript}
+    keyExtractor={(item, index) => item + index}
     renderItem={({item}) =>
       <SubTranScript item={item}/>
     }

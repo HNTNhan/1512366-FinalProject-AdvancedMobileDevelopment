@@ -5,7 +5,7 @@ import AuthorIconButton from "../../Common/author-icon-button";
 import IconButton from "../../Common/icon-button";
 import DescriptionOpenClose from "../../Common/description-open-close";
 
-const Detail = (props) => {
+const GeneralCourseDetail = (props) => {
   const authorListItems = (props) => {
     return props.detail.author.map((item, index) => <AuthorIconButton key={index} item={item}/>);
   }
@@ -59,4 +59,4 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
   },
 })
-export default Detail;
+export default GeneralCourseDetail;

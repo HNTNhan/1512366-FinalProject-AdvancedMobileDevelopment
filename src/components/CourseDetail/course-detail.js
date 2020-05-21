@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {View, StyleSheet, ScrollView} from 'react-native';
 import VideoPlayer from "./VideoPlayer/video-player";
-import Detail from "./Detail/detail";
+import GeneralCourseDetail from "./GeneralCourseDetail/general-course-detail";
 import ListLessons from "./ListLessons/list-lessons";
 import Transcript from "./Transcript/transcript";
 
@@ -40,7 +40,7 @@ const CourseDetail = (props) => {
   return <View style={styles.container}>
     <VideoPlayer />
     <ScrollView>
-      <Detail detail={courseDetail}/>
+      <GeneralCourseDetail detail={courseDetail}/>
       <View>
         <Transcript />
       </View>

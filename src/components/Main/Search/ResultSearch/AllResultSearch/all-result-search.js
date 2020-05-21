@@ -1,10 +1,10 @@
 import React from 'react';
 import {View} from 'react-native';
-import ListCourses from "../../../../Courses/ListCourses/list-courses";
+import Courses from "../../../../Courses/courses";
 
 const AllResultSearch = (props) => {
   return <View>
-    <ListCourses />
+    <Courses />
   </View>
 };
 

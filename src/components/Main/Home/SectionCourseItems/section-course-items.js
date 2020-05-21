@@ -1,13 +1,13 @@
 import React from 'react';
-import {View, StyleSheet, Image, Text} from 'react-native';
+import {StyleSheet, Image, Text, TouchableOpacity} from 'react-native';
 import SubCourseInfo from "../../../Common/sub-course-info";
 
 const SectionCourseItems = (props) => {
 
-  return <View style={styles.item}>
+  return <TouchableOpacity style={styles.item} onPress={props.onPress}>
     <Image source={require('../../../../../assets/ic_course.png')} style={styles.image}/>
     <SubCourseInfo item={props.item}/>
-  </View>
+  </TouchableOpacity>
 };
 
 const styles = StyleSheet.create({

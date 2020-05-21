@@ -5,7 +5,6 @@ export const globalStyles = StyleSheet.create({
     height: 1,
     width: "100%",
     backgroundColor: "darkgray",
-    marginLeft: 105,
   },
   container: {
     flex: 1,

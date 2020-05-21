@@ -7,7 +7,7 @@ const DescriptionOpenClose = (props) => {
   const [line, setLine] = useState(false)
 
   return <View style={styles.container}>
-    <Text numberOfLines={line ? 1000 : props.noLines} style={styles.text}>{props.description}</Text>
+    <Text numberOfLines={line ? 1000 : props.noLines} style={[styles.text, {fontSize: props.textSize || 14}]}>{props.description}</Text>
     <TouchableOpacity style={styles.button} onPress={() => {
       setIcon(!icon)
       setLine(!line)

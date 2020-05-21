@@ -52,19 +52,28 @@ const SectionCourses = (props) => {
     }
   ];
 
+  const onPressItemInListCourse = () => {
+    props.navigation.navigate('CourseDetail')
+  }
+
+  const onPressItemInListPath = () => {
+    props.navigation.navigate('PathDetail')
+  }
+
   const renderListItems = (courses) => {
-    return courses.map( item => <SectionCourseItems key={item.id} item={item} />);
+    return courses.map( (item) => <SectionCourseItems key={item.id}  item={item} onPress={onPressItemInListCourse} />);
   }
 
   const renderPathItems = (paths) => {
-    return paths.map( item => <PathItems key={item.id} item={item} />);
+    return paths.map( (item) => <PathItems key={item.id} item={item} onPress={onPressItemInListPath} />);
   }
 
   return <View style={styles.container}>
     <View style={styles.title}>
       <Text style={styles.titleText}>{props.title}</Text>
       <TouchableOpacity style={styles.button}
-                        onPress={props.onPress}>
+                        onPress={props.pressSeeAll}
+      >
         <Text>  See all >  </Text>
       </TouchableOpacity>
     </View>

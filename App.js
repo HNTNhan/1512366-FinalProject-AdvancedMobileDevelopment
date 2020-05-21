@@ -21,6 +21,8 @@ import Login from "./src/components/Authentication/Login/login";
 import ForgetPassword from "./src/components/Authentication/ForgetPassword/forget-password";
 import Register from "./src/components/Authentication/Register/register";
 import SplashScreen from "./src/components/Others/SplashScreen/splash-screen";
+import ListPaths from "./src/components/Courses/ListPaths/list-paths";
+import PathDetail from "./src/components/PathDetail/path-detail";
 
 const Stack = createStackNavigator();
 
@@ -71,9 +73,19 @@ export default function App() {
   const HomeScreen = () => {
     return <HomeStack.Navigator>
       <HomeStack.Screen name='Home' component={Home}/>
-      <HomeStack.Screen name='ListCourse' component={ListCourses}/>
-      <HomeStack.Screen name='CourseDetail' component={CourseDetail}/>
+      <HomeStack.Screen name='ListCourses' component={ListCourses}/>
+      <HomeStack.Screen name='ListPaths' component={ListPaths}/>
+      <HomeStack.Screen name='CourseDetail' component={CourseDetail} options={{headerShown: false}}/>
+      <HomeStack.Screen name='PathDetail' component={PathDetail}/>
     </HomeStack.Navigator>
+  }
+
+  const DownloadStack = createStackNavigator();
+  const DownloadScreen = () => {
+    return <DownloadStack.Navigator>
+      <DownloadStack.Screen name='Download' component={Download}/>
+      <DownloadStack.Screen name='CourseDetail' component={CourseDetail} options={{headerShown: false}}/>
+    </DownloadStack.Navigator>
   }
 
   const MainTab = createBottomTabNavigator();
@@ -97,7 +109,7 @@ export default function App() {
       }}
     >
       <Tab.Screen name="Home" component={HomeScreen}/>
-      <Tab.Screen name='Download' component={Download}/>
+      <Tab.Screen name='Download' component={DownloadScreen}/>
       <Tab.Screen name='Browse' component={Browse}/>
       <Tab.Screen name='Search' component={Search}/>
     </MainTab.Navigator>
@@ -114,17 +126,18 @@ export default function App() {
     </View>
 
     // <View style={styles.container}>
-    //   <Home />
-    //   <ListCourses />
-    //   <Download />
-    //   <Browse />
-    //   <Search />
-    //   <AccountManagement />
-    //   <Profile userName={"Thien Nhan"}/>
-    //   <Setting userName={"Thien Nhan"} email={'123@gmail.com'}/>
-    //   <Authentication />
-    //   <CourseDetail />
-    //   <LocationMap />
+    //   {/*<Home />*/}
+    //   {/*<ListCourses />*/}
+    //   {/*<Download />*/}
+    //   {/*<Browse />*/}
+    //   {/*<Search />*/}
+    //   {/*<AccountManagement />*/}
+    //   {/*<Profile userName={"Thien Nhan"}/>*/}
+    //   {/*<Setting userName={"Thien Nhan"} email={'123@gmail.com'}/>*/}
+    //   {/*<Authentication />*/}
+    //   {/*<CourseDetail />*/}
+    //   {/*<LocationMap />*/}
+    //   <PathDetail />
     // </View>
   );
 }
