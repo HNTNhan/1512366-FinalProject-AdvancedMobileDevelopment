@@ -7,7 +7,11 @@ import DescriptionOpenClose from "../../Common/description-open-close";
 
 const GeneralCourseDetail = (props) => {
   const authorListItems = (props) => {
-    return props.detail.author.map((item, index) => <AuthorIconButton key={index} item={item}/>);
+    return props.detail.author.map((item, index) => <AuthorIconButton key={index} item={item} onPress={onPressAuthorItem}/>);
+  }
+
+  const onPressAuthorItem = () => {
+    props.navigation.navigate('AuthorDetail')
   }
 
   return <ScrollView>

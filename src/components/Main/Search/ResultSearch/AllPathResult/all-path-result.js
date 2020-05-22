@@ -1,8 +1,9 @@
 import React from 'react';
 import ListPaths from "../../../../Courses/ListPaths/list-paths";
+import AllCourseResult from "../AllCourseResult/all-course-result";
 
 const AllPathResult = (props) => {
-  return <ListPaths />
+  return <ListPaths navigation={props.navigation} route={props.route}/>
 };
 
 

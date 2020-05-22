@@ -55,7 +55,7 @@ const CourseDetail = (props) => {
   const renderScene = ({ route }) => {
     switch (route.key) {
       case 'first':
-        return <GeneralCourseDetail  detail={courseDetail} />;
+        return <GeneralCourseDetail  detail={courseDetail} navigation={props.navigation} route={props.route}/>;
       case 'second':
         return <Transcript />;
       case 'third':

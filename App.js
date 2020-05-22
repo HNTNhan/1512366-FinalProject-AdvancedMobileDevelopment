@@ -84,6 +84,7 @@ export default function App() {
       <HomeStack.Screen name='CourseDetail' component={CourseDetail} options={{headerShown: false}}/>
       <HomeStack.Screen name='PathDetail' component={PathDetail}/>
       <HomeStack.Screen name='ChannelDetail' component={ChannelDetail}/>
+      <HomeStack.Screen name='AuthorDetail' component={AuthorDetail}/>
     </HomeStack.Navigator>
   }
 
@@ -93,6 +94,7 @@ export default function App() {
       <DownloadStack.Screen name='Download' component={Download}/>
       <DownloadStack.Screen name='ListCourses' component={ListCourses}/>
       <DownloadStack.Screen name='CourseDetail' component={CourseDetail}/>
+      <DownloadStack.Screen name='AuthorDetail' component={AuthorDetail}/>
     </DownloadStack.Navigator>
   }
 
@@ -108,6 +110,20 @@ export default function App() {
       <BrowseStack.Screen name='CategoryDetail' component={CategoryDetail}/>
       <BrowseStack.Screen name='SkillDetail' component={SkillDetail} options={({ route }) => ({ title: route.params.name })}/>
     </BrowseStack.Navigator>
+  }
+
+  const SearchStack = createStackNavigator();
+  const SearchScreen = () => {
+    return <SearchStack.Navigator>
+      <SearchStack.Screen name='Search' component={Search} options={{headerShown: false}}/>
+      <SearchStack.Screen name='ListCourses' component={ListCourses}/>
+      <SearchStack.Screen name='ListPaths' component={ListPaths}/>
+      <SearchStack.Screen name='CourseDetail' component={CourseDetail} options={{headerShown: false}}/>
+      <SearchStack.Screen name='PathDetail' component={PathDetail}/>
+      <SearchStack.Screen name='AuthorDetail' component={AuthorDetail}/>
+      <SearchStack.Screen name='CategoryDetail' component={CategoryDetail}/>
+      <SearchStack.Screen name='SkillDetail' component={SkillDetail}/>
+    </SearchStack.Navigator>
   }
 
   const MainTab = createBottomTabNavigator();
@@ -133,7 +149,7 @@ export default function App() {
       <Tab.Screen name="Home" component={HomeScreen}/>
       <Tab.Screen name='Download' component={DownloadScreen}/>
       <Tab.Screen name='Browse' component={BrowseScreen}/>
-      <Tab.Screen name='Search' component={Search}/>
+      <Tab.Screen name='Search' component={SearchScreen} options={{headerShown: false}}/>
     </MainTab.Navigator>
   }
   return (

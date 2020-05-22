@@ -4,6 +4,8 @@ import ListCourseItems from "./ListCourseItems/list-course-items";
 import ListPathItems from "./ListPathItems/list-path-items";
 import ListAuthorItems from "./ListAuthorItems/list-author-items";
 import SectionTitle from "../Common/section-title";
+import {globalStyles} from "../../Globles/styles";
+import {NavigationActions} from "@react-navigation/compat";
 
 const Courses = (props) => {
   const courses =[
@@ -86,29 +88,33 @@ const Courses = (props) => {
 
   const renderSeparator = () => {
     return (
-      <View style={styles.separator} />
+      <View style={globalStyles.separator} />
     );
   };
 
+
+  const onPressCourseItem = () => {
+    props.navigation.navigate('CourseDetail')
+  }
+
+  const onPressPathItem = () => {
+    props.navigation.navigate('PathDetail')
+  }
+  const onPressAuthorItem = () => {
+    props.navigation.navigate('AuthorDetail')
+  }
   return <View>
     <SectionList
       sections={courses}
       renderItem={({item,index, section}) =>
-        section.title==="Courses" ? <ListCourseItems item={item}/>
-          : section.title==="Paths" ? <ListPathItems item={item}/> : <ListAuthorItems item={item}/>
+        section.title==="Courses" ? <ListCourseItems item={item} onPress={onPressCourseItem}/>
+          : section.title==="Paths" ? <ListPathItems item={item} onPress={onPressPathItem}/> :
+          <ListAuthorItems item={item} onPress={onPressAuthorItem}/>
       }
       renderSectionHeader={({section: {title, num}}) => <SectionTitle title={title} button={num}/>}
       ItemSeparatorComponent= {renderSeparator}
     />
   </View>
 };
-
-const styles = StyleSheet.create({
-  separator: {
-    height: 1,
-    width: "100%",
-    backgroundColor: "darkgray",
-  },
-})
 
 export default Courses;

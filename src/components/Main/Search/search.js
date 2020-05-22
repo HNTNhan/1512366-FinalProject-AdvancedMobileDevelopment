@@ -4,6 +4,7 @@ import BeforeSearch from "./BeforeSearch/before-search";
 import WhileSearch from "./WhileSearch/while-search";
 import ResultSearch from "./ResultSearch/result_search";
 import {globalStyles} from "../../../Globles/styles";
+import AllResultSearch from "./ResultSearch/AllResultSearch/all-result-search";
 
 const Search = (props) => {
   const [isDisplayCancel, setDisplayCancel] = useState(false);
@@ -49,7 +50,7 @@ const Search = (props) => {
     {
       showResult===false ? searchKey==='' ?  <BeforeSearch onPress={onPress}/> :
         <WhileSearch searchKey={searchKey} onPress={onPress}/>
-      : <ResultSearch />
+      : <ResultSearch navigation={props.navigation} route={props.route}/>
     }
 
 

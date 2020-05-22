@@ -7,6 +7,9 @@ import AllAuthorResult from "./AllAuthorResult/all-author-result";
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 import {colors} from "../../../../Globles/constants";
 import TabBarStyle from "../../../Common/tab-bar-style";
+import GeneralCourseDetail from "../../../CourseDetail/GeneralCourseDetail/general-course-detail";
+import Transcript from "../../../CourseDetail/Transcript/transcript";
+import ListLessons from "../../../CourseDetail/ListLessons/list-lessons";
 
 const initialLayout = { width: Dimensions.get('window').width };
 
@@ -19,13 +22,20 @@ const ResultSearch = (props) => {
     { key: 'four', title: 'AUTHORS' },
   ]);
 
-  const renderScene = SceneMap({
-    first: AllResultSearch,
-    second: AllCourseResult,
-    third: AllPathResult,
-    four: AllAuthorResult,
-  });
-
+  const renderScene = ({ route }) => {
+    switch (route.key) {
+      case 'first':
+        return <AllResultSearch navigation={props.navigation} route={props.route}/>;
+      case 'second':
+        return <AllCourseResult navigation={props.navigation} route={props.route}/>;
+      case 'third':
+        return <AllPathResult navigation={props.navigation} route={props.route}/>;
+      case 'four':
+        return <AllAuthorResult navigation={props.navigation} route={props.route}/>;
+      default:
+        return null;
+    }
+  };
 
   return <TabView
     renderTabBar={TabBarStyle}

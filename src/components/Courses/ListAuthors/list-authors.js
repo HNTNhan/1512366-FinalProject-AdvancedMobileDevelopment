@@ -29,10 +29,14 @@ const ListAuthors = (props) => {
     );
   };
 
+  const onPressItem = () => {
+    props.navigation.navigate('AuthorDetail')
+  }
+
   return <View>
     <FlatList
       data={authors}
-      renderItem={({item}) => <ListAuthorItems item={item}/>}
+      renderItem={({item}) => <ListAuthorItems item={item} onPress={onPressItem}/>}
       ItemSeparatorComponent= {renderSeparator}
       ListHeaderComponent = {() => <SectionTitle title={'11 Result'} button={'Filter'}/>}
     />
