@@ -11,9 +11,9 @@ export const renderSeparator = () => {
 export const colors = {
   bottomTab: {
     activeTintColor: '#1297E0',
-    inactiveTintColor: '#909090',
+    inactiveTintColor: 'gray',
   },
-  defaultBackgroundColor: '#C0C0C0',
+  defaultBackgroundColor: '#F8F8F8',
 }
 
 

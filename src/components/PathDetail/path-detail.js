@@ -1,7 +1,7 @@
 import React from 'react';
 import {ScrollView, View} from 'react-native';
 import GeneralPathDetail from "./GeneralPathDetail/general-path-detail";
-import Progress from "./Progress/progress";
+import PathProgress from "./PathProgress/path-progress";
 import CourseInPath from "./CoursesInPath/course-in-path";
 
 const PathDetail = (props) => {
@@ -66,8 +66,8 @@ const PathDetail = (props) => {
 
   return <ScrollView style={{flex: 1, marginHorizontal: 5}}>
     <GeneralPathDetail detail={pathDetail}/>
-    <Progress progress={pathDetail.progress}/>
-    <CourseInPath courses={pathDetail.listCourses}/>
+    <PathProgress progress={pathDetail.progress}/>
+    <CourseInPath courses={pathDetail.listCourses} navigation={props.navigation} route={props.route}/>
   </ScrollView>
 };
 

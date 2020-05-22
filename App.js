@@ -23,6 +23,11 @@ import Register from "./src/components/Authentication/Register/register";
 import SplashScreen from "./src/components/Others/SplashScreen/splash-screen";
 import ListPaths from "./src/components/Courses/ListPaths/list-paths";
 import PathDetail from "./src/components/PathDetail/path-detail";
+import ListChannels from "./src/components/Courses/ListChannels/list-channels";
+import ChannelDetail from "./src/components/ChannelDetail/channel-detail";
+import AuthorDetail from "./src/components/AuthorDetail/author-detail";
+import CategoryDetail from "./src/components/CategoryDetail/category-detail";
+import SkillDetail from "./src/components/SkillDetail/skill-detai";
 
 const Stack = createStackNavigator();
 
@@ -75,8 +80,10 @@ export default function App() {
       <HomeStack.Screen name='Home' component={Home}/>
       <HomeStack.Screen name='ListCourses' component={ListCourses}/>
       <HomeStack.Screen name='ListPaths' component={ListPaths}/>
+      <HomeStack.Screen name='ListChannel' component={ListChannels}/>
       <HomeStack.Screen name='CourseDetail' component={CourseDetail} options={{headerShown: false}}/>
       <HomeStack.Screen name='PathDetail' component={PathDetail}/>
+      <HomeStack.Screen name='ChannelDetail' component={ChannelDetail}/>
     </HomeStack.Navigator>
   }
 
@@ -84,8 +91,23 @@ export default function App() {
   const DownloadScreen = () => {
     return <DownloadStack.Navigator>
       <DownloadStack.Screen name='Download' component={Download}/>
-      <DownloadStack.Screen name='CourseDetail' component={CourseDetail} options={{headerShown: false}}/>
+      <DownloadStack.Screen name='ListCourses' component={ListCourses}/>
+      <DownloadStack.Screen name='CourseDetail' component={CourseDetail}/>
     </DownloadStack.Navigator>
+  }
+
+  const BrowseStack = createStackNavigator();
+  const BrowseScreen = () => {
+    return <BrowseStack.Navigator>
+      <BrowseStack.Screen name='Browse' component={Browse}/>
+      <BrowseStack.Screen name='ListCourses' component={ListCourses} options={({ route }) => ({ title: route.params.name })}/>
+      <BrowseStack.Screen name='ListPaths' component={ListPaths}/>
+      <BrowseStack.Screen name='CourseDetail' component={CourseDetail} options={{headerShown: false}}/>
+      <BrowseStack.Screen name='PathDetail' component={PathDetail}/>
+      <BrowseStack.Screen name='AuthorDetail' component={AuthorDetail}/>
+      <BrowseStack.Screen name='CategoryDetail' component={CategoryDetail}/>
+      <BrowseStack.Screen name='SkillDetail' component={SkillDetail} options={({ route }) => ({ title: route.params.name })}/>
+    </BrowseStack.Navigator>
   }
 
   const MainTab = createBottomTabNavigator();
@@ -110,7 +132,7 @@ export default function App() {
     >
       <Tab.Screen name="Home" component={HomeScreen}/>
       <Tab.Screen name='Download' component={DownloadScreen}/>
-      <Tab.Screen name='Browse' component={Browse}/>
+      <Tab.Screen name='Browse' component={BrowseScreen}/>
       <Tab.Screen name='Search' component={Search}/>
     </MainTab.Navigator>
   }
@@ -137,7 +159,9 @@ export default function App() {
     //   {/*<Authentication />*/}
     //   {/*<CourseDetail />*/}
     //   {/*<LocationMap />*/}
-    //   <PathDetail />
+    //   {/*<PathDetail />*/}
+    //   {/*<ChannelDetail />*/}
+    //   <AuthorDetail />
     // </View>
   );
 }

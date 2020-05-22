@@ -29,7 +29,7 @@ const Transcript = (props) => {
   ]
 
   const SubTranScript = (props) => {
-    return <View style={styles.container}>
+    return <View>
       <Text h4 style={{paddingVertical: 5}}>{props.item.name}</Text>
       <Text style={{marginBottom: 20}}>{props.item.content}</Text>
     </View>
@@ -40,13 +40,7 @@ const Transcript = (props) => {
     renderItem={({item}) =>
       <SubTranScript item={item}/>
     }
-    renderSectionHeader={({section: {title}}) => <Text h3 style={{marginHorizontal: 10}}>{title}</Text>}
+    renderSectionHeader={({section: {title}}) => <Text h3 >{title}</Text>}
   />
 };
-
-const styles = StyleSheet.create({
-  container: {
-    marginHorizontal: 10,
-  }
-})
 export default Transcript;

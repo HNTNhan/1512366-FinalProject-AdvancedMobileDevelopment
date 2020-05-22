@@ -47,7 +47,7 @@ const WhileSearch = (props) => {
   return <View>
     <FlatList
       data={filter}
-      renderItem={({item}) => <ListKeyItems item={item}/>}
+      renderItem={({item}) => <ListKeyItems item={item} onPress={() => props.onPress(item)}/>}
       ItemSeparatorComponent= {renderSeparator}
     />
   </View>

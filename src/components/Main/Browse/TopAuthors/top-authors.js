@@ -1,5 +1,6 @@
 import React from 'react';
 import {View, Text, ScrollView, TouchableOpacity, StyleSheet, Image} from 'react-native';
+import AuthorDetail from "../../../AuthorDetail/author-detail";
 
 const TopAuthors = (props) => {
   const topAuthors = [
@@ -29,12 +30,15 @@ const TopAuthors = (props) => {
     },
   ];
 
+  const onPressAuthorItem = () => {
+    props.navigation.navigate(AuthorDetail)
+  }
 
   const renderTopAuthors = (topAuthors) => {
-    return topAuthors.map( item => <View key={item.id} style={{marginRight: 10}}>
+    return topAuthors.map( item => <TouchableOpacity key={item.id} style={{marginRight: 10}} onPress={onPressAuthorItem}>
       <Image source={require('../../../../../assets/ic_person.png')} style={styles.image}/>
       <Text style={styles.imageText} numberOfLines={1} ellipsizeMode='tail'>{item.author}</Text>
-    </View>);
+    </TouchableOpacity>);
   }
 
   return <View style={styles.container}>
@@ -62,8 +66,8 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   image: {
-    width: 80,
-    height: 80,
+    width: 85,
+    height: 85,
     borderRadius: 50,
   },
   imageText: {

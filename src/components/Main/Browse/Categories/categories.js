@@ -31,7 +31,7 @@ const Categories = (props) => {
   ]
 
   const onPressImageButton = () => {
-    console.log('On Press')
+    props.navigation.navigate('CategoryDetail')
   }
 
   return <View style={styles.container}>

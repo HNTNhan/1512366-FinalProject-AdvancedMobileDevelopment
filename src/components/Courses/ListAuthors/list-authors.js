@@ -29,7 +29,7 @@ const ListAuthors = (props) => {
     );
   };
 
-  return <View style={{backgroundColor: 'rgb(240, 239, 245)'}}>
+  return <View>
     <FlatList
       data={authors}
       renderItem={({item}) => <ListAuthorItems item={item}/>}

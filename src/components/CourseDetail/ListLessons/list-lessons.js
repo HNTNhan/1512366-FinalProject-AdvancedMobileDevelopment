@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import {ScrollView, SectionList, StyleSheet, View} from 'react-native';
 import ListLessonItems from "../ListLessonItems/list-lesson-items";
 import ListLessonTitle from "../ListLessonTitle/list-lesson-title";
+import {globalStyles} from "../../../Globles/styles";
 
 const ListLessons = (props) => {
   const courseLessons = [
@@ -75,7 +76,7 @@ const ListLessons = (props) => {
 
   const renderSeparator = () => {
     return (
-      <View style={styles.separator} />
+      <View style={globalStyles.separator} />
     );
   };
 
@@ -89,13 +90,5 @@ const ListLessons = (props) => {
     SectionSeparatorComponent={renderSeparator}
   />
 };
-
-const styles = StyleSheet.create({
-  separator: {
-    height: 1,
-    width: "100%",
-    backgroundColor: "darkgray",
-  },
-})
 
 export default ListLessons;

@@ -10,7 +10,7 @@ const GeneralCourseDetail = (props) => {
     return props.detail.author.map((item, index) => <AuthorIconButton key={index} item={item}/>);
   }
 
-  return <View style={styles.container} contentContainerStyle={{paddingBottom: 100}}>
+  return <ScrollView>
     <Text style={styles.title}>{props.detail.title}</Text>
     <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
       <View style={styles.author}>
@@ -40,13 +40,10 @@ const GeneralCourseDetail = (props) => {
       }
       containerStyle={{marginVertical: 5}}
     />
-  </View>
+  </ScrollView>
 };
 
 const styles = StyleSheet.create({
-  container: {
-    marginHorizontal: 10,
-  },
   title: {
     fontSize: 20,
     fontWeight: '600',

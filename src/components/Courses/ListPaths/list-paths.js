@@ -36,7 +36,7 @@ const ListPaths = (props) => {
     props.navigation.navigate('PathDetail')
   }
 
-  return <View style={{backgroundColor: 'rgb(240, 239, 245)'}}>
+  return <View>
     <FlatList
       data={paths}
       keyExtractor={(item, index) => item + index}

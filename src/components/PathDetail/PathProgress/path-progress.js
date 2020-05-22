@@ -1,7 +1,7 @@
 import React from 'react';
 import {View, StyleSheet, Text} from 'react-native';
 
-const Progress = (props) => {
+const PathProgress = (props) => {
   return <View style={styles.container}>
     <Text style={styles.title}>Your Progress: {props.progress}%</Text>
     <View style={styles.progressBar}>
@@ -23,4 +23,4 @@ const styles = StyleSheet.create({
     backgroundColor: '#BDC3C7',
   }
 })
-export default Progress;
+export default PathProgress;

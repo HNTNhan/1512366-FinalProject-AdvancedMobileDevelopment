@@ -1,6 +1,7 @@
 import React from 'react';
 import {View, FlatList, StyleSheet, Text, TouchableOpacity} from 'react-native';
 import ListCourseItems from "../../Courses/ListCourseItems/list-course-items";
+import {colors} from "../../../Globles/constants";
 
 const Download = (props) => {
   const courses =[
@@ -50,7 +51,7 @@ const Download = (props) => {
     props.navigation.navigate('CourseDetail');
   }
 
-  return <View style={{backgroundColor: 'rgb(240, 239, 245)'}}>
+  return <View style={styles.container}>
     <FlatList
       data={courses}
       renderItem={({item}) => <ListCourseItems item={item} onPress={onPress}/>}
@@ -61,12 +62,16 @@ const Download = (props) => {
 };
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    marginHorizontal: 5,
+    backgroundColor: 'white',
+  },
   header: {
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginLeft: 5,
-    marginBottom: 5,
+    marginVertical: 5,
   },
   button: {
     padding: 3,

@@ -3,13 +3,20 @@ import {View, TextInput, TouchableOpacity, StyleSheet, Text, Keyboard } from 're
 import BeforeSearch from "./BeforeSearch/before-search";
 import WhileSearch from "./WhileSearch/while-search";
 import ResultSearch from "./ResultSearch/result_search";
+import {globalStyles} from "../../../Globles/styles";
 
 const Search = (props) => {
   const [isDisplayCancel, setDisplayCancel] = useState(false);
   const [searchKey, setSearchKey] = useState('');
   const [showResult, setShowResult] = useState(false)
 
-  return <View style={styles.container}>
+  const onPress = (value) => {
+    console.log(value)
+    setSearchKey(value.key);
+    setShowResult(true);
+  }
+
+  return <View style={globalStyles.container}>
       <View style={styles.searchContainer}>
         <TextInput
           style={styles.searchInput}
@@ -22,7 +29,6 @@ const Search = (props) => {
           value={searchKey}
           returnKeyType={"search"}
           onSubmitEditing={(target) => {
-            console.log(target.nativeEvent)
             setShowResult(true)
           }}
         />
@@ -31,6 +37,7 @@ const Search = (props) => {
             onPress={() => {
               setSearchKey('')
               setDisplayCancel(false)
+              setShowResult(false)
             }}
             title='Cancel'
             style={styles.cancelButton}>
@@ -40,7 +47,8 @@ const Search = (props) => {
         }
     </View>
     {
-      showResult===false ? searchKey==='' ?  <BeforeSearch /> : <WhileSearch searchKey={searchKey} />
+      showResult===false ? searchKey==='' ?  <BeforeSearch onPress={onPress}/> :
+        <WhileSearch searchKey={searchKey} onPress={onPress}/>
       : <ResultSearch />
     }
 
@@ -49,15 +57,13 @@ const Search = (props) => {
 };
 
 const styles = StyleSheet.create({
-  container:{
-    flex: 1
-  },
   searchContainer: {
     flexDirection: 'row',
     marginVertical: 10,
   },
   searchInput: {
     paddingHorizontal: 10,
+    paddingVertical: 5,
     marginRight: 10,
     flex: 1,
     backgroundColor: 'lightgrey',

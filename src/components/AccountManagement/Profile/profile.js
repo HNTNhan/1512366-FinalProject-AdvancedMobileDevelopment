@@ -1,6 +1,6 @@
 import React from 'react';
 import {View, Image, StyleSheet, Text} from 'react-native';
-import PopularSkills from "../../Main/Browse/PopularSkills/popular-skills";
+import Skills from "../../Main/Browse/Skills/skills";
 
 const Profile = (props) => {
   return <View style={styles.container}>
@@ -8,7 +8,7 @@ const Profile = (props) => {
       <Image source={require('../../../../assets/ic_person.png')} style={styles.image}/>
       <Text>{props.userName}</Text>
     </View>
-    <PopularSkills title={'Interests'}/>
+    <Skills title={'Interests'}/>
     <View>
       <Text style={styles.title}>Activity insights (last 30 days)</Text>
       <View>

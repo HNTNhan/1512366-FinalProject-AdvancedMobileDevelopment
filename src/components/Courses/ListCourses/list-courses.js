@@ -44,7 +44,7 @@ const ListCourses = (props) => {
     props.navigation.navigate('CourseDetail')
   }
 
-  return <View style={{backgroundColor: 'rgb(240, 239, 245)'}}>
+  return <View>
     <FlatList
       data={courses}
       keyExtractor={(item, index) => item + index}

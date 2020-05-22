@@ -1,6 +1,7 @@
 import React from 'react';
 import {SectionList, StyleSheet, Text, View, Image, TouchableOpacity, ScrollView} from 'react-native';
 import ListKeyItems from "../ListKeyItems/list-key-items";
+import {globalStyles} from "../../../../Globles/styles";
 
 const BeforeSearch = (props) => {
 
@@ -32,26 +33,6 @@ const BeforeSearch = (props) => {
           id: 6,
           key: 'c',
         },
-        {
-          id: 7,
-          key: 'c#',
-        },
-        {
-          id: 8,
-          key: 'c++',
-        },
-        {
-          id: 9,
-          key: 'android',
-        },
-        {
-          id: 10,
-          key: 'ios',
-        },
-        {
-          id: 11,
-          key: '.net',
-        },
       ]
     },
     {
@@ -75,14 +56,14 @@ const BeforeSearch = (props) => {
 
   const renderSeparator = () => {
     return (
-      <View style={styles.separator} />
+      <View style={globalStyles.separator} />
     );
   };
 
   return <View style={styles.container}>
     <SectionList
       sections={keys}
-      renderItem={({item}) => <ListKeyItems item={item}/>}
+      renderItem={({item}) => <ListKeyItems item={item} onPress={() => props.onPress(item)}/>}
       renderSectionHeader={({section: {title}}) => <View style={styles.title}>
           <Text style={styles.titleText}>{title}</Text>
             {title!== 'Your interests' ? <TouchableOpacity style={styles.button}
@@ -99,11 +80,6 @@ const BeforeSearch = (props) => {
 const styles = StyleSheet.create({
   container:{
     flex: 1
-  },
-  separator: {
-    height: 1,
-    width: "100%",
-    backgroundColor: "darkgray",
   },
   title: {
     flex: 1,

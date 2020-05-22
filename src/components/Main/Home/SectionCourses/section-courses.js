@@ -2,6 +2,7 @@ import React from 'react';
 import {View, Text, ScrollView, TouchableOpacity, StyleSheet} from 'react-native';
 import SectionCourseItems from "../SectionCourseItems/section-course-items";
 import PathItems from "../PathItems/path-items";
+import ChannelItems from "../ChanneItems/channel-items";
 
 const SectionCourses = (props) => {
   const courses = [
@@ -52,12 +53,27 @@ const SectionCourses = (props) => {
     }
   ];
 
+  const channels = [
+    {
+      id: 1,
+      title: 'React',
+    },
+    {
+      id: 2,
+      title: 'js',
+    },
+  ];
+
   const onPressItemInListCourse = () => {
     props.navigation.navigate('CourseDetail')
   }
 
   const onPressItemInListPath = () => {
     props.navigation.navigate('PathDetail')
+  }
+
+  const onPressItemInListChannel = () => {
+    props.navigation.navigate('ChannelDetail')
   }
 
   const renderListItems = (courses) => {
@@ -68,17 +84,23 @@ const SectionCourses = (props) => {
     return paths.map( (item) => <PathItems key={item.id} item={item} onPress={onPressItemInListPath} />);
   }
 
+  const renderChannelItems = (paths) => {
+    return paths.map( (item) => <ChannelItems key={item.id} item={item} onPress={onPressItemInListChannel} />);
+  }
+
   return <View style={styles.container}>
     <View style={styles.title}>
       <Text style={styles.titleText}>{props.title}</Text>
-      <TouchableOpacity style={styles.button}
+      {props.hasButton!==false ?<TouchableOpacity style={styles.button}
                         onPress={props.pressSeeAll}
       >
         <Text>  See all >  </Text>
-      </TouchableOpacity>
+      </TouchableOpacity> : null}
+
     </View>
     <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-      {props.title!=='Path' ? renderListItems(courses) : renderPathItems(paths)}
+      {props.type==='Path' ? renderPathItems(paths) : props.type==='Channel'
+        ? renderChannelItems(channels) : renderListItems(courses)}
     </ScrollView>
   </View>
 };

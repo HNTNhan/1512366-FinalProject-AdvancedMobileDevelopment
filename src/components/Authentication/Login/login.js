@@ -3,7 +3,7 @@ import {View, TouchableOpacity, Text, StyleSheet, ScrollView} from 'react-native
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import { Sae } from 'react-native-textinput-effects';
 import {Button} from "react-native-elements";
-import {login} from "../../../core/services/authentication-services";
+import {login} from "../../../Core/services/authentication-services";
 
 const Login = (props) => {
   const [username, setUsername] = useState('admin');

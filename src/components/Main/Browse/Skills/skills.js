@@ -1,7 +1,7 @@
 import React from 'react';
 import {ScrollView, StyleSheet, Text, View, TouchableOpacity, Image} from 'react-native';
 
-const PopularSkills = (props) => {
+const Skills = (props) => {
   const skills = [
       {
         id: 1,
@@ -40,9 +40,13 @@ const PopularSkills = (props) => {
       },
   ]
 
+  const onPress = (item) => {
+    props.navigation.navigate('SkillDetail', {name: item.name});
+  }
+
   const renderListItems = (skills) => {
     return skills.map( (item) =>
-      <TouchableOpacity key={item.id} style={styles.button}>
+      <TouchableOpacity key={item.id} style={styles.button} onPress={() => onPress(item)}>
         {
           item.checked===true ? <Image source={require('../../../../../assets/ic_check.png')} style={styles.image}/>
              : null
@@ -57,7 +61,7 @@ const PopularSkills = (props) => {
       <Text style={styles.titleText}>{props.title}</Text>
     </View>
     <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-      {renderListItems(skills)}
+      {renderListItems(props.skills || skills)}
     </ScrollView>
   </View>
 };
@@ -89,4 +93,4 @@ const styles = StyleSheet.create({
   }
 })
 
-export default PopularSkills;
+export default Skills;

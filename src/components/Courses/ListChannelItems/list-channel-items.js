@@ -1,12 +1,11 @@
 import React from 'react';
-import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {View, StyleSheet, Image, Text, TouchableOpacity} from 'react-native';
 
-const ListAuthorItems = (props) => {
+const ListChannelItems = (props) => {
   return <TouchableOpacity style={styles.item} onPress={props.onPress}>
-    <Image source={require('../../../../assets/ic_person.png')} style={styles.image}/>
+    <Image source={require('../../../../assets/ic_course.png')} style={styles.image}/>
     <View style={styles.detail}>
-      <Text>{props.item.author}</Text>
-      <Text style={styles.darkText}>{props.item.no_courses}</Text>
+      <Text>{props.item.title}</Text>
     </View>
   </TouchableOpacity>
 };
@@ -17,8 +16,7 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
   image: {
-    borderRadius: 50,
-    width: 50,
+    width: 100,
     height: 50,
   },
   detail: {
@@ -28,4 +26,5 @@ const styles = StyleSheet.create({
     color: 'darkgray',
   },
 })
-export default ListAuthorItems;
+
+export default ListChannelItems;

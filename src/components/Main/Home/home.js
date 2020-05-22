@@ -9,15 +9,22 @@ const Home = (props) => {
   return <View style={globalStyles.container}>
     <ScrollView>
       <SectionCourses title='Continue learning'
+                      type='Continue learning'
                       navigation={props.navigation}
                       route={props.route}
                       pressSeeAll={() => props.navigation.navigate('ListCourses')}/>
       <SectionCourses title='Path'
+                      type='Path'
                       navigation={props.navigation}
                       route={props.route}
                       pressSeeAll={() => props.navigation.navigate('ListPaths')}/>
-      <SectionCourses title='Channel' navigation={props.navigation} route={props.route}/>
+      <SectionCourses title='Channel'
+                      type='Channel'
+                      navigation={props.navigation}
+                      route={props.route}
+                      pressSeeAll={() => props.navigation.navigate('ListChannel')}/>
       <SectionCourses title='Bookmarks'
+                      type='Bookmarks'
                       navigation={props.navigation}
                       route={props.route}
                       pressSeeAll={() => props.navigation.navigate('ListCourses')}/>

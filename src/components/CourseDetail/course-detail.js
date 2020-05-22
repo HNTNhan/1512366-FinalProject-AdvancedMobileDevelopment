@@ -1,9 +1,17 @@
 import React, {useState} from 'react';
-import {View, StyleSheet, ScrollView} from 'react-native';
+import {View, StyleSheet, ScrollView, Dimensions} from 'react-native';
 import VideoPlayer from "./VideoPlayer/video-player";
 import GeneralCourseDetail from "./GeneralCourseDetail/general-course-detail";
 import ListLessons from "./ListLessons/list-lessons";
 import Transcript from "./Transcript/transcript";
+import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
+import AllResultSearch from "../Main/Search/ResultSearch/AllResultSearch/all-result-search";
+import AllCourseResult from "../Main/Search/ResultSearch/AllCourseResult/all-course-result";
+import AllPathResult from "../Main/Search/ResultSearch/AllPathResult/all-path-result";
+import AllAuthorResult from "../Main/Search/ResultSearch/AllAuthorResult/all-author-result";
+import TabBarStyle from "../Common/tab-bar-style";
+
+const initialLayout = { width: Dimensions.get('window').width };
 
 const CourseDetail = (props) => {
   const courseDetail= {
@@ -37,26 +45,41 @@ const CourseDetail = (props) => {
       duration: '1h 18m',
     };
 
+  const [index, setIndex] = useState(0);
+  const [routes] = useState([
+    { key: 'first', title: 'Course' },
+    { key: 'second', title: 'Transcript' },
+    { key: 'third', title: 'Lessons' },
+  ]);
+
+  const renderScene = ({ route }) => {
+    switch (route.key) {
+      case 'first':
+        return <GeneralCourseDetail  detail={courseDetail} />;
+      case 'second':
+        return <Transcript />;
+      case 'third':
+        return <ListLessons tabLabel='Content'/>;
+      default:
+        return null;
+    }
+  };
+
   return <View style={styles.container}>
     <VideoPlayer />
-    <ScrollView>
-      <GeneralCourseDetail detail={courseDetail}/>
-      <View>
-        <Transcript />
-      </View>
-      <View style={styles.lessonContainer}>
-        <ListLessons tabLabel='Content' />
-      </View>
-    </ScrollView>
+    <TabView
+      renderTabBar={TabBarStyle}
+      navigationState={{ index, routes }}
+      renderScene={renderScene}
+      onIndexChange={setIndex}
+      initialLayout={initialLayout}
+      sceneContainerStyle={{paddingHorizontal: 5, backgroundColor: 'white'}}
+    />
   </View>
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-  },
-  lessonContainer: {
-    marginHorizontal: 10,
     flex: 1,
   },
 })
