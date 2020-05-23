@@ -6,7 +6,8 @@ import ButtonSwitch from "./ButtonSwitch/button-switch";
 const AccountManagement = (props) => {
 
   return <View style={styles.container}>
-    <ButtonSetting title={'Account'} />
+    <ButtonSetting title={'Profile'} onPress={() => props.navigation.navigate("Profile")}/>
+    <ButtonSetting title={'Account'} onPress={() => props.navigation.navigate("Setting")}/>
     <ButtonSetting title={'Subscription'} />
     <ButtonSetting title={'Communication Preferences'} />
 
@@ -38,6 +39,8 @@ const AccountManagement = (props) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    paddingHorizontal: 5,
+    backgroundColor: 'white'
   },
   itemContainer: {
     flexDirection: 'row',

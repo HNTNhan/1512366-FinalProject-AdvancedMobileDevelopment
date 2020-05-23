@@ -6,7 +6,7 @@ const Profile = (props) => {
   return <View style={styles.container}>
     <View style={styles.containerAccount}>
       <Image source={require('../../../../assets/ic_person.png')} style={styles.image}/>
-      <Text>{props.userName}</Text>
+      <Text style={styles.textContent}>Thien Nhan</Text>
     </View>
     <Skills title={'Interests'}/>
     <View>
@@ -30,6 +30,8 @@ const Profile = (props) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    paddingHorizontal: 5,
+    backgroundColor: 'white'
   },
   containerAccount: {
     flexDirection: 'row',
@@ -39,6 +41,7 @@ const styles = StyleSheet.create({
     width: 50,
     height: 50,
     borderRadius: 50,
+    marginRight: 10,
   },
   title: {
     fontSize: 18,

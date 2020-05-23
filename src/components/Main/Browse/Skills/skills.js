@@ -41,7 +41,7 @@ const Skills = (props) => {
   ]
 
   const onPress = (item) => {
-    props.navigation.navigate('SkillDetail', {name: item.name});
+    return !props.navigation ? null : props.navigation.navigate('SkillDetail', {name: item.name});
   }
 
   const renderListItems = (skills) => {

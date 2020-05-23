@@ -5,7 +5,6 @@ import ListPathItems from "./ListPathItems/list-path-items";
 import ListAuthorItems from "./ListAuthorItems/list-author-items";
 import SectionTitle from "../Common/section-title";
 import {globalStyles} from "../../Globles/styles";
-import {NavigationActions} from "@react-navigation/compat";
 
 const Courses = (props) => {
   const courses =[

@@ -5,12 +5,12 @@ import {colors} from "../../Globles/constants";
 const TabBarStyle = (props) => {
   return <TabBar
     {...props}
-    indicatorStyle={{ backgroundColor: colors.bottomTab.activeTintColor }}
+    indicatorStyle={{ backgroundColor: colors.bottomTabOption.activeTintColor }}
     style={{ backgroundColor: 'white' }}
     labelStyle={{fontWeight: 'bold'}}
     tabStyle={{padding: 0}}
-    activeColor={colors.bottomTab.activeTintColor}
-    inactiveColor={colors.bottomTab.inactiveTintColor}
+    activeColor={colors.bottomTabOption.activeTintColor}
+    inactiveColor={colors.bottomTabOption.inactiveTintColor}
   />
 };
 

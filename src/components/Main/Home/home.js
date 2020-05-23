@@ -7,7 +7,7 @@ import {globalStyles} from "../../../Globles/styles";
 
 const Home = (props) => {
   return <View style={globalStyles.container}>
-    <ScrollView>
+    <ScrollView showsVerticalScrollIndicator={false}>
       <SectionCourses title='Continue learning'
                       type='Continue learning'
                       navigation={props.navigation}

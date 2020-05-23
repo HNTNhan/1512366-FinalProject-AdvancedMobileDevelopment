@@ -15,8 +15,8 @@ import LocationMap from "./src/components/Others/LocationMap/location-map";
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import {colors} from "./src/Globles/constants";
-import {Icon} from "react-native-elements";
+import {Button, Icon} from "react-native-elements";
+import { colors } from "./src/Globles/constants";
 import Login from "./src/components/Authentication/Login/login";
 import ForgetPassword from "./src/components/Authentication/ForgetPassword/forget-password";
 import Register from "./src/components/Authentication/Register/register";
@@ -34,6 +34,7 @@ const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
 export default function App() {
+
   const bottomTabIcons = (route, focused) => {
     {
       let iconName;
@@ -42,23 +43,23 @@ export default function App() {
       if (route.name === 'Home') {
         iconName = 'home';
         color = focused
-          ? colors.bottomTab.activeTintColor
-          : colors.bottomTab.inactiveTintColor;
+          ? colors.bottomTabOption.activeTintColor
+          : colors.bottomTabOption.inactiveTintColor;
       } else if (route.name === 'Download') {
         iconName = 'arrow-alt-circle-down';
         color = focused
-          ? colors.bottomTab.activeTintColor
-          : colors.bottomTab.inactiveTintColor;
+          ? colors.bottomTabOption.activeTintColor
+          : colors.bottomTabOption.inactiveTintColor;
       } else if (route.name === 'Browse') {
         iconName = 'window-restore';
         color = focused
-          ? colors.bottomTab.activeTintColor
-          : colors.bottomTab.inactiveTintColor;
+          ? colors.bottomTabOption.activeTintColor
+          : colors.bottomTabOption.inactiveTintColor;
       } else if (route.name === 'Search') {
         iconName = 'search';
         color = focused
-          ? colors.bottomTab.activeTintColor
-          : colors.bottomTab.inactiveTintColor;
+          ? colors.bottomTabOption.activeTintColor
+          : colors.bottomTabOption.inactiveTintColor;
       }
 
       return <Icon name={iconName} type='font-awesome-5' color={color}  size={26}/>
@@ -75,9 +76,40 @@ export default function App() {
   }
 
   const HomeStack = createStackNavigator();
-  const HomeScreen = () => {
-    return <HomeStack.Navigator>
-      <HomeStack.Screen name='Home' component={Home}/>
+  const HomeScreen = ({navigation}) => {
+    // React.useEffect(() => {
+    //   const unsubscribe = navigation.addListener('tabPress', e => {
+    //     // Prevent default behavior
+    //     console.log(e)
+    //     e.preventDefault()
+    //     navigation.popToTop()
+    //
+    //     // Do something manually
+    //     // ...
+    //   });
+    //
+    //   return unsubscribe;
+    // }, [navigation]);
+
+    return <HomeStack.Navigator
+              screenOptions={{
+                headerStyle: {
+                  height: 50,
+                },
+                headerStatusBarHeight: 0,
+              }}>
+      <HomeStack.Screen name='Home'
+                        component={Home}
+                        options={({route, navigation}) => (
+                          {headerRight: () => {
+                              return <Icon name='ellipsis-v'
+                                    size={20}
+                                    type='font-awesome-5'
+                                    containerStyle={{marginRight: 10, paddingHorizontal: 10}}
+                                    onPress={() => navigation.navigate('AccountManagement')}
+                              />
+                          }}
+                        )}/>
       <HomeStack.Screen name='ListCourses' component={ListCourses}/>
       <HomeStack.Screen name='ListPaths' component={ListPaths}/>
       <HomeStack.Screen name='ListChannel' component={ListChannels}/>
@@ -90,7 +122,13 @@ export default function App() {
 
   const DownloadStack = createStackNavigator();
   const DownloadScreen = () => {
-    return <DownloadStack.Navigator>
+    return <DownloadStack.Navigator
+      screenOptions={{
+        headerStyle: {
+          height: 50,
+        },
+        headerStatusBarHeight: 0,
+      }}>
       <DownloadStack.Screen name='Download' component={Download}/>
       <DownloadStack.Screen name='ListCourses' component={ListCourses}/>
       <DownloadStack.Screen name='CourseDetail' component={CourseDetail}/>
@@ -100,7 +138,13 @@ export default function App() {
 
   const BrowseStack = createStackNavigator();
   const BrowseScreen = () => {
-    return <BrowseStack.Navigator>
+    return <BrowseStack.Navigator
+      screenOptions={{
+        headerStyle: {
+          height: 50,
+        },
+        headerStatusBarHeight: 0,
+      }}>
       <BrowseStack.Screen name='Browse' component={Browse}/>
       <BrowseStack.Screen name='ListCourses' component={ListCourses} options={({ route }) => ({ title: route.params.name })}/>
       <BrowseStack.Screen name='ListPaths' component={ListPaths}/>
@@ -114,7 +158,13 @@ export default function App() {
 
   const SearchStack = createStackNavigator();
   const SearchScreen = () => {
-    return <SearchStack.Navigator>
+    return <SearchStack.Navigator
+      screenOptions={{
+        headerStyle: {
+          height: 50,
+        },
+        headerStatusBarHeight: 0,
+      }}>
       <SearchStack.Screen name='Search' component={Search} options={{headerShown: false}}/>
       <SearchStack.Screen name='ListCourses' component={ListCourses}/>
       <SearchStack.Screen name='ListPaths' component={ListPaths}/>
@@ -131,20 +181,8 @@ export default function App() {
     return <MainTab.Navigator
       screenOptions={({route}) => ({
         tabBarIcon: ({focused}) => bottomTabIcons(route, focused),
-      })
-      }
-      tabBarOptions={{
-        activeTintColor: colors.bottomTab.activeTintColor,
-        inactiveTintColor: colors.bottomTab.inactiveTintColor,
-        style: {
-          paddingBottom: 5,
-          paddingTop: 5,
-          height: 60,
-        },
-        labelStyle: {
-          fontSize: 16,
-        }
-      }}
+      })}
+      tabBarOptions={colors.bottomTabOption}
     >
       <Tab.Screen name="Home" component={HomeScreen}/>
       <Tab.Screen name='Download' component={DownloadScreen}/>
@@ -152,6 +190,22 @@ export default function App() {
       <Tab.Screen name='Search' component={SearchScreen} options={{headerShown: false}}/>
     </MainTab.Navigator>
   }
+
+  const AccountManagementStack = createStackNavigator();
+  const AccountManagementScreen = () => {
+    return <AccountManagementStack.Navigator
+      screenOptions={{
+        headerStyle: {
+          height: 50,
+        },
+        headerStatusBarHeight: 0,
+      }}>
+      <AccountManagementStack.Screen name='AccountManagement' component={AccountManagement} />
+      <AccountManagementStack.Screen name='Profile' component={Profile} />
+      <AccountManagementStack.Screen name='Setting' component={Setting} />
+    </AccountManagementStack.Navigator>
+  }
+
   return (
     <View style={styles.container}>
       <NavigationContainer>
@@ -159,26 +213,10 @@ export default function App() {
           <Stack.Screen name='SplashScreen' component={SplashScreen} options={{headerShown: false}}/>
           <Stack.Screen name='Authentication' component={AuthenticationScreen} options={{headerShown: false}}/>
           <Stack.Screen name='Main' component={MainScreen} options={{headerShown: false}}/>
+          <Stack.Screen name='AccountManagement' component={AccountManagementScreen} options={{headerShown: false}}/>
         </Stack.Navigator>
       </NavigationContainer>
     </View>
-
-    // <View style={styles.container}>
-    //   {/*<Home />*/}
-    //   {/*<ListCourses />*/}
-    //   {/*<Download />*/}
-    //   {/*<Browse />*/}
-    //   {/*<Search />*/}
-    //   {/*<AccountManagement />*/}
-    //   {/*<Profile userName={"Thien Nhan"}/>*/}
-    //   {/*<Setting userName={"Thien Nhan"} email={'123@gmail.com'}/>*/}
-    //   {/*<Authentication />*/}
-    //   {/*<CourseDetail />*/}
-    //   {/*<LocationMap />*/}
-    //   {/*<PathDetail />*/}
-    //   {/*<ChannelDetail />*/}
-    //   <AuthorDetail />
-    // </View>
   );
 }
 

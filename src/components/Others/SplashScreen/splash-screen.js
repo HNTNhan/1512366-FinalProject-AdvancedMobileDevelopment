@@ -7,7 +7,7 @@ const SplashScreen = (props) => {
   const [counter, setCounter] = React.useState(0);
 
   useEffect(() => {
-    !(counter < 100 && setTimeout(() => setCounter(counter + 1), 1)) ? props.navigation.navigate('Authentication') : null;
+    !(counter < 100 && setTimeout(() => setCounter(counter + 5), 1)) ? props.navigation.navigate('Authentication') : null;
   }, [counter])
 
   return <View style={styles.container}>

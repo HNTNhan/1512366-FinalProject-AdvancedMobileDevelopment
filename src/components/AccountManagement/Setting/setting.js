@@ -115,6 +115,8 @@ const Setting = (props) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    paddingHorizontal: 5,
+    backgroundColor: 'white'
   },
   sectionContainer: {
     marginBottom: 40,

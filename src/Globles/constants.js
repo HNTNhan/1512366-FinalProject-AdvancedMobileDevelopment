@@ -9,11 +9,20 @@ export const renderSeparator = () => {
 };
 
 export const colors = {
-  bottomTab: {
+  bottomTabOption: {
     activeTintColor: '#1297E0',
     inactiveTintColor: 'gray',
+    style: {
+      paddingBottom: 5,
+      paddingTop: 5,
+      height: 60,
+    },
+    labelStyle: {
+      fontSize: 16,
+    }
   },
   defaultBackgroundColor: '#F8F8F8',
+
 }
 
 
