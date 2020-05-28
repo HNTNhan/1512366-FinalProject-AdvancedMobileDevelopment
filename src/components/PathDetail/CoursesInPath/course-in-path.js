@@ -1,6 +1,6 @@
 import React from 'react';
 import {SectionList, Text, View} from 'react-native';
-import {renderSeparator} from "../../../Globles/constants";
+import {renderSeparator} from "../../../globles/constants";
 import ListCourseItems from "../../Courses/ListCourseItems/list-course-items";
 
 const CourseInPath = (props) => {

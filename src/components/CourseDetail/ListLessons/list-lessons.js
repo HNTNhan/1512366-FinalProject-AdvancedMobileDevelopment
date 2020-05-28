@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {ScrollView, SectionList, StyleSheet, View} from 'react-native';
 import ListLessonItems from "../ListLessonItems/list-lesson-items";
 import ListLessonTitle from "../ListLessonTitle/list-lesson-title";
-import {globalStyles} from "../../../Globles/styles";
+import {globalStyles} from "../../../globles/styles";
 
 const ListLessons = (props) => {
   const courseLessons = [

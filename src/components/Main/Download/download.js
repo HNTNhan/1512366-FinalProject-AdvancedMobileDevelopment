@@ -1,7 +1,7 @@
 import React from 'react';
 import {View, FlatList, StyleSheet, Text, TouchableOpacity} from 'react-native';
 import ListCourseItems from "../../Courses/ListCourseItems/list-course-items";
-import {colors} from "../../../Globles/constants";
+import {objectsConstant} from "../../../globles/constants";
 
 const Download = (props) => {
   const courses =[

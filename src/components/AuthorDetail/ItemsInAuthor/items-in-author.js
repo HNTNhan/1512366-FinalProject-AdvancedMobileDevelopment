@@ -1,6 +1,6 @@
 import React from 'react';
 import {View, Text, StyleSheet} from 'react-native';
-import {globalStyles} from "../../../Globles/styles";
+import {globalStyles} from "../../../globles/styles";
 import ListCourseItems from "../../Courses/ListCourseItems/list-course-items";
 
 const ItemsInAuthor = (props) => {

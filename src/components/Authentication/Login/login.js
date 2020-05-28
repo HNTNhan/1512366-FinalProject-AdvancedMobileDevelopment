@@ -3,7 +3,8 @@ import {View, TouchableOpacity, Text, StyleSheet, ScrollView} from 'react-native
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import { Sae } from 'react-native-textinput-effects';
 import {Button} from "react-native-elements";
-import {login} from "../../../Core/services/authentication-services";
+import {login} from "../../../core/services/authentication-services";
+import InputTextSae from "../../Common/input-text-sae";
 
 const Login = (props) => {
   const [username, setUsername] = useState('admin');
@@ -11,73 +12,60 @@ const Login = (props) => {
   const [status, setStatus] = useState(null);
   useEffect(() => {
     if(status && status.status === 200){
-      props.navigation.navigate('Main')
+      props.navigation.replace('Main')
     }
   }, [status])
-
-  const saeInputText = (title, onChangeText) => {
-    return <Sae
-      label={title}
-      labelStyle={styles.saeLabel}
-      inputStyle={styles.saeInput}
-      iconClass={FontAwesomeIcon}
-      iconName={'pencil'}
-      iconColor={'#03A9F4'}
-      inputPadding={3}
-      labelHeight={16}
-      borderHeight={2}
-      autoCapitalize={'none'}
-      autoCorrect={false}
-      caretHidden={true}
-      style={styles.saeContainer}
-      value={title==='Password' ? password: username || ''}
-      onChangeText={(text) => {
-        title==='Password' ? setPassword(text): setUsername(text)
-      }}
-    />
-  }
 
   const RenderLoginStatus = () => {
     if(!status) {
       return <View />
     } else if(status.status === 200){
-      return <Text>Login successed!</Text>
+      return <View>
+        <Text style={styles.message}>Login succeeded!</Text>
+      </View>
     } else {
       return <View>
-        <Text>{status.errorString}</Text>
+        <Text style={styles.message}>{status.errorString}</Text>
       </View>
     }
   }
 
-  return <View style={{flex: 1}}>
-        <ScrollView style={styles.container} contentContainerStyle={{paddingBottom: 100}}>
+  const onChangeUsername = (username) => {
+    setUsername(username)
+  }
+
+  const onChangePassword = (password) => {
+    setPassword(password)
+  }
+
+  return <View style={styles.container}>
+        <ScrollView contentContainerStyle={{paddingBottom: 100}}>
           <RenderLoginStatus />
-          {saeInputText('Username (or Email)')}
-          {saeInputText('Password')}
+          <InputTextSae title='Username (or Email)' value={username} onChangeText={onChangeUsername}/>
+          <InputTextSae title='Password' value={password} onChangeText={onChangePassword} secureTextEntry={true}/>
 
           <Button buttonStyle={styles.signInButton}
                   titleStyle={styles.signInButtonText}
                   onPress={() => {
                     setStatus(login(username, password))
-                    //props.navigation.navigate('Main')
                   }}
                   title = 'SIGN IN' />
           <Button
             buttonStyle={styles.button}
             titleStyle={styles.buttonText}
-            onPress={() => props.navigation.navigate('ForgetPassword')}
+            onPress={() => props.navigation.navigate('Forgot Password')}
             title ='FORGOT PASSWORD' />
 
-          <Button
-            buttonStyle={styles.button}
-            titleStyle={styles.buttonText}
-            onPress={() => console.log('456')}
-            title = 'USE SINGLE SIGN-ON (SS0)'/>
+          {/*<Button*/}
+          {/*  buttonStyle={styles.button}*/}
+          {/*  titleStyle={styles.buttonText}*/}
+          {/*  onPress={() => console.log('456')}*/}
+          {/*  title = 'USE SINGLE SIGN-ON (SS0)'/>*/}
 
           <Button
             buttonStyle={styles.button}
             titleStyle={styles.buttonText}
-            onPress={() => props.navigation.navigate('Register')}
+            onPress={() => props.navigation.navigate('Sign Up')}
             title= 'SIGN UP FREE' />
         </ScrollView>
   </View>
@@ -89,25 +77,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 30,
     paddingTop: 80,
     backgroundColor: 'white'
-  },
-  saeContainer: {
-    borderRadius: 7,
-    borderWidth: 2,
-    borderColor: 'gainsboro',
-    marginBottom: 5,
-    backgroundColor: 'rgba(255, 255, 255, 0.8)'
-  },
-  saeLabel: {
-    color: '#03A9F4',
-    fontWeight: '600',
-    paddingBottom: 12,
-    paddingHorizontal: 10,
-  },
-  saeInput: {
-    color: 'black',
-    marginHorizontal: 10,
-    fontSize: 16,
-    marginBottom: -5,
   },
   button: {
     marginVertical: 5,
@@ -131,6 +100,11 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 18,
   },
+  message: {
+    textAlign: 'center',
+    fontSize: 16,
+    marginVertical: 5,
+  }
 })
 
 export default Login;

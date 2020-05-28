@@ -5,7 +5,7 @@ import AllCourseResult from "./AllCourseResult/all-course-result";
 import AllPathResult from "./AllPathResult/all-path-result";
 import AllAuthorResult from "./AllAuthorResult/all-author-result";
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
-import {colors} from "../../../../Globles/constants";
+import {objectsConstant} from "../../../../globles/constants";
 import TabBarStyle from "../../../Common/tab-bar-style";
 import GeneralCourseDetail from "../../../CourseDetail/GeneralCourseDetail/general-course-detail";
 import Transcript from "../../../CourseDetail/Transcript/transcript";

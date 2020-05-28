@@ -16,16 +16,20 @@ const InputTextSae = (props) => {
     borderHeight={2}
     autoCapitalize={'none'}
     autoCorrect={false}
+    secureTextEntry={props.secureTextEntry || false}
+    value={props.value}
     style={styles.saeContainer}
-    onChangeText={(text) => console.log(text)}
+    onChangeText={(text) => props.onChangeText(text)}
   />
 };
 
 const styles = StyleSheet.create({
   saeContainer: {
     borderRadius: 7,
+    borderWidth: 2,
+    borderColor: 'gainsboro',
     marginBottom: 10,
-    backgroundColor: 'rgba(255, 255, 255, 0.15)'
+    backgroundColor: 'rgba(255, 255, 255, 0.8)'
   },
   saeLabel: {
     color: '#03A9F4',
@@ -34,7 +38,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
   },
   saeInput: {
-    color: 'white',
+    color: 'black',
     marginHorizontal: 10,
     fontSize: 16,
     marginBottom: -5,

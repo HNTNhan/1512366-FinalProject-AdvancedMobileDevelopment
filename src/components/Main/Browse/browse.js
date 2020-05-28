@@ -5,7 +5,7 @@ import Skills from "./Skills/skills";
 import Categories from "./Categories/categories";
 import SectionCourses from "../Home/SectionCourses/section-courses";
 import TopAuthors from "./TopAuthors/top-authors";
-import {globalStyles} from "../../../Globles/styles";
+import {globalStyles} from "../../../globles/styles";
 
 const Browse = (props) => {
 

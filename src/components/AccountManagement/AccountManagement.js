@@ -1,11 +1,11 @@
 import React, {useState} from 'react';
-import {View, TouchableOpacity, Text, Image, StyleSheet, Switch} from 'react-native';
+import {View, TouchableOpacity, Text, Image, StyleSheet, Switch, ScrollView} from 'react-native';
 import ButtonSetting from "./ButtonSetting/button-setting";
 import ButtonSwitch from "./ButtonSwitch/button-switch";
 
 const AccountManagement = (props) => {
 
-  return <View style={styles.container}>
+  return <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
     <ButtonSetting title={'Profile'} onPress={() => props.navigation.navigate("Profile")}/>
     <ButtonSetting title={'Account'} onPress={() => props.navigation.navigate("Setting")}/>
     <ButtonSetting title={'Subscription'} />
@@ -33,7 +33,7 @@ const AccountManagement = (props) => {
     <TouchableOpacity onPress={console.log(1)} style={styles.signOutButton}>
       <Text style={[styles.text, styles.signOutButtonText]}>SignOut</Text>
     </TouchableOpacity>
-  </View>
+  </ScrollView>
 };
 
 const styles = StyleSheet.create({

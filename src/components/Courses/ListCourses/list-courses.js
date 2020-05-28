@@ -4,7 +4,7 @@ import ListCourseItems from "../ListCourseItems/list-course-items";
 import ListPathItems from "../ListPathItems/list-path-items";
 import ListAuthorItems from "../ListAuthorItems/list-author-items";
 import SectionTitle from "../../Common/section-title";
-import {globalStyles} from "../../../Globles/styles";
+import {globalStyles} from "../../../globles/styles";
 
 const ListCourses = (props) => {
   const courses =[

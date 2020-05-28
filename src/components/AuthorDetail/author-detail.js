@@ -1,7 +1,7 @@
 import React from 'react';
 import {ScrollView, View} from 'react-native';
 import GeneralAuthorDetail from "./GeneralAuthorDetail/general-author-detail";
-import {globalStyles} from "../../Globles/styles";
+import {globalStyles} from "../../globles/styles";
 import ItemsInAuthor from "./ItemsInAuthor/items-in-author";
 
 const AuthorDetail = (props) => {

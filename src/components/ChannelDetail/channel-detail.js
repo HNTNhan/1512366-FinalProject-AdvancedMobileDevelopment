@@ -1,6 +1,6 @@
 import React from 'react';
 import {ScrollView, View} from 'react-native';
-import {globalStyles} from "../../Globles/styles";
+import {globalStyles} from "../../globles/styles";
 import GeneralChannelDetail from "./GeneralChannelDetail/general-channel-detail";
 import ChannelProgress from "./ChannelProgress/channel-progress";
 import ItemsInChannel from "./ItemsInChannel/items-in-channel";

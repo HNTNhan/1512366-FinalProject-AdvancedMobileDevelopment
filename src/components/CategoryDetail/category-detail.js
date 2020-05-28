@@ -2,7 +2,7 @@ import React from 'react';
 import {ScrollView, View} from 'react-native';
 import Skills from "../Main/Browse/Skills/skills";
 import SectionCourses from "../Main/Home/SectionCourses/section-courses";
-import {globalStyles} from "../../Globles/styles";
+import {globalStyles} from "../../globles/styles";
 import TopAuthors from "../Main/Browse/TopAuthors/top-authors";
 
 const CategoryDetail = (props) => {

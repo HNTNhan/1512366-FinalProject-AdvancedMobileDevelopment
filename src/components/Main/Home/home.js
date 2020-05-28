@@ -1,7 +1,7 @@
 import React from 'react';
 import {View, StyleSheet, ScrollView, Button} from 'react-native';
 import SectionCourses from "./SectionCourses/section-courses";
-import {globalStyles} from "../../../Globles/styles";
+import {globalStyles} from "../../../globles/styles";
 
 
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import {FlatList, StyleSheet, View} from 'react-native';
-import {globalStyles} from "../../../Globles/styles";
+import {globalStyles} from "../../../globles/styles";
 import SectionTitle from "../../Common/section-title";
 import ListPathItems from "../ListPathItems/list-path-items";
 import ListChannelItems from "../ListChannelItems/list-channel-items";

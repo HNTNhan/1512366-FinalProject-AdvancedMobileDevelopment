@@ -3,7 +3,7 @@ import {View, TextInput, TouchableOpacity, StyleSheet, Text, Keyboard } from 're
 import BeforeSearch from "./BeforeSearch/before-search";
 import WhileSearch from "./WhileSearch/while-search";
 import ResultSearch from "./ResultSearch/result_search";
-import {globalStyles} from "../../../Globles/styles";
+import {globalStyles} from "../../../globles/styles";
 import AllResultSearch from "./ResultSearch/AllResultSearch/all-result-search";
 
 const Search = (props) => {

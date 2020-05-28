@@ -1,6 +1,6 @@
 import React from 'react';
 import {ScrollView, View} from 'react-native';
-import {globalStyles} from "../../Globles/styles";
+import {globalStyles} from "../../globles/styles";
 import SectionCourses from "../Main/Home/SectionCourses/section-courses";
 import TopAuthors from "../Main/Browse/TopAuthors/top-authors";
 

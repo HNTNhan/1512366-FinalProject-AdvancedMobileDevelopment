@@ -8,7 +8,7 @@ export const renderSeparator = () => {
   );
 };
 
-export const colors = {
+export const objectsConstant = {
   bottomTabOption: {
     activeTintColor: '#1297E0',
     inactiveTintColor: 'gray',
@@ -21,8 +21,13 @@ export const colors = {
       fontSize: 16,
     }
   },
-  defaultBackgroundColor: '#F8F8F8',
-
+  defaultCenterHeaderBar: {
+    headerStyle: {
+      height: 50,
+    },
+    headerStatusBarHeight: 0,
+    headerTitleAlign: 'center'
+  },
 }
 
 

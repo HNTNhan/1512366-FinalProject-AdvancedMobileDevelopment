@@ -2,7 +2,7 @@ import React from 'react';
 import {FlatList, View} from 'react-native';
 import ListAuthorItems from "../ListAuthorItems/list-author-items";
 import SectionTitle from "../../Common/section-title";
-import {globalStyles} from "../../../Globles/styles";
+import {globalStyles} from "../../../globles/styles";
 
 const ListAuthors = (props) => {
   const authors = [

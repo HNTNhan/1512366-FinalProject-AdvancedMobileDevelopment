@@ -2,7 +2,7 @@ import React from 'react';
 import {View} from 'react-native';
 import ListPathItems from "../../Courses/ListPathItems/list-path-items";
 import ListCourseItems from "../../Courses/ListCourseItems/list-course-items";
-import {globalStyles} from "../../../Globles/styles";
+import {globalStyles} from "../../../globles/styles";
 
 
 const ItemsInChannel = (props) => {

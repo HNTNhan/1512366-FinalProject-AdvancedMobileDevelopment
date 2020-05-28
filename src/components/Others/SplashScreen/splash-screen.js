@@ -1,13 +1,12 @@
 import React, {useEffect, useState} from 'react';
 import {Image, View, StyleSheet, Text} from 'react-native';
-import {globalStyles} from "../../../Globles/styles";
+import {globalStyles} from "../../../globles/styles";
 
 const SplashScreen = (props) => {
-  const [loading, setLoading] = useState(0)
   const [counter, setCounter] = React.useState(0);
 
   useEffect(() => {
-    !(counter < 100 && setTimeout(() => setCounter(counter + 5), 1)) ? props.navigation.navigate('Authentication') : null;
+    !(counter < 100 && setTimeout(() => setCounter(counter + 4), 1)) ? props.navigation.replace('Authentication') : null;
   }, [counter])
 
   return <View style={styles.container}>

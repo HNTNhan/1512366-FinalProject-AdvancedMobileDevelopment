@@ -1,7 +1,7 @@
 import React from 'react';
 import {SectionList, StyleSheet, Text, View, Image, TouchableOpacity, ScrollView} from 'react-native';
 import ListKeyItems from "../ListKeyItems/list-key-items";
-import {globalStyles} from "../../../../Globles/styles";
+import {globalStyles} from "../../../../globles/styles";
 
 const BeforeSearch = (props) => {
 
