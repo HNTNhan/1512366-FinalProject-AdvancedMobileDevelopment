@@ -11,7 +11,7 @@ const ListCourses = (props) => {
     {
       id: 1,
       title: 'Building Mobile Apps with Visual Studio Tools for Apache Cordova',
-      author: 'Matt Honeycutt',
+      author: ['Matt Honeycutt'],
       level: 'Beginner',
       released: 'Jan 17, 2017',
       duration: '3h 41m',
@@ -19,7 +19,7 @@ const ListCourses = (props) => {
     {
       id: 2,
       title: 'Building Hybrid Mobile Applications with HTML5',
-      author: 'Jon Flanders',
+      author: ['Jon Flanders'],
       level: 'Intermediate',
       released: 'Mar 9, 2012',
       duration: '4h 25m',
@@ -27,7 +27,7 @@ const ListCourses = (props) => {
     {
       id: 3,
       title: 'Building Cross-Platform Mobile Apps with Telerik AppBuilder',
-      author: 'Steve Michelotti',
+      author: ['Steve Michelotti', 'Michel'],
       level: 'Intermediate',
       released: 'Jan 18, 2014',
       duration: '3h 15m',

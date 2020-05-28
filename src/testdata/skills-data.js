@@ -1,0 +1,15 @@
+const skills = ['Angular',
+  'JavaScript',
+  'C#',
+  'Java',
+  'Python',
+  'React',
+  '.NET',
+  'Android',
+  'Data Analysis',
+  'ASP.NET',
+  'Node.js',
+  'SQL Server',
+  'Database Administration',
+  'Machine Learning'
+]

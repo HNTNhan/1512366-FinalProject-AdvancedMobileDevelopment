@@ -3,6 +3,7 @@ import {ScrollView, View} from 'react-native';
 import GeneralPathDetail from "./GeneralPathDetail/general-path-detail";
 import PathProgress from "./PathProgress/path-progress";
 import CourseInPath from "./CoursesInPath/course-in-path";
+import {globalStyles} from "../../globles/styles";
 
 const PathDetail = (props) => {
   const pathDetail = {
@@ -64,7 +65,7 @@ const PathDetail = (props) => {
     ]
   }
 
-  return <ScrollView style={{flex: 1, marginHorizontal: 5}}>
+  return <ScrollView style={globalStyles.container}>
     <GeneralPathDetail detail={pathDetail}/>
     <PathProgress progress={pathDetail.progress}/>
     <CourseInPath courses={pathDetail.listCourses} navigation={props.navigation} route={props.route}/>

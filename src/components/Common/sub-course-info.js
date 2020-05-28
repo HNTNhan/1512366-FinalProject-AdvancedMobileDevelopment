@@ -4,7 +4,7 @@ import {StyleSheet, Text, View} from 'react-native';
 const SubCourseInfo = (props) => {
   return <View style={styles.detail}>
     <Text>{props.item.title}</Text>
-    <Text style={styles.darkText}>{props.item.author}</Text>
+    <Text style={styles.darkText}>{props.item.author.join(', ')}</Text>
     <Text style={styles.darkText}>{`${props.item.level} . ${props.item.released} . ${props.item.duration}`}</Text>
   </View>
 };
