@@ -1,15 +1,17 @@
-import React, {createRef, useEffect, useState} from 'react';
-import {View, TouchableOpacity, Text, StyleSheet, ScrollView} from 'react-native';
-import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
-import { Sae } from 'react-native-textinput-effects';
+import React, {useContext, useEffect, useState} from 'react';
+import {View, Text, StyleSheet, ScrollView} from 'react-native';
 import {Button} from "react-native-elements";
 import {login} from "../../../core/services/authentication-services";
 import InputTextSae from "../../Common/input-text-sae";
+import {AuthenticationContext} from "../../../provider/authentication-provider";
+import {usersData} from "../../../testdata/users-data"
+import {ColorsContext} from "../../../provider/colors-provider";
 
 const Login = (props) => {
   const [username, setUsername] = useState('admin');
   const [password, setPassword] = useState('123456');
   const [status, setStatus] = useState(null);
+
   useEffect(() => {
     if(status && status.status === 200){
       props.navigation.replace('Main')
@@ -20,6 +22,8 @@ const Login = (props) => {
     if(!status) {
       return <View />
     } else if(status.status === 200){
+      const user = usersData.find((user) => user.name===status.user.username)
+      setUser(user)
       return <View>
         <Text style={styles.message}>Login succeeded!</Text>
       </View>
@@ -38,37 +42,38 @@ const Login = (props) => {
     setPassword(password)
   }
 
-  return <View style={styles.container}>
-        <ScrollView contentContainerStyle={{paddingBottom: 100}}>
-          <RenderLoginStatus />
-          <InputTextSae title='Username (or Email)' value={username} onChangeText={onChangeUsername}/>
-          <InputTextSae title='Password' value={password} onChangeText={onChangePassword} secureTextEntry={true}/>
+  const {setUser} = useContext(AuthenticationContext);
+  const {defaultBackgroundColor, checkBackgroundColor, setCheckBackgroundColor} = useContext(ColorsContext)
 
-          <Button buttonStyle={styles.signInButton}
-                  titleStyle={styles.signInButtonText}
-                  onPress={() => {
-                    setStatus(login(username, password))
-                  }}
-                  title = 'SIGN IN' />
-          <Button
-            buttonStyle={styles.button}
-            titleStyle={styles.buttonText}
-            onPress={() => props.navigation.navigate('Forgot Password')}
-            title ='FORGOT PASSWORD' />
+  return <View style={[styles.container, {backgroundColor: defaultBackgroundColor.background}]}>
+      <ScrollView contentContainerStyle={{paddingBottom: 100}}>
+        <RenderLoginStatus />
+        <InputTextSae title='Username (or Email)' value={username} onChangeText={onChangeUsername}/>
+        <InputTextSae title='Password' value={password} onChangeText={onChangePassword} secureTextEntry={true}/>
 
-          {/*<Button*/}
-          {/*  buttonStyle={styles.button}*/}
-          {/*  titleStyle={styles.buttonText}*/}
-          {/*  onPress={() => console.log('456')}*/}
-          {/*  title = 'USE SINGLE SIGN-ON (SS0)'/>*/}
-
-          <Button
-            buttonStyle={styles.button}
-            titleStyle={styles.buttonText}
-            onPress={() => props.navigation.navigate('Sign Up')}
-            title= 'SIGN UP FREE' />
-        </ScrollView>
-  </View>
+        <Button buttonStyle={styles.signInButton}
+                titleStyle={styles.signInButtonText}
+                onPress={() => {
+                  setStatus(login(username, password))
+                }}
+                title = 'SIGN IN' />
+        <Button
+          buttonStyle={styles.button}
+          titleStyle={styles.buttonText}
+          onPress={() => props.navigation.navigate('Forgot Password')}
+          title ='FORGOT PASSWORD' />
+        <Button
+          buttonStyle={styles.button}
+          titleStyle={styles.buttonText}
+          onPress={() => props.navigation.navigate('Sign Up')}
+          title= 'SIGN UP FREE' />
+        <Button
+          buttonStyle={styles.button}
+          titleStyle={styles.buttonText}
+          onPress={() => setCheckBackgroundColor(!checkBackgroundColor)}
+          title ='Change Color' />
+      </ScrollView>
+    </View>
 };
 
 const styles = StyleSheet.create({
@@ -76,7 +81,6 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 30,
     paddingTop: 80,
-    backgroundColor: 'white'
   },
   button: {
     marginVertical: 5,

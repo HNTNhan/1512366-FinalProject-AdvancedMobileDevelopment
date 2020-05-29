@@ -9,8 +9,10 @@ import ListChannels from "../../Courses/ListChannels/list-channels";
 import CourseDetail from "../../CourseDetail/course-detail";
 import PathDetail from "../../PathDetail/path-detail";
 import ChannelDetail from "../../ChannelDetail/channel-detail";
+
 import AuthorDetail from "../../AuthorDetail/author-detail";
 import {objectsConstant} from "../../../globles/constants";
+import IconMainHeaderRight from "../../Common/icon-main-hearder-right";
 
 
 const HomeStack = createStackNavigator();
@@ -22,12 +24,7 @@ const HomeScreen = (props) => {
                       component={Home}
                       options={({route, navigation}) => (
                         {headerRight: () => {
-                            return <Icon name='ellipsis-v'
-                                         size={20}
-                                         type='font-awesome-5'
-                                         containerStyle={{marginRight: 10, paddingHorizontal: 10}}
-                                         onPress={() => navigation.navigate('AccountManagement')}
-                            />
+                            return <IconMainHeaderRight onPress={() => navigation.navigate('AccountManagement')}/>
                           }}
                       )}/>
     <HomeStack.Screen name='ListCourses' component={ListCourses}/>

@@ -16,16 +16,16 @@ const initialLayout = { width: Dimensions.get('window').width };
 const CourseDetail = (props) => {
   const courseDetail= {
       title: 'Developing Mobile Applications Protected by Azure Active Directory',
-      description: 'Authenticating users is essential to mobile applications, and for the sake of your users ' +
+      description: 'Authenticating usersData is essential to mobile applications, and for the sake of your usersData ' +
         'it needed to be implemented right, but it’s difficult to know where to get started. ' +
         'In this course, Developing Mobile Applications Protected by Azure Active Directory, ' +
-        'you’ll learn to harness the power and infrastructure of Azure AD to provide your users and mobile apps ' +
+        'you’ll learn to harness the power and infrastructure of Azure AD to provide your usersData and mobile apps ' +
         'with a secure sign-in experience. First, you’ll explore how to configure Azure AD to work ' +
-        'with your mobile app. Next, you’ll discover how users can sign-in to your mobile application ' +
+        'with your mobile app. Next, you’ll discover how usersData can sign-in to your mobile application ' +
         'to access secure resources in a custom web API. Finally, you’ll learn how to query the Microsoft Graph ' +
-        'to obtain information about your users contained within Azure AD. When you’re finished with this course' +
+        'to obtain information about your usersData contained within Azure AD. When you’re finished with this course' +
         ', you’ll have the skills and knowledge of authenticating mobile apps with Azure AD needed ' +
-        'to provide your users with a secure experience.',
+        'to provide your usersData with a secure experience.',
       author: [
         {
           icon: require('../../../assets/ic_person.png'),

@@ -1,4 +1,4 @@
-const channels = [
+export const channels = [
   {
     detail:{
       titleChannel: 'react',

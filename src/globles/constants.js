@@ -21,6 +21,7 @@ export const objectsConstant = {
       fontSize: 16,
     }
   },
+
   defaultCenterHeaderBar: {
     headerStyle: {
       height: 50,
@@ -30,4 +31,16 @@ export const objectsConstant = {
   },
 }
 
+export const defaultColors = {
+  defaultBackgroundColor: {
+    dark: {
+      foreground: '#dddddd',
+      background: '#000000',
+    },
+    light: {
+      foreground: '#222222',
+      background: '#ffffff',
+    }
+  }
+}
 

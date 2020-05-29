@@ -21,3 +21,16 @@ export const globalStyles = StyleSheet.create({
      width: Dimensions.get('screen').width
    },
 })
+
+// export const defaultColors = StyleSheet.create({
+//   defaultBackgroundColor: {
+//     dark: {
+//       foreground: '#dddddd',
+//       background: '#000000',
+//     },
+//     light: {
+//       foreground: '#222222',
+//       background: '#ffffff',
+//     }
+//   }
+// })

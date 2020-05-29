@@ -1,11 +1,11 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {View, Text, ScrollView, TouchableOpacity, StyleSheet} from 'react-native';
 import SectionCourseItems from "../SectionCourseItems/section-course-items";
 import PathItems from "../PathItems/path-items";
 import ChannelItems from "../ChanneItems/channel-items";
 
 const SectionCourses = (props) => {
-  const courses = [
+  /* const courses = [
     {
       id: 1,
       title: 'Building Mobile Apps with Visual Studio Tools for Apache Cordova',
@@ -30,9 +30,8 @@ const SectionCourses = (props) => {
       released: 'Jan 18, 2014',
       duration: '3h 15m',
     },
-  ];
-
-  const paths = [
+  ]; */
+  /*const paths = [
     {
       id: 1,
       title: '.NET Base Class Library',
@@ -51,9 +50,8 @@ const SectionCourses = (props) => {
       no_courses: '8 Courses',
       duration: '28 Hours'
     }
-  ];
-
-  const channels = [
+  ]; */
+  /*const channels = [
     {
       id: 1,
       title: 'React',
@@ -62,7 +60,8 @@ const SectionCourses = (props) => {
       id: 2,
       title: 'js',
     },
-  ];
+  ];*/
+
 
   const onPressItemInListCourse = () => {
     props.navigation.navigate('CourseDetail')
@@ -76,16 +75,16 @@ const SectionCourses = (props) => {
     props.navigation.navigate('ChannelDetail')
   }
 
-  const renderListItems = (courses) => {
-    return courses.map( (item) => <SectionCourseItems key={item.id}  item={item} onPress={onPressItemInListCourse} />);
+  const renderListItems = () => {
+    return props.data.map( (item) => <SectionCourseItems key={item.key}  item={item} onPress={onPressItemInListCourse} />);
   }
 
-  const renderPathItems = (paths) => {
-    return paths.map( (item) => <PathItems key={item.id} item={item} onPress={onPressItemInListPath} />);
+  const renderPathItems = () => {
+    return props.data.map( (item) => <PathItems key={item.key} item={item} onPress={onPressItemInListPath} />);
   }
 
-  const renderChannelItems = (paths) => {
-    return paths.map( (item) => <ChannelItems key={item.id} item={item} onPress={onPressItemInListChannel} />);
+  const renderChannelItems = () => {
+    return props.data.map( (item) => <ChannelItems key={item.title} item={item} onPress={onPressItemInListChannel} />);
   }
 
   return <View style={styles.container}>
@@ -99,8 +98,8 @@ const SectionCourses = (props) => {
 
     </View>
     <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-      {props.type==='Path' ? renderPathItems(paths) : props.type==='Channel'
-        ? renderChannelItems(channels) : renderListItems(courses)}
+      {props.type==='Path' ? renderPathItems() : props.type==='Channel'
+        ? renderChannelItems() : renderListItems()}
     </ScrollView>
   </View>
 };

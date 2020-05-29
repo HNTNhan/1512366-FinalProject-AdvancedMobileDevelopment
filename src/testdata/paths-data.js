@@ -1,4 +1,4 @@
-const paths = [
+export const pathsData = [
   {
     key: 'P00000',
     title: 'React',
