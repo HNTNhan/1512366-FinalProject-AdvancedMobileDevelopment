@@ -27,9 +27,9 @@ const HomeScreen = (props) => {
                             return <IconMainHeaderRight onPress={() => navigation.navigate('AccountManagement')}/>
                           }}
                       )}/>
-    <HomeStack.Screen name='ListCourses' component={ListCourses}/>
-    <HomeStack.Screen name='ListPaths' component={ListPaths}/>
-    <HomeStack.Screen name='ListChannel' component={ListChannels}/>
+    <HomeStack.Screen name='ListCourses' component={ListCourses} options={({ route }) => ({ title: route.params.name })}/>
+    <HomeStack.Screen name='ListPaths' component={ListPaths} options={{title: 'Paths'}} />
+    <HomeStack.Screen name='ListChannels' component={ListChannels} options={{title: 'Channels'}}/>
     <HomeStack.Screen name='CourseDetail' component={CourseDetail} options={{headerShown: false}}/>
     <HomeStack.Screen name='PathDetail' component={PathDetail}/>
     <HomeStack.Screen name='ChannelDetail' component={ChannelDetail}/>

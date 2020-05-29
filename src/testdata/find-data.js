@@ -7,3 +7,13 @@ export function findByKey(list, listFind) {
 
   return items
 }
+
+export function findAuthorByName(list, listFind) {
+  let items=[];
+
+  for(let i=0; i<listFind.length; i++) {
+    items.push(list.find((item) => item.name===listFind[i]))
+  }
+
+  return items
+}

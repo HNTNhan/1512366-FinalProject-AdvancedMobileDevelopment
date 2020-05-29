@@ -5,45 +5,16 @@ import GeneralCourseDetail from "./GeneralCourseDetail/general-course-detail";
 import ListLessons from "./ListLessons/list-lessons";
 import Transcript from "./Transcript/transcript";
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
-import AllResultSearch from "../Main/Search/ResultSearch/AllResultSearch/all-result-search";
-import AllCourseResult from "../Main/Search/ResultSearch/AllCourseResult/all-course-result";
-import AllPathResult from "../Main/Search/ResultSearch/AllPathResult/all-path-result";
-import AllAuthorResult from "../Main/Search/ResultSearch/AllAuthorResult/all-author-result";
 import TabBarStyle from "../Common/tab-bar-style";
+import {findAuthorByName, findByKey} from "../../testdata/find-data";
+import {coursesData} from "../../testdata/courses-data";
+import {authorsData} from "../../testdata/authors-data";
 
 const initialLayout = { width: Dimensions.get('window').width };
 
 const CourseDetail = (props) => {
-  const courseDetail= {
-      title: 'Developing Mobile Applications Protected by Azure Active Directory',
-      description: 'Authenticating usersData is essential to mobile applications, and for the sake of your usersData ' +
-        'it needed to be implemented right, but it’s difficult to know where to get started. ' +
-        'In this course, Developing Mobile Applications Protected by Azure Active Directory, ' +
-        'you’ll learn to harness the power and infrastructure of Azure AD to provide your usersData and mobile apps ' +
-        'with a secure sign-in experience. First, you’ll explore how to configure Azure AD to work ' +
-        'with your mobile app. Next, you’ll discover how usersData can sign-in to your mobile application ' +
-        'to access secure resources in a custom web API. Finally, you’ll learn how to query the Microsoft Graph ' +
-        'to obtain information about your usersData contained within Azure AD. When you’re finished with this course' +
-        ', you’ll have the skills and knowledge of authenticating mobile apps with Azure AD needed ' +
-        'to provide your usersData with a secure experience.',
-      author: [
-        {
-          icon: require('../../../assets/ic_person.png'),
-          name: 'Matthew Soucoup'
-        },
-        {
-          icon: require('../../../assets/ic_person.png'),
-          name: 'Jonathan Lovatt',
-        },
-        {
-          icon: require('../../../assets/ic_person.png'),
-          name: 'Jonathan Lovatt',
-        }
-      ],
-      level: 'Intermediate',
-      released: 'May 11, 2020',
-      duration: '1h 18m',
-    };
+  const course = findByKey(coursesData, [props.route.params.key])[0]
+  const authors = findAuthorByName(authorsData, course.author)
 
   const [index, setIndex] = useState(0);
   const [routes] = useState([
@@ -55,9 +26,9 @@ const CourseDetail = (props) => {
   const renderScene = ({ route }) => {
     switch (route.key) {
       case 'first':
-        return <GeneralCourseDetail  detail={courseDetail} navigation={props.navigation} route={props.route}/>;
+        return <GeneralCourseDetail  detail={course} author={authors} navigation={props.navigation} route={props.route}/>;
       case 'second':
-        return <Transcript />;
+        return <Transcript transcript={course.transcript}/>;
       case 'third':
         return <ListLessons tabLabel='Content'/>;
       default:

@@ -3,6 +3,7 @@ import {Dimensions, StyleSheet} from 'react-native';
 export const globalStyles = StyleSheet.create({
   separator: {
     height: 1,
+    marginVertical: 5,
     width: "100%",
     backgroundColor: "darkgray",
   },
@@ -13,7 +14,6 @@ export const globalStyles = StyleSheet.create({
   container: {
     flex: 1,
     paddingHorizontal: 5,
-    backgroundColor: 'white',
   },
    splashScreen: {
      resizeMode: "cover",

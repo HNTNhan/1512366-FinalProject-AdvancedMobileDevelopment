@@ -1,30 +1,12 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {FlatList, StyleSheet, View} from 'react-native';
 import {globalStyles} from "../../../globles/styles";
 import SectionTitle from "../../Common/section-title";
 import ListPathItems from "../ListPathItems/list-path-items";
+import {ColorsContext} from "../../../provider/colors-provider";
 
 const ListPaths = (props) => {
-  const paths = [
-    {
-      id: 1,
-      title: '.NET Base Class Library',
-      no_courses: '6 Courses',
-      duration: '18 Hours'
-    },
-    {
-      id: 2,
-      title: 'Android Development with Kotlin — App Fundamentals',
-      no_courses: '5 Courses',
-      duration: '17 Hours'
-    },
-    {
-      id: 3,
-      title: 'Google: Associate Android Developer (AAD)',
-      no_courses: '8 Courses',
-      duration: '28 Hours'
-    },
-  ]
+  const {defaultBackgroundColor} = useContext(ColorsContext)
 
   const renderSeparator = () => {
     return (
@@ -36,13 +18,13 @@ const ListPaths = (props) => {
     props.navigation.navigate('PathDetail')
   }
 
-  return <View>
+  return <View style={[globalStyles.container, {backgroundColor: defaultBackgroundColor.background}]}>
     <FlatList
-      data={paths}
+      data={props.route.params.data}
       keyExtractor={(item, index) => item + index}
       renderItem={({item}) => <ListPathItems item={item} onPress={onPressItem}/>}
       ItemSeparatorComponent= {renderSeparator}
-      ListHeaderComponent = {() => <SectionTitle title={'8 Result'} button={'Filter'}/>}
+      ListHeaderComponent = {props.route.params.title ? () => <SectionTitle title={'8 Result'} button={'Filter'}/> : null}
     />
   </View>
 };
