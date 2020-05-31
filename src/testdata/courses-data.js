@@ -8,6 +8,66 @@ export const coursesData = [
     duration: '1h 10m',
     description: 'You ve heard of React, but is it right for you? In this course, React: The Big Picture, you will first learn why React has become so popular. Next, you will learn the tradeoffs inherent in React\'s design. Finally, you will explore some drawbacks to consider. After watching this course, you\'ll have a clear understanding of React\'s core use cases, advantages, and drawbacks so you can make an educated decision on whether React is right for you.',
     transcript: '',
+    lessons: [
+      {
+        title: 'Course Overview',
+        totalDuration: '1:26',
+        data: [
+          {
+            name: 'Course Overview',
+            duration: '1:26',
+          }
+        ]
+      },
+      {
+        title: 'Why React?',
+        totalDuration: '25:37',
+        data: [
+          {
+            name: 'Intro',
+            duration: '0:53',
+          },
+          {
+            name: 'History',
+            duration: '2:00',
+          },
+          {
+            name: 'Why React?',
+            duration: '0:27',
+          },
+          {
+            name: 'Reason 1: Flexibility',
+            duration: '3:30',
+          },
+          {
+            name: 'Reason 2: Developer Experience',
+            duration: '4:50',
+          },
+        ]
+      },
+      {
+        title: 'Tradeoffs',
+        totalDuration: '23:31',
+        data: [
+          {
+            name: 'Intro',
+            duration: '0:31',
+          },
+          {
+            name: 'Tradeoff 1: Framework vs. Library',
+            duration: '2:36',
+          },
+          {
+            name: 'Tradeoff 2: Concise vs. Explicit',
+            duration: '2:21',
+          },
+          {
+            name: 'Tradeoff 3: Template-centric vs. JavaScript-centric',
+            duration: '6:09',
+          },
+        ]
+      },
+    ]
   },
   {
     key: 'C00001',
@@ -41,6 +101,66 @@ export const coursesData = [
         ]
       }
     ],
+    lessons: [
+      {
+        title: 'Course Overview',
+        totalDuration: '2:06',
+        data: [
+          {
+            name: 'Course Overview',
+            duration: '2:06',
+          }
+        ]
+      },
+      {
+        title: 'The Basics',
+        totalDuration: '57:22',
+        data: [
+          {
+            name: 'Introduction',
+            duration: '3:53',
+          },
+          {
+            name: 'Why React?',
+            duration: '5:57',
+          },
+          {
+            name: `React's Basic Concepts`,
+            duration: '5:22',
+          },
+          {
+            name: 'Your First React Component',
+            duration: '10:34',
+          },
+          {
+            name: 'Your First React Hook',
+            duration: '7:02',
+          },
+        ]
+      },
+      {
+        title: 'Modern JavaScript Crash Course',
+        totalDuration: '22:40',
+        data: [
+          {
+            name: 'ECMAScript and TC39',
+            duration: '1:25',
+          },
+          {
+            name: 'Variables and Block Scopes',
+            duration: '4:37',
+          },
+          {
+            name: 'Arrow Functions',
+            duration: '2:58',
+          },
+          {
+            name: 'Object Literals',
+            duration: '2:17',
+          },
+        ]
+      },
+    ]
   },
   {
     key: 'C00002',
@@ -74,6 +194,66 @@ export const coursesData = [
         ]
       }
     ],
+    lessons: [
+      {
+        title: 'Course Overview',
+        totalDuration: '1:37',
+        data: [
+          {
+            name: 'Course Overview',
+            duration: '1:37',
+          }
+        ]
+      },
+      {
+        title: 'Intro',
+        totalDuration: '31:03',
+        data: [
+          {
+            name: 'Intro',
+            duration: '1:20',
+          },
+          {
+            name: 'Course Outline',
+            duration: '1:23',
+          },
+          {
+            name: `Who Is This Course For?`,
+            duration: '1:21',
+          },
+          {
+            name: 'Why React?',
+            duration: '7:00',
+          },
+          {
+            name: 'Tech Overview',
+            duration: '38',
+          },
+        ]
+      },
+      {
+        title: 'Environment Setup',
+        totalDuration: '24:33',
+        data: [
+          {
+            name: 'Intro',
+            duration: '0:59',
+          },
+          {
+            name: 'Install Node',
+            duration: '0:40',
+          },
+          {
+            name: 'Install VS Code',
+            duration: '0:28',
+          },
+          {
+            name: 'Configure VS Code Extensions: Prettier and ESLint',
+            duration: '1:44',
+          },
+        ]
+      },
+    ]
   },
   {
     key: 'C00003',
@@ -84,6 +264,66 @@ export const coursesData = [
     duration: '3h 54m',
     description: `Have you ever wanted to create full-stack Javascript applications with React.js? This course, Advanced React.js, covers many advanced topics and best practices about React.js. First, you'll learn how to configure and customize full-stack JavaScript environments. Next, you'll explore how to work with async data and manage an application state both internally and externally. Additionally, you'll dive into components context API, and learn how to use it with higher order components, pure components, presentational and container components, and all components lifecycle methods. Finally, you'll discover performance analysis and optimization, how to use immutable data structures, and how to create production builds for both React.js and Node.js. By the end of this course, you'll be able to efficiently use presentational and stateful React components in production.`,
     transcript: '',
+    lessons: [
+      {
+        title: 'Course Overview',
+        totalDuration: '1:27',
+        data: [
+          {
+            name: 'Course Overview',
+            duration: '1:27',
+          }
+        ]
+      },
+      {
+        title: 'UIs in React',
+        totalDuration: '7:33',
+        data: [
+          {
+            name: 'Welcome and Prereqs',
+            duration: '1:40',
+          },
+          {
+            name: 'Why Style?',
+            duration: '2:38',
+          },
+          {
+            name: `Prepare for React Land`,
+            duration: '3:13',
+          },
+        ]
+      },
+      {
+        title: 'Inline Styles',
+        totalDuration: '21:06',
+        data: [
+          {
+            name: 'Forget What You Know',
+            duration: '1:18',
+          },
+          {
+            name: 'Current Origins of Inline Styles',
+            duration: '4:12',
+          },
+          {
+            name: 'Demo Introduction',
+            duration: '2:02',
+          },
+          {
+            name: 'Inline Styles Demo: Install',
+            duration: '1:11',
+          },
+          {
+            name: 'Inline Styles Demo: Styling',
+            duration: '9:59',
+          },
+          {
+            name: 'Evaluate Inline Styles',
+            duration: '2:22',
+          },
+        ]
+      },
+    ]
   },
   {
     key: 'C00004',
@@ -117,6 +357,66 @@ export const coursesData = [
         ]
       }
     ],
+    lessons: [
+      {
+        title: 'Course Overview',
+        totalDuration: '1:25',
+        data: [
+          {
+            name: 'Course Overview',
+            duration: '1:25',
+          }
+        ]
+      },
+      {
+        title: 'Introduction to JavaScript',
+        totalDuration: '11:39',
+        data: [
+          {
+            name: 'Introduction',
+            duration: '2:15',
+          },
+          {
+            name: 'Installing Development Software',
+            duration: '1:53',
+          },
+          {
+            name: `Hello World Project from GitHub`,
+            duration: '5:08',
+          },
+          {
+            name: `Our Sample Website`,
+            duration: '2:21',
+          },
+        ]
+      },
+      {
+        title: 'JavaScript Beginnings',
+        totalDuration: '23:39',
+        data: [
+          {
+            name: 'Introduction',
+            duration: '1:41',
+          },
+          {
+            name: 'Adding JavaScript Code to a Web Page',
+            duration: '3:39',
+          },
+          {
+            name: 'Working with JavaScript Files',
+            duration: '6:18',
+          },
+          {
+            name: 'Formatting Code',
+            duration: '2:18',
+          },
+          {
+            name: 'Detecting and Fixing Errors',
+            duration: '3:14',
+          },
+        ]
+      },
+    ]
   },
   {
     key: 'C00005',
@@ -127,6 +427,70 @@ export const coursesData = [
     duration: '1h 42m',
     description: `Are you a JavaScript programmer that needs to learn more about the syntax, exception handling, and the wide array of operators JavaScript has to offer? In this course, JavaScript Syntax and Operators, you will expand your knowledge of the JavaScript language. First, you will learn all about the switch statement and the difference between for/in and for/of. Next, you will discover the various math, comparison, and logical operators, in addition to handling exceptions and determining the data type of variables. Finally, you will explore the 'this' keyword and the spread operator. When you are finished with this course, you will have gained the skills and knowledge of JavaScript syntax and operators needed to propel your JavaScript applications to the next level.`,
     transcript: '',
+    lessons: [
+      {
+        title: 'Course Overview',
+        totalDuration: '1:33',
+        data: [
+          {
+            name: 'Course Overview',
+            duration: '1:33',
+          }
+        ]
+      },
+      {
+        title: 'All About the Switch Statement',
+        totalDuration: '14:35',
+        data: [
+          {
+            name: 'Course Intro, Assumptions, and Related Courses',
+            duration: '1:12',
+          },
+          {
+            name: 'Modules in This Course',
+            duration: '1:33',
+          },
+          {
+            name: `How the Switch Statement Works`,
+            duration: '1:26',
+          },
+          {
+            name: `Simple Switch Statement Demo`,
+            duration: '2:49',
+          },
+          {
+            name: `Multiple Case Statements and Forget a Break`,
+            duration: '3:03',
+          },
+          {
+            name: `Switch Uses Strict Comparison`,
+            duration: '1:15',
+          },
+          {
+            name: `Block-level Scope Issue with Switch Statements`,
+            duration: '2:41',
+          },
+          {
+            name: `Module Summary`,
+            duration: '0:33',
+          },
+        ]
+      },
+      {
+        title: 'The Difference Between for/in and for/of',
+        totalDuration: '11:32',
+        data: [
+          {
+            name: 'Using a for/in Loop',
+            duration: '2:44',
+          },
+          {
+            name: 'Using a for/of loop',
+            duration: '3:09',
+          },
+        ]
+      },
+    ]
   },
   {
     key: 'C00006',
@@ -160,6 +524,74 @@ export const coursesData = [
         ]
       }
     ],
+    lessons: [
+      {
+        title: 'Course Overview',
+        totalDuration: '1:21',
+        data: [
+          {
+            name: 'Course Overview',
+            duration: '1:21',
+          }
+        ]
+      },
+      {
+        title: 'Using Variables, Literals, and Assignments',
+        totalDuration: '26:51',
+        data: [
+          {
+            name: 'How This Course Works',
+            duration: '5:22',
+          },
+          {
+            name: 'Using Template Literals',
+            duration: '3:26',
+          },
+          {
+            name: `Create a Tagged Template Literal`,
+            duration: '6:04',
+          },
+          {
+            name: `The Difference Between Let and Const`,
+            duration: '5:46',
+          },
+          {
+            name: `Use the Destructing Syntax to Get Values from Arrays and Objects`,
+            duration: '3:51 ',
+          },
+          {
+            name: `Summary and Where to Go Next`,
+            duration: '2:20',
+          },
+        ]
+      },
+      {
+        title: 'Applying Primitive Types',
+        totalDuration: '14:53',
+        data: [
+          {
+            name: 'Introduction',
+            duration: '0:33',
+          },
+          {
+            name: 'Test Strings for Specific Content',
+            duration: '4:39',
+          },
+          {
+            name: 'Test Numbers for Type and Safety',
+            duration: '4:16',
+          },
+          {
+            name: 'Understanding Symbols',
+            duration: '3:16',
+          },
+          {
+            name: 'Summary and Where to Go Next',
+            duration: '2:06',
+          },
+        ]
+      },
+    ]
   },
   {
     key: 'C00007',
@@ -170,6 +602,62 @@ export const coursesData = [
     duration: '1h 24m',
     description: `Play by Play is a series in which top technologists work through a problem in real time, unrehearsed, and unscripted. In this course, Play by Play: Modern Web Security Patterns, Troy Hunt and Lars Klint investigate current security web approaches and trends with real world examples, and then dive into how these incidents and errors can be fixed with easy to use techniques. Learn how subresource integrity checking can validate assets, content security policies in action and learn how to configure them, and get crucial knowledge on how important HTTPS is and some of the tools you can use to test your site. By the end of this course, you’ll have all the tools you need to learn about how you can secure your web assets, with the Modern Web Security Standards.`,
     transcript: '',
+    lessons: [
+      {
+        title: 'Course Overview',
+        totalDuration: '2:22',
+        data: [
+          {
+            name: 'Course Overview',
+            duration: '2:22',
+          }
+        ]
+      },
+      {
+        title: 'Current Issues of Web Development Security',
+        totalDuration: '8:07',
+        data: [
+          {
+            name: 'Introduction',
+            duration: '2:01',
+          },
+          {
+            name: 'Explaining the Problem of Including External JavaScript',
+            duration: '6:06',
+          },
+        ]
+      },
+      {
+        title: 'Subresource Integrity Checking and Content Security Policies',
+        totalDuration: '33:42',
+        data: [
+          {
+            name: 'Explaining Subresource Integrity Checking',
+            duration: '6:32',
+          },
+          {
+            name: 'Issues With Subresource Integrity Checking',
+            duration: '2:31',
+          },
+          {
+            name: 'Content Security Policies in Action',
+            duration: '5:28',
+          },
+          {
+            name: 'Reporting Content Security Policy Violations',
+            duration: '7:47',
+          },
+          {
+            name: 'Adding Content Security Policy Exceptions',
+            duration: '3:07',
+          },
+          {
+            name: 'Issues With the Cross-Site Scripting Auditor',
+            duration: '8:04',
+          },
+        ]
+      },
+    ]
   },
   {
     key: 'C00008',
@@ -180,6 +668,64 @@ export const coursesData = [
     duration: '3h 24m',
     description: `Securing the transport layer of any application talking over the web is becoming an absolutely essential attribute of modern software. However, HTTPS is frequently not implemented due to perceived (rather than actual) barriers and when it is, it's often done poorly. Not only that, but many modern browser features that can help streamline secure communications (and actually make it more efficient and resilient) are rarely used. In this course, What Every Developer Must Know About HTTPS, you will learn all about why you need HTTPS. First, you'll learn the many positive things that HTTPS does. Next, you'll learn about what many people perceive as barriers to HTTP adoption. Finally, you'll spend some time exploring some topics that go outside of the the basics of HTTPS. By the end of this course, you'll have a fundamental knowledge to both implement HTTPS properly from the outset and retrofit it to existing applications.`,
     transcript: '',
+    lessons: [
+      {
+        title: 'Course Overview',
+        totalDuration: '1:50',
+        data: [
+          {
+            name: 'Course Overview',
+            duration: '1:50',
+          }
+        ]
+      },
+      {
+        title: 'The HTTPS Value Proposition',
+        totalDuration: '37:55',
+        data: [
+          {
+            name: 'Overview',
+            duration: '2:33',
+          },
+          {
+            name: 'The Rise and Rise of HTTPS',
+            duration: '3:35',
+          },
+          {
+            name: 'Understanding a Man in the Middle Attack',
+            duration: '6:58',
+          },
+          {
+            name: 'The Importance of Confidentiality',
+            duration: '2:30',
+          },
+          {
+            name: 'The Importance of Integrity',
+            duration: '3:21',
+          },
+          {
+            name: 'The Importance of Authenticity',
+            duration: '4:05',
+          },
+          {
+            name: 'Abuses of Unencrypted Traffic Are Everywhere',
+            duration: '3:17',
+          },
+          {
+            name: 'The (Perceived) Barriers to HTTPS',
+            duration: '3:31',
+          },
+          {
+            name: 'The Big Browser Shift',
+            duration: '5:17',
+          },
+          {
+            name: 'Summary',
+            duration: '2:44',
+          },
+        ]
+      },
+    ]
   },
   {
     key: 'C00009',
@@ -190,6 +736,70 @@ export const coursesData = [
     duration: '1h 23',
     description: `Would you like the ability to recognize what is needed to make a web application properly manage sensitive data and prevent it from unintended exposure? This course, Secure Coding: Preventing Sensitive Data Exposure, will show you the knowledge that is based on the recommendations set by the Open Web Application Security Project (or OWASP in short). First, you will learn how to think of sensitive data and what constitutes sensitive data. Next, you will discover TLS; the protocol to protect sensitive data transmitted between a web browser and web application and the different facilities it provides to enable this protection. Finally, you will explore how to properly manage user passwords stored in a database. When you’re finished with this course, you will have the knowledge of preventing sensitive data exposure needed to effectively and efficiently apply them in your own Web applications.`,
     transcript: '',
+    lessons: [
+      {
+        title: 'Course Overview',
+        totalDuration: '1:33',
+        data: [
+          {
+            name: 'Course Overview',
+            duration: '1:33',
+          }
+        ]
+      },
+      {
+        title: 'Defining OWASP Top 10 Sensitive Data Exposure',
+        totalDuration: '14:20',
+        data: [
+          {
+            name: 'Introduction to Sensitive Data',
+            duration: '6:43',
+          },
+          {
+            name: 'Attack Surface Analysis',
+            duration: '4:49',
+          },
+          {
+            name: `Real-world Examples`,
+            duration: '2:46,
+          },
+        ]
+      },
+      {
+        title: 'Attacking the Web Application',
+        totalDuration: '33:45',
+        data: [
+          {
+            name: 'Overview',
+            duration: '2:56',
+          },
+          {
+            name: 'Data In-transit Attack Context',
+            duration: '4:22',
+          },
+          {
+            name: 'Demo: Attack on Plain HTTP In-transit',
+            duration: '5:13',
+          },
+          {
+            name: 'Transport Layer Security (TLS)',
+            duration: '5:23',
+          },
+          {
+            name: 'Demo: Using HTTPS',
+            duration: '2:30',
+          },
+          {
+            name: 'New Attack Vector',
+            duration: '2:26',
+          },
+          {
+            name: 'Discussion',
+            duration: '3:14',
+          },
+        ]
+      },
+    ]
   },
 ]
 
