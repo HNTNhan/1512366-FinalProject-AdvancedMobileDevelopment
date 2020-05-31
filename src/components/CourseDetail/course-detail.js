@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useContext, useState} from 'react';
 import {View, StyleSheet, ScrollView, Dimensions} from 'react-native';
 import VideoPlayer from "./VideoPlayer/video-player";
 import GeneralCourseDetail from "./GeneralCourseDetail/general-course-detail";
@@ -9,12 +9,14 @@ import TabBarStyle from "../Common/tab-bar-style";
 import {findAuthorByName, findByKey} from "../../testdata/find-data";
 import {coursesData} from "../../testdata/courses-data";
 import {authorsData} from "../../testdata/authors-data";
+import {ColorsContext} from "../../provider/colors-provider";
 
 const initialLayout = { width: Dimensions.get('window').width };
 
 const CourseDetail = (props) => {
   const course = findByKey(coursesData, [props.route.params.key])[0]
   const authors = findAuthorByName(authorsData, course.author)
+  const {defaultBackgroundColor} = useContext(ColorsContext)
 
   const [index, setIndex] = useState(0);
   const [routes] = useState([
@@ -30,7 +32,7 @@ const CourseDetail = (props) => {
       case 'second':
         return <Transcript transcript={course.transcript}/>;
       case 'third':
-        return <ListLessons tabLabel='Content'/>;
+        return <ListLessons tabLabel='Content' lessons={course.lessons}/>;
       default:
         return null;
     }
@@ -44,7 +46,7 @@ const CourseDetail = (props) => {
       renderScene={renderScene}
       onIndexChange={setIndex}
       initialLayout={initialLayout}
-      sceneContainerStyle={{paddingHorizontal: 5, backgroundColor: 'white'}}
+      sceneContainerStyle={{paddingHorizontal: 5, backgroundColor: defaultBackgroundColor.background}}
     />
   </View>
 };

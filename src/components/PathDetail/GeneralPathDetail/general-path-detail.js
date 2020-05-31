@@ -7,8 +7,8 @@ const GeneralPathDetail = (props) => {
     <View style={styles.detailContainer}>
       <Image source={require('../../../../assets/ic_course.png')} style={styles.image}/>
       <View style={styles.titleContainer}>
-        <Text style={styles.title}>{props.detail.titlePath}</Text>
-        <Text style={styles.text}>{props.detail.noCourse} . {props.detail.durationPath}</Text>
+        <Text style={styles.title}>{props.detail.title}</Text>
+        <Text style={styles.text}>{props.detail.noCourses} . {props.detail.duration}</Text>
       </View>
     </View>
     <DescriptionOpenClose description={props.detail.description} noLines={3} textSize={16}/>

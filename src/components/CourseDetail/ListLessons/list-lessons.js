@@ -81,7 +81,7 @@ const ListLessons = (props) => {
   };
 
   return <SectionList
-    sections={courseLessons}
+    sections={props.lessons}
     keyExtractor={(item, index) => item + index}
     renderItem={({item, index}) =>
       <ListLessonItems item={item}/>

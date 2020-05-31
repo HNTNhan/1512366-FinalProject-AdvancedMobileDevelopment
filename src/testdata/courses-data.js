@@ -730,7 +730,7 @@ export const coursesData = [
   {
     key: 'C00009',
     title: 'Secure Coding: Preventing Sensitive Data Exposure',
-    author: 'Timothy Ghanim',
+    author: ['Timothy Ghanim'],
     level: 'Intermediate',
     released: 'Sep 24, 2019',
     duration: '1h 23',
@@ -761,7 +761,7 @@ export const coursesData = [
           },
           {
             name: `Real-world Examples`,
-            duration: '2:46,
+            duration: '2:46',
           },
         ]
       },
