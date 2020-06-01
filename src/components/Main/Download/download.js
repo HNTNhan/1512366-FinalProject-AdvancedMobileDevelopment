@@ -1,35 +1,16 @@
-import React from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {View, FlatList, StyleSheet, Text, TouchableOpacity} from 'react-native';
 import ListCourseItems from "../../Courses/ListCourseItems/list-course-items";
-import {objectsConstant} from "../../../globles/constants";
+import {AuthenticationContext} from "../../../provider/authentication-provider";
+import {findByKey} from "../../../testdata/find-data";
+import {coursesData} from "../../../testdata/courses-data";
+import {globalStyles} from "../../../globles/styles";
+import {ColorsContext} from "../../../provider/colors-provider";
 
 const Download = (props) => {
-  const courses =[
-    {
-      id: '1',
-      title: 'Building Mobile Apps with Visual Studio Tools for Apache Cordova',
-      author: 'Matt Honeycutt',
-      level: 'Beginner',
-      released: 'Jan 17, 2017',
-      duration: '3h 41m',
-    },
-    {
-      id: '2',
-      title: 'Building Hybrid Mobile Applications with HTML5',
-      author: 'Jon Flanders',
-      level: 'Intermediate',
-      released: 'Mar 9, 2012',
-      duration: '4h 25m',
-    },
-    {
-      id: '3',
-      title: 'Building Cross-Platform Mobile Apps with Telerik AppBuilder',
-      author: 'Steve Michelotti',
-      level: 'Intermediate',
-      released: 'Jan 18, 2014',
-      duration: '3h 15m',
-    },
-  ]
+  const {defaultBackgroundColor} = useContext(ColorsContext)
+  const {user, setUser} = useContext(AuthenticationContext);
+  const [downloads, setDownloads]  = useState(findByKey(coursesData, user.downloads));
 
   const renderSeparator = () => {
     return (
@@ -39,22 +20,28 @@ const Download = (props) => {
 
   const renderHeader = () => {
     return <View style={styles.header}>
-      <Text style={{fontSize: 18, fontWeight: 'bold'}}>Downloads</Text>
+      <Text style={{fontSize: 18, fontWeight: 'bold'}}>Download</Text>
       <TouchableOpacity style={styles.button}
-                        onPress={() => { console.log('Remove all')}}>
+                        onPress={() => {
+                          let temp=user;
+                          temp.downloads=[];
+                          setDownloads([]);
+                          setUser(temp);
+                        }}>
         <Text style={styles.buttonText}> Remove all </Text>
       </TouchableOpacity>
     </View>
   }
 
-  const onPress = () => {
-    props.navigation.navigate('CourseDetail');
+  const onPress = (key) => {
+    props.navigation.push('CourseDetail', {key: key});
   }
 
-  return <View style={styles.container}>
+  return <View style={[globalStyles.container, {backgroundColor: defaultBackgroundColor.background}]}>
     <FlatList
-      data={courses}
-      renderItem={({item}) => <ListCourseItems item={item} onPress={onPress}/>}
+      data={downloads}
+      keyExtractor={(item, index) => item.key}
+      renderItem={({item}) => <ListCourseItems item={item} onPress={() => onPress(item.key)}/>}
       ItemSeparatorComponent= {renderSeparator}
       ListHeaderComponent = {renderHeader}
     />

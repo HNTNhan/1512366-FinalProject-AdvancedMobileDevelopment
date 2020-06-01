@@ -43,8 +43,10 @@ const MainTab = createBottomTabNavigator();
 const MainScreen = (props) => {
   return <MainTab.Navigator
     screenOptions={({route}) => ({
+
       tabBarIcon: ({focused}) => bottomTabIcons(route, focused),
-    })}
+    })
+    }
     tabBarOptions={objectsConstant.bottomTabOption}
   >
     <MainTab.Screen name="Home" component={HomeScreen}/>

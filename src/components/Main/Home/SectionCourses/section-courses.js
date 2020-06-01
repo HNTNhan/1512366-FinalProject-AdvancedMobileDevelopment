@@ -13,8 +13,8 @@ const SectionCourses = (props) => {
     props.navigation.navigate('PathDetail', {key: key})
   }
 
-  const onPressItemInListChannel = () => {
-    props.navigation.navigate('ChannelDetail')
+  const onPressItemInListChannel = (channel) => {
+    props.navigation.navigate('ChannelDetail', {channel: channel})
   }
 
   const renderListItems = () => {
@@ -26,7 +26,7 @@ const SectionCourses = (props) => {
   }
 
   const renderChannelItems = () => {
-    return props.data.map( (item) => <ChannelItems key={item.title} item={item} onPress={onPressItemInListChannel} />);
+    return props.data.map( (item) => <ChannelItems key={item.detail.title} item={item} onPress={() => onPressItemInListChannel(item)} />);
   }
 
   return <View style={styles.container}>

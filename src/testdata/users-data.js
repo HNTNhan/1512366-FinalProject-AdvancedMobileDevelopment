@@ -6,40 +6,49 @@ export const usersData = [
     bookmarks: ['C00001', 'C00007', 'C00008'],
     channels: [
       {
-        title: 'react',
-        user: 'admin',
-        type: 'Private',
-        member: 1,
-        progress: 10,
+        detail: {
+          title: 'react',
+          user: 'admin',
+          type: 'Private',
+          member: 1,
+        },
+        progress: 25,
         items: [
-          {
-            typeItem: 'course',
-            data: ['C00005', 'C00008'],
-          },
           {
             typeItem: 'path',
             data: ['P00000'],
           },
+          {
+            typeItem: 'course',
+            data: ['C00005'],
+          },
+          {
+            typeItem: 'course',
+            data: ['C00008'],
+          },
         ]
       },
       {
-        title: 'js',
-        user: 'admin',
-        type: 'Private',
-        member: 1,
+        detail: {
+          title: 'js',
+          user: 'admin',
+          type: 'Private',
+          member: 1,
+        },
         progress: 10,
         items: [
-          {
-            typeItem: 'course',
-            data: [],
-          },
           {
             typeItem: 'path',
             data: ['P00001'],
           },
+          {
+            typeItem: 'course',
+            data: [],
+          },
         ]
       },
-    ]
+    ],
+    downloads: ['C00007', 'C00008', 'C00009']
   },
   {
     name: 'user',
@@ -48,10 +57,12 @@ export const usersData = [
     bookmarks: ['C00001', 'C00008'],
     channels: [
       {
-        titleChannel: 'react',
-        user: 'admin',
-        type: 'Private',
-        member: 1,
+        detail: {
+          titleChannel: 'react',
+          user: 'user',
+          type: 'Private',
+          member: 1,
+        },
         progress: 10,
         items: [
           {
@@ -61,23 +72,6 @@ export const usersData = [
           {
             typeItem: 'path',
             data: ['P00000'],
-          },
-        ]
-      },
-      {
-        titleChannel: 'react',
-        user: 'admin',
-        type: 'Private',
-        member: 1,
-        progress: 10,
-        items: [
-          {
-            typeItem: 'course',
-            data: [],
-          },
-          {
-            typeItem: 'path',
-            data: ['P00001'],
           },
         ]
       },

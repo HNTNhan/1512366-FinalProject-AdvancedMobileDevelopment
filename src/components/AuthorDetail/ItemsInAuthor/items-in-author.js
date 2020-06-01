@@ -2,16 +2,20 @@ import React from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import {globalStyles} from "../../../globles/styles";
 import ListCourseItems from "../../Courses/ListCourseItems/list-course-items";
+import {findByKey} from "../../../testdata/find-data";
+import {coursesData} from "../../../testdata/courses-data";
 
 const ItemsInAuthor = (props) => {
-  const onPressCourseItem = () => {
-    props.navigation.navigate('CourseDetail');
+  const courses = findByKey(coursesData, props.courses);
+
+  const onPressCourseItem = (key) => {
+    props.navigation.push('CourseDetail', {key: key});
   }
 
   return <View>
     <Text style={styles.text}>Course</Text>
-    { props.items.map((item) => <View style={globalStyles.borderSeparator}>
-        <ListCourseItems key={item.id} item={item} onPress={onPressCourseItem}/>
+    { courses.map((item) => <View key={item.key} style={globalStyles.borderSeparator}>
+        <ListCourseItems item={item} onPress={() => onPressCourseItem(item.key)}/>
       </View>
     ) }
   </View>

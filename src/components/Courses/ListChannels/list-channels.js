@@ -15,15 +15,15 @@ const ListChannels = (props) => {
     );
   };
 
-  const onPressItem = () => {
-    props.navigation.navigate('ChannelDetail')
+  const onPressItem = (channel) => {
+    props.navigation.navigate('ChannelDetail', {channel: channel})
   }
 
   return <View style={[globalStyles.container, {backgroundColor: defaultBackgroundColor.background}]}>
     <FlatList
       data={props.route.params.data}
       keyExtractor={(item, index) => item + index}
-      renderItem={({item}) => <ListChannelItems item={item} onPress={onPressItem}/>}
+      renderItem={({item}) => <ListChannelItems item={item} onPress={() => onPressItem(item)}/>}
       ItemSeparatorComponent= {renderSeparator}
       //ListHeaderComponent = {() => <SectionTitle title={'8 Result'} button={'Filter'}/>}
     />

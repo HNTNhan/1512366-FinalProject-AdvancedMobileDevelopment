@@ -6,19 +6,19 @@ import IconButton from "../../Common/icon-button";
 import DescriptionOpenClose from "../../Common/description-open-close";
 
 const GeneralCourseDetail = (props) => {
-  const authorListItems = (props) => {
-    return props.author.map((item, index) => <AuthorIconButton key={index} item={item} onPress={onPressAuthorItem}/>);
+  const authorListItems = (author) => {
+    return author.map((item, index) => <AuthorIconButton key={index} item={item} onPress={() => onPressAuthorItem(item.key)}/>);
   }
 
-  const onPressAuthorItem = () => {
-    props.navigation.navigate('AuthorDetail')
+  const onPressAuthorItem = (key) => {
+    props.navigation.navigate('AuthorDetail', {key: key})
   }
 
   return <ScrollView>
     <Text style={styles.title}>{props.detail.title}</Text>
     <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
       <View style={styles.author}>
-        {authorListItems(props)}
+        {authorListItems(props.author)}
       </View>
     </ScrollView>
     <Text style={{fontSize: 12}}>{props.detail.level} . {props.detail.released} . {props.detail.duration}</Text>

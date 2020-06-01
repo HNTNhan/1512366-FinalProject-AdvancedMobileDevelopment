@@ -1,8 +1,6 @@
 import React from 'react';
-import {View} from 'react-native';
 import {createStackNavigator} from "@react-navigation/stack";
 import Home from "../../Main/Home/home";
-import {Icon} from "react-native-elements";
 import ListCourses from "../../Courses/ListCourses/list-courses";
 import ListPaths from "../../Courses/ListPaths/list-paths";
 import ListChannels from "../../Courses/ListChannels/list-channels";
@@ -33,7 +31,7 @@ const HomeScreen = (props) => {
     <HomeStack.Screen name='CourseDetail' component={CourseDetail} options={{headerShown: false}}/>
     <HomeStack.Screen name='PathDetail' component={PathDetail}/>
     <HomeStack.Screen name='ChannelDetail' component={ChannelDetail}/>
-    <HomeStack.Screen name='AuthorDetail' component={AuthorDetail}/>
+    <HomeStack.Screen name='AuthorDetail' component={AuthorDetail} options={{title: 'Author'}}/>
   </HomeStack.Navigator>
 };
 

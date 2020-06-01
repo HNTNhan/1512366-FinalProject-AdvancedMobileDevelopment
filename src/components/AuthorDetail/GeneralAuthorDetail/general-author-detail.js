@@ -27,6 +27,15 @@ const GeneralAuthorDetail = (props) => {
       />
       <Button icon={
                 <Icon
+                  name="twitter"
+                  size={15}
+                  color="white"
+                  type='font-awesome-5'
+                />}
+              containerStyle={styles.linkButton}
+      />
+      <Button icon={
+                <Icon
                   name="facebook"
                   size={15}
                   color="white"
@@ -36,7 +45,7 @@ const GeneralAuthorDetail = (props) => {
       />
       <Button icon={
                 <Icon
-                  name="twitter"
+                  name="linkedin"
                   size={15}
                   color="white"
                   type='font-awesome-5'

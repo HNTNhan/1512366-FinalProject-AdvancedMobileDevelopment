@@ -13,7 +13,7 @@ const PathDetail = (props) => {
   const {defaultBackgroundColor} = useContext(ColorsContext)
   const paths = findByKey(pathsData, [props.route.params.key])[0];
 
-  return <ScrollView style={[globalStyles.container, {backgroundColor: defaultBackgroundColor}]}>
+  return <ScrollView style={[globalStyles.container, {backgroundColor: defaultBackgroundColor.background}]}>
     <GeneralPathDetail detail={paths.detail}/>
     <PathProgress progress={paths.progress}/>
     <CourseInPath type={paths.type} courses={paths.listCourses} navigation={props.navigation} route={props.route}/>

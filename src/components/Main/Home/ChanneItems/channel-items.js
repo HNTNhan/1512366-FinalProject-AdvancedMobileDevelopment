@@ -5,8 +5,7 @@ const ChannelItems = (props) => {
   return <TouchableOpacity style={styles.item} onPress={props.onPress}>
     <Image source={require('../../../../../assets/ic_course.png')} style={styles.image}/>
     <View style={styles.detail}>
-      <Text>{props.item.title}</Text>
-      <Text style={styles.darkText}>{props.item.no_courses}</Text>
+      <Text>{props.item.detail.title}</Text>
     </View>
   </TouchableOpacity>
 };

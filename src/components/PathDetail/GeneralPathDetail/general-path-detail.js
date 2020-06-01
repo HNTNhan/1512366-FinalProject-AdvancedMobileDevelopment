@@ -16,15 +16,13 @@ const GeneralPathDetail = (props) => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-
-  },
   detailContainer: {
     flexDirection: 'row',
     marginVertical: 5,
   },
   titleContainer: {
-    marginLeft: 20,
+    flexShrink: 1,
+    marginLeft: 10,
   },
   image: {
     width: 100,

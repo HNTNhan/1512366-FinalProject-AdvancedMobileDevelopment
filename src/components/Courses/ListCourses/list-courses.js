@@ -16,15 +16,15 @@ const ListCourses = (props) => {
     );
   };
 
-  const onPressItem = () => {
-    props.navigation.navigate('CourseDetail')
+  const onPressItem = (key) => {
+    props.navigation.navigate('CourseDetail', {key: key})
   }
 
   return <View style={[globalStyles.container, {backgroundColor: defaultBackgroundColor.background}]}>
     <FlatList
       data={props.route.params.data}
       keyExtractor={(item, index) => item + index}
-      renderItem={({item}) => <ListCourseItems item={item} onPress={onPressItem}/>}
+      renderItem={({item}) => <ListCourseItems item={item} onPress={() => onPressItem(item.key)}/>}
       ItemSeparatorComponent= {renderSeparator}
       ListHeaderComponent = {props.route.params.title ? () => <SectionTitle title={'42 Result'} button={'Filter'}/> : null}
     />

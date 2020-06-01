@@ -14,15 +14,15 @@ const ListPaths = (props) => {
     );
   };
 
-  const onPressItem = () => {
-    props.navigation.navigate('PathDetail')
+  const onPressItem = (key) => {
+    props.navigation.navigate('PathDetail', {key: key})
   }
 
   return <View style={[globalStyles.container, {backgroundColor: defaultBackgroundColor.background}]}>
     <FlatList
       data={props.route.params.data}
       keyExtractor={(item, index) => item + index}
-      renderItem={({item}) => <ListPathItems item={item} onPress={onPressItem}/>}
+      renderItem={({item}) => <ListPathItems item={item} onPress={() => onPressItem(item.key)}/>}
       ItemSeparatorComponent= {renderSeparator}
       ListHeaderComponent = {props.route.params.title ? () => <SectionTitle title={'8 Result'} button={'Filter'}/> : null}
     />
