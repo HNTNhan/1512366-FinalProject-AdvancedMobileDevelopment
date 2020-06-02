@@ -17,3 +17,13 @@ export function findAuthorByName(list, listFind) {
 
   return items
 }
+
+export function findSkillByName(list, listFind) {
+  let items=[];
+
+  for(let i=0; i<listFind.length; i++) {
+    items.push(list.find((item) => item.title===listFind[i]))
+  }
+
+  return items
+}

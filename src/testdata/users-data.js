@@ -1,6 +1,7 @@
 export const usersData = [
   {
     name: 'admin',
+    skills: ['React', 'JavaScript', 'Python'],
     continueLearning: ['C00000', 'C00001', 'C00002'],
     paths: ['P00000', 'P00001'],
     bookmarks: ['C00001', 'C00007', 'C00008'],
@@ -48,10 +49,11 @@ export const usersData = [
         ]
       },
     ],
-    downloads: ['C00007', 'C00008', 'C00009']
+    downloads: ['C00007', 'C00008', 'C00009'],
   },
   {
     name: 'user',
+    skills: ['React', 'JavaScript', 'Python'],
     continueLearning: ['C00000', 'C00002'],
     paths: ['P00000', 'P00001'],
     bookmarks: ['C00001', 'C00008'],
@@ -75,6 +77,7 @@ export const usersData = [
           },
         ]
       },
-    ]
+    ],
+    downloads: ['C00001', 'C00002'],
   }
 ]

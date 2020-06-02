@@ -21,7 +21,7 @@ const Home = (props) => {
   return <View style={[globalStyles.container, {backgroundColor: defaultBackgroundColor.background}]}>
     <ScrollView showsVerticalScrollIndicator={false}>
       <SectionCourses title='Continue learning'
-                      type='Continue learning'
+                      type='Course'
                       navigation={props.navigation}
                       route={props.route}
                       data={courses}
@@ -39,7 +39,7 @@ const Home = (props) => {
                       data={channels}
                       pressSeeAll={() => props.navigation.navigate('ListChannels', {data: channels, title: false})}/>
       <SectionCourses title='Bookmarks'
-                      type='Bookmarks'
+                      type='Course'
                       navigation={props.navigation}
                       route={props.route}
                       data={bookmarks}

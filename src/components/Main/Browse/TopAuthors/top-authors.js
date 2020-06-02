@@ -3,41 +3,14 @@ import {View, Text, ScrollView, TouchableOpacity, StyleSheet, Image} from 'react
 import AuthorDetail from "../../../AuthorDetail/author-detail";
 
 const TopAuthors = (props) => {
-  const topAuthors = [
-    {
-      id: 1,
-      author: 'Matt Honeycutt',
-    },
-    {
-      id: 2,
-      author: 'Jon Flanders',
-    },
-    {
-      id: 3,
-      author: 'Steve Michelotti',
-    },
-    {
-      id: 4,
-      author: 'Scott Allen',
-    },
-    {
-      id: 5,
-      author: 'Jim Wilson',
-    },
-    {
-      id: 6,
-      author: 'Deborah Kurata',
-    },
-  ];
-
-  const onPressAuthorItem = () => {
-    props.navigation.navigate(AuthorDetail)
+  const onPressAuthorItem = (key) => {
+    props.navigation.navigate('AuthorDetail', {key: key})
   }
 
-  const renderTopAuthors = (topAuthors) => {
-    return topAuthors.map( item => <TouchableOpacity key={item.id} style={{marginRight: 10}} onPress={onPressAuthorItem}>
+  const renderTopAuthors = (authors) => {
+    return authors.map( item => <TouchableOpacity key={item.key} style={{marginRight: 10}} onPress={() => onPressAuthorItem(item.key)}>
       <Image source={require('../../../../../assets/ic_person.png')} style={styles.image}/>
-      <Text style={styles.imageText} numberOfLines={1} ellipsizeMode='tail'>{item.author}</Text>
+      <Text style={styles.imageText} numberOfLines={1} ellipsizeMode='tail'>{item.detail.name}</Text>
     </TouchableOpacity>);
   }
 
@@ -46,7 +19,7 @@ const TopAuthors = (props) => {
       <Text style={styles.titleText}>{props.title}</Text>
     </View>
     <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-      {renderTopAuthors(topAuthors)}
+      {renderTopAuthors(props.authors)}
     </ScrollView>
   </View>
 };
