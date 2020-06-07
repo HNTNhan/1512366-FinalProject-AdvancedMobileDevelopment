@@ -1,23 +1,38 @@
-import React, {useState} from 'react';
-import {View, TextInput, TouchableOpacity, StyleSheet, Text, Keyboard } from 'react-native';
+import React, {useContext, useState} from 'react';
+import {StyleSheet, Text, TextInput, TouchableOpacity, View} from 'react-native';
 import BeforeSearch from "./BeforeSearch/before-search";
 import WhileSearch from "./WhileSearch/while-search";
 import ResultSearch from "./ResultSearch/result_search";
 import {globalStyles} from "../../../globles/styles";
-import AllResultSearch from "./ResultSearch/AllResultSearch/all-result-search";
+import {ColorsContext} from "../../../provider/colors-provider";
+import {skillsData} from "../../../testdata/skills-data";
+import {categoriesData} from "../../../testdata/categories-data";
+import {authorsData} from "../../../testdata/authors-data";
+import {AuthenticationContext} from "../../../provider/authentication-provider";
 
 const Search = (props) => {
-  const [isDisplayCancel, setDisplayCancel] = useState(false);
+  const {user, setUser} = useContext(AuthenticationContext);
   const [searchKey, setSearchKey] = useState('');
-  const [showResult, setShowResult] = useState(false)
+  const [showResult, setShowResult] = useState(false);
+  const [recentSearch, setRecentSearch] = useState(user.recentSearch);
+  const {defaultBackgroundColor} = useContext(ColorsContext);
+  const keysHelpSearch = skillsData.map(skill => { return {key: skill.title, type: 'skill'}}).
+                         concat(categoriesData.map(category => {return {key: category.title, type: 'category'}})).
+                         concat(authorsData.map(author => { return {key: author.detail.name, type: 'author'}}));
 
-  const onPress = (value) => {
-    console.log(value)
-    setSearchKey(value.key);
+  const onPressItem = (value) => {
+    setSearchKey(value);
     setShowResult(true);
   }
 
-  return <View style={globalStyles.container}>
+  const onPressClear = () => {
+    setRecentSearch([]);
+    let temp = user;
+    temp.recentSearch = recentSearch;
+    setUser(temp);
+  }
+
+  return <View style={[globalStyles.container, {backgroundColor: defaultBackgroundColor.background}]}>
       <View style={styles.searchContainer}>
         <TextInput
           style={styles.searchInput}
@@ -31,13 +46,14 @@ const Search = (props) => {
           returnKeyType={"search"}
           onSubmitEditing={(target) => {
             setShowResult(true)
+            recentSearch.unshift(searchKey)
+            setRecentSearch([...new Set(recentSearch)])
           }}
         />
         { searchKey!=='' ?
           <TouchableOpacity
             onPress={() => {
               setSearchKey('')
-              setDisplayCancel(false)
               setShowResult(false)
             }}
             title='Cancel'
@@ -48,12 +64,10 @@ const Search = (props) => {
         }
     </View>
     {
-      showResult===false ? searchKey==='' ?  <BeforeSearch onPress={onPress}/> :
-        <WhileSearch searchKey={searchKey} onPress={onPress}/>
-      : <ResultSearch navigation={props.navigation} route={props.route}/>
+      showResult===false ? searchKey==='' ?  <BeforeSearch onPress={onPressItem} onPressClear={onPressClear} recentSearch={recentSearch} skills={user.skills}/> :
+        <WhileSearch searchKey={searchKey} keys={keysHelpSearch} onPress={onPressItem}/>
+      : <ResultSearch searchKey={searchKey} route={props.route} navigation={props.navigation}/>
     }
-
-
   </View>
 };
 

@@ -1,42 +1,11 @@
 import React from 'react';
 import {FlatList, View, StyleSheet} from 'react-native';
 import ListKeyItems from "../ListKeyItems/list-key-items";
+import {skillsData} from "../../../../testdata/skills-data";
+import {categoriesData} from "../../../../testdata/categories-data";
 
 const WhileSearch = (props) => {
-  const keys = [
-    {
-      id: 1,
-      key: 'react'
-    },
-    {
-      id: 2,
-       key: "react.js"
-    }, {
-      id: 3,
-      key: 'redux'
-    }, {
-      id: 4,
-      key: 'ruby'
-    }, {
-      id: 5,
-      key: 'networking'
-    }, {
-      id: 6,
-      key: 'node js'
-    }, {
-      id: 7,
-      key: 'node'
-    }, {
-      id: 8,
-      key: 'cloud'
-    }, {
-      id: 9,
-      key: 'c'
-    }, {
-      id: 10,
-      key: 'c#'
-    }];
-  const filter =  keys.filter(v => v.key.toLowerCase().includes(props.searchKey.toLowerCase()))
+  const filter = props.keys.filter(v => v.key.toLowerCase().includes(props.searchKey.toLowerCase())).slice(0, 10);
 
   const renderSeparator = () => {
     return (
@@ -46,8 +15,10 @@ const WhileSearch = (props) => {
 
   return <View>
     <FlatList
+      showsVerticalScrollIndicator={false}
+      keyExtractor={(item, index) => item+index}
       data={filter}
-      renderItem={({item}) => <ListKeyItems item={item} onPress={() => props.onPress(item)}/>}
+      renderItem={({item}) => <ListKeyItems item={item.key} onPress={() => props.onPress(item)}/>}
       ItemSeparatorComponent= {renderSeparator}
     />
   </View>

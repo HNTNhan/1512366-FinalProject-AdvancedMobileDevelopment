@@ -47,4 +47,3 @@ const CategoryDetail = (props) => {
 };
 
 export default CategoryDetail;
-g

@@ -1,11 +1,13 @@
 import React from 'react';
 import {Image, Text, TouchableOpacity, View, StyleSheet} from 'react-native';
+import {Icon} from "react-native-elements";
 
 const ListKeyItems = (props) => {
+
   return <View>
     <TouchableOpacity style={styles.keyContainer} onPress={props.onPress}>
-      <Image source={require('../../../../../assets/ic_search.png')} style={styles.image}/>
-      <Text style={styles.keyText}>{props.item.key}</Text>
+      <Icon name={'search'} type='font-awesome-5' color='gray' size={18} containerStyle={styles.image}/>
+      <Text style={styles.keyText}>{props.item}</Text>
     </TouchableOpacity>
   </View>
 };
@@ -18,8 +20,6 @@ const styles = StyleSheet.create({
   },
   image: {
     marginRight: 5,
-    width: 25,
-    height: 25,
   },
   keyText: {
     fontSize: 18,

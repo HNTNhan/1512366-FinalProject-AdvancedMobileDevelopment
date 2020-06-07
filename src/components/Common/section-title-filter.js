@@ -1,12 +1,16 @@
 import React from 'react';
-import {Text, TouchableOpacity, View, StyleSheet} from 'react-native';
+import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 
-const SectionTitle = (props) => {
+const SectionTitleFilter = (props) => {
   return <View style={styles.title}>
     <Text style={styles.titleText}>{props.title}</Text>
     <TouchableOpacity style={styles.button}
-                      onPress={props.onPress}>
-      <Text style={styles.buttonText}> {props.buttonText} </Text>
+                      onPress={props.onPressFilterLevel}>
+      <Text style={styles.buttonText}> {props.filterText1} </Text>
+    </TouchableOpacity>
+    <TouchableOpacity style={styles.button}
+                      onPress={props.onPressFilterTime}>
+      <Text style={styles.buttonText}> {props.filterText2} </Text>
     </TouchableOpacity>
   </View>
 };
@@ -27,12 +31,11 @@ const styles = StyleSheet.create({
   button: {
     padding: 3,
     borderRadius: 10,
-    marginRight: 0,
+    marginRight: 20,
     textAlign: 'center',
   },
   buttonText: {
     color: 'black',
-    fontSize: 16,
   },
 })
-export default SectionTitle;
+export default SectionTitleFilter;

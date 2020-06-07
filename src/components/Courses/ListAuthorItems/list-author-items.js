@@ -5,8 +5,8 @@ const ListAuthorItems = (props) => {
   return <TouchableOpacity style={styles.item} onPress={props.onPress}>
     <Image source={require('../../../../assets/ic_person.png')} style={styles.image}/>
     <View style={styles.detail}>
-      <Text>{props.item.author}</Text>
-      <Text style={styles.darkText}>{props.item.no_courses}</Text>
+      <Text>{props.item.detail.name}</Text>
+      <Text style={styles.darkText}>{props.item.courses.length} Courses</Text>
     </View>
   </TouchableOpacity>
 };

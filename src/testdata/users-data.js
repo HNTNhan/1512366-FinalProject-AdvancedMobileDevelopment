@@ -50,6 +50,7 @@ export const usersData = [
       },
     ],
     downloads: ['C00007', 'C00008', 'C00009'],
+    recentSearch: ['react', 'java', 'javascript'],
   },
   {
     name: 'user',
@@ -79,5 +80,6 @@ export const usersData = [
       },
     ],
     downloads: ['C00001', 'C00002'],
+    recentSearch: ['react', 'java'],
   }
 ]
