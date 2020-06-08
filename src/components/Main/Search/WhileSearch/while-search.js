@@ -18,7 +18,7 @@ const WhileSearch = (props) => {
       showsVerticalScrollIndicator={false}
       keyExtractor={(item, index) => item+index}
       data={filter}
-      renderItem={({item}) => <ListKeyItems item={item.key} onPress={() => props.onPress(item)}/>}
+      renderItem={({item}) => <ListKeyItems item={item.key} onPress={() => props.onPress(item.key)}/>}
       ItemSeparatorComponent= {renderSeparator}
     />
   </View>

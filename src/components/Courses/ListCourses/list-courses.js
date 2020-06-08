@@ -30,8 +30,6 @@ const ListCourses = (props) => {
       ItemSeparatorComponent= {renderSeparator}
       ListHeaderComponent = {title ? !props.titleType ? () => <SectionTitle title={title} buttonText={props.button}/> :
         <SectionTitleFilter title={title}
-                            filterText1={props.filterText1}
-                            filterText2={props.filterText2}
                             onPressFilterLevel={props.onPressFilterLevel}
                             onPressFilterTime={props.onPressFilterTime} />
       : null}

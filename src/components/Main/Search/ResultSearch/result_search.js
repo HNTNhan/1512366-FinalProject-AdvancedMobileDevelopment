@@ -24,17 +24,17 @@ const ResultSearch = (props) => {
   const paths = findPathsThroughName(pathsData, props.searchKey);
   let authors = findAuthorsThroughName(authorsData, props.searchKey);
 
-  if(courses.length) {
-    const authorsOfCourses = courses.map(course => course.author.join()).join().split(',');
+  if(constCourses.length) {
+    const authorsOfCourses = constCourses.map(course => course.author.join()).join().split(',');
     authors = authors.concat(findAuthorByName(authorsData, authorsOfCourses));
     authors = [...new Set(authors)]
   }
 
-  courses.length || paths.length || authors.length ? allData = [
+  constCourses.length || paths.length || authors.length ? allData = [
     {
       title: 'Courses',
-      amount: courses.length ? (courses.length + (courses.length>1 ? ' Courses' : ' Course')) : null,
-      data: courses.length<=5 ? courses : courses.slice(0, 5),
+      amount: constCourses.length ? (constCourses.length + (constCourses.length>1 ? ' Courses' : ' Course')) : null,
+      data: constCourses.length<=5 ? constCourses : constCourses.slice(0, 5),
     },
     {
       title: 'Paths',
@@ -48,8 +48,13 @@ const ResultSearch = (props) => {
     }
   ] : allData = null;
 
-  const onPressFilterLevel = () => {
-    setCourse(constCourses.filter(course => course.level==='Beginner'))
+  const onPressFilterLevel = (itemValue) => {
+    itemValue!=='All'&&itemValue ? setCourse(constCourses.filter(course => course.level===itemValue)) : setCourse(constCourses);
+  }
+
+  const onPressFilterTime = (itemValue) => {
+   itemValue==='Oldest' ? setCourse(constCourses.sort((a, b) => a.released.getTime() - b.released.getTime()))
+                        : setCourse(constCourses.sort((a, b) => b.released.getTime() - a.released.getTime()));
   }
 
   const [index, setIndex] = useState(0);
@@ -65,12 +70,12 @@ const ResultSearch = (props) => {
       case 'first':
         return <Courses data={allData} tapRoute={route} jumpTo={jumpTo} route={props.route} navigation={props.navigation}/>
       case 'second':
-        return <ListCourses data={courses} route={props.route} navigation={props.navigation} title={courses.length + ' Courses'} titleType={1}
-                            filterText1={'filterText1'} filterText2={'filterText2'} onPressFilterLevel={() => onPressFilterLevel()}/>;
+        return <ListCourses data={courses} route={props.route} navigation={props.navigation} title={constCourses.length + (constCourses.length>1 ? ' Courses' : ' Course')}
+                            titleType={1} onPressFilterLevel={onPressFilterLevel} onPressFilterTime={onPressFilterTime}/>;
       case 'third':
-        return <ListPaths data={paths} route={props.route} navigation={props.navigation}/>;
+        return <ListPaths data={paths} route={props.route} navigation={props.navigation} title={paths.length + (paths.length>1 ? ' Paths' : ' Path')}/>;
       case 'four':
-        return <ListAuthors data={authors} route={props.route} navigation={props.navigation}/>;
+        return <ListAuthors data={authors} route={props.route} navigation={props.navigation} title={authors.length + (authors.length>1 ? ' Authors' : ' Author')}/>;
       default:
         return null;
     }

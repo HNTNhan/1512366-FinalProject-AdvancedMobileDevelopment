@@ -37,7 +37,6 @@ const SectionCourses = (props) => {
       >
         <Text>  See all >  </Text>
       </TouchableOpacity> : null}
-
     </View>
     <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
       {props.type==='Path' ? renderPathItems() : props.type==='Channel'

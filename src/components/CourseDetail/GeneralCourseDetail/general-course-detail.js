@@ -6,6 +6,8 @@ import IconButton from "../../Common/icon-button";
 import DescriptionOpenClose from "../../Common/description-open-close";
 
 const GeneralCourseDetail = (props) => {
+  const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
   const authorListItems = (author) => {
     return author.map((item, index) => <AuthorIconButton key={index} item={item} onPress={() => onPressAuthorItem(item.key)}/>);
   }
@@ -21,7 +23,7 @@ const GeneralCourseDetail = (props) => {
         {authorListItems(props.author)}
       </View>
     </ScrollView>
-    <Text style={{fontSize: 12}}>{props.detail.level} . {props.detail.released} . {props.detail.duration}</Text>
+    <Text style={{fontSize: 12}}>{props.detail.level} . {monthNames[props.detail.released.getMonth()]} {props.detail.released.getDate()} {props.detail.released.getFullYear()} . {props.detail.duration}</Text>
     <View style={styles.activeContainer}>
       <IconButton name='bookmark-border' title='Bookmark'/>
       <IconButton name='cast-connected' title='Add to channel'/>

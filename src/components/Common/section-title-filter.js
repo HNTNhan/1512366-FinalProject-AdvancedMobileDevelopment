@@ -1,17 +1,39 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {Picker} from "@react-native-community/picker";
+
 
 const SectionTitleFilter = (props) => {
+  const [type, setType] = useState('All');
+  const onLevelChange = (itemValue) => {
+    props.onPressFilterLevel(itemValue);
+    setType(itemValue);
+  }
+  const onTypeChange = (itemValue) => {
+    props.onPressFilterTime(itemValue);
+    setType(itemValue);
+  }
   return <View style={styles.title}>
     <Text style={styles.titleText}>{props.title}</Text>
-    <TouchableOpacity style={styles.button}
-                      onPress={props.onPressFilterLevel}>
-      <Text style={styles.buttonText}> {props.filterText1} </Text>
-    </TouchableOpacity>
-    <TouchableOpacity style={styles.button}
-                      onPress={props.onPressFilterTime}>
-      <Text style={styles.buttonText}> {props.filterText2} </Text>
-    </TouchableOpacity>
+    <Picker
+      mode={'dropdown'}
+      selectedValue={type}
+      style={{ height: 20, width: 100 }}
+      onValueChange={(itemValue, itemIndex) => type!==itemValue ? onLevelChange(itemValue) : null}>
+      <Picker.Item label="All" value="All" />
+      <Picker.Item label="Beginner" value="Beginner" />
+      <Picker.Item label="Intermediate" value="Intermediate" />
+      <Picker.Item label="Advanced" value="Advanced" />
+    </Picker>
+    <Picker
+      mode={'dropdown'}
+      selectedValue={type}
+      style={{ height: 20, width: 100 }}
+      onValueChange={(itemValue, itemIndex) => type!==itemValue ? onTypeChange(itemValue) : null}
+    >
+      <Picker.Item label="Newest" value="Newest" />
+      <Picker.Item label="Oldest" value="Oldest" />
+    </Picker>
   </View>
 };
 
