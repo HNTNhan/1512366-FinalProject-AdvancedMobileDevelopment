@@ -32,7 +32,7 @@ export const objectsConstant = {
 }
 
 export const defaultColors = {
-  defaultBackgroundColor: {
+  themes: {
     dark: {
       foreground: '#dddddd',
       background: '#000000',

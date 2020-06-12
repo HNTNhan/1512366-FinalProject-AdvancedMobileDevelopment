@@ -1,14 +1,16 @@
-import React, {useState} from 'react';
+import React, {useContext, useState} from 'react';
 import {ScrollView, StyleSheet, View} from 'react-native';
 import {Button, CheckBox, Text} from "react-native-elements";
 import InputTextSae from "../../Common/input-text-sae";
-import RNPickerSelect from 'react-native-picker-select';
 import countryList from 'react-select-country-list'
+import {ColorsContext} from "../../../provider/colors-provider";
+import Select from 'react-select';
+import {Picker} from "@react-native-community/picker";
 
 const Register = (props) => {
+  const {theme} = useContext(ColorsContext)
   const [check, setCheck] = useState(false);
   const countries = countryList().getData();
-
   const [country, setCountry] = useState('');
   const [email, setEmail] = useState('');
   const [firstName, setFirstName] = useState('');
@@ -22,6 +24,7 @@ const Register = (props) => {
   const onChangeFirstName = (firstName) => {
     setFirstName(firstName)
   }
+
   const onChangeLastName = (lastName) => {
     setLastName(lastName)
   }
@@ -30,20 +33,21 @@ const Register = (props) => {
     setPhone(phone)
   }
 
-  return <View style={{flex: 1}}>
+  return <View style={{flex: 1, backgroundColor: theme.background}}>
     <ScrollView style={styles.container} contentContainerStyle={{paddingBottom: 100}}>
       <Text h3 style={styles.title}>Create your account</Text>
       <InputTextSae title={'Email*'} value={email} onChangeText={onChangeEmail}/>
       <InputTextSae title={'First name*'} value={firstName} onChangeText={onChangeFirstName}/>
       <InputTextSae title={'Last name*'} value={lastName} onChangeText={onChangeLastName}/>
       <InputTextSae title={'Phone'} value={phone} onChangeText={onChangePhone}/>
-      <RNPickerSelect
-        placeholder={{label: "Select Country", value: null, color: '#03A9F4'}}
-        items={countries}
-        onValueChange={(value) => setCountry(value)}
-        style={{ ...picker}}
-        useNativeAndroidPickerStyle={false}
-      />
+
+      <Picker
+        mode={'dropdown'}
+        selectedValue={country}
+        style={{ height: 20, width: '100%', marginBottom: 10}}
+        onValueChange={(itemValue, itemIndex) => setCountry(itemValue)}>
+        { countries.map((country) => <Picker.Item key={country.value} label={country.label} value={country.value} />) }
+      </Picker>
 
       <Text style={styles.text}>* Required field</Text>
       <CheckBox
@@ -62,34 +66,11 @@ const Register = (props) => {
   </View>
 };
 
-const picker = StyleSheet.create({
-  inputAndroid: {
-    borderRadius: 7,
-    marginBottom: 5,
-    padding: 10,
-    fontWeight: '600',
-    fontSize: 16,
-    backgroundColor: '#E0E0E0',
-  },
-  inputIOS: {
-    borderRadius: 7,
-    marginBottom: 5,
-    padding: 10,
-    fontWeight: '600',
-    fontSize: 16,
-    backgroundColor: 'rgba(255, 255, 255, 0.15)',
-  },
-  placeholder: {
-    color: '#03A9F4',
-  },
-});
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingHorizontal: 30,
     paddingTop: 50,
-    backgroundColor: 'white'
   },
   title: {
     textAlign:'center',

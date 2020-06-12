@@ -8,7 +8,6 @@ import TopAuthors from "./TopAuthors/top-authors";
 import {globalStyles} from "../../../globles/styles";
 import {ColorsContext} from "../../../provider/colors-provider";
 import {AuthenticationContext} from "../../../provider/authentication-provider";
-import {findByKey} from "../../../testdata/find-data";
 import {coursesData} from "../../../testdata/courses-data";
 import {pathsData} from "../../../testdata/paths-data";
 import {authorsData} from "../../../testdata/authors-data";
@@ -16,7 +15,7 @@ import {skillsData} from "../../../testdata/skills-data";
 import {categoriesData} from "../../../testdata/categories-data";
 
 const Browse = (props) => {
-  const {defaultBackgroundColor} = useContext(ColorsContext)
+  const {theme} = useContext(ColorsContext)
   const {user} = useContext(AuthenticationContext);
   const courses = coursesData;
   const skills = skillsData;
@@ -31,7 +30,7 @@ const Browse = (props) => {
     props.navigation.navigate('ListCourses', {data: courses, title: false, name: 'Recommended For You'})
   }
 
-  return <ScrollView showsVerticalScrollIndicator={false} style={[globalStyles.container, {backgroundColor: defaultBackgroundColor.background}]}>
+  return <ScrollView showsVerticalScrollIndicator={false} style={{...globalStyles.container, backgroundColor: theme.background}}>
     <ImageButton title={`NEW\nRELEASES`} onPress={onPressNewReleases} />
     <ImageButton title={`RECOMMENDED\nFOR YOU`} onPress={onRecommendedForYou} />
     <Skills title='Popular skills' skills={skills} interests={user.skills} navigation={props.navigation} route={props.route}/>

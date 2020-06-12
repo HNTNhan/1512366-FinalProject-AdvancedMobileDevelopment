@@ -16,7 +16,7 @@ const initialLayout = { width: Dimensions.get('window').width };
 const CourseDetail = (props) => {
   const course = findByKey(coursesData, [props.route.params.key])[0]
   const authors = findAuthorByName(authorsData, course.author)
-  const {defaultBackgroundColor} = useContext(ColorsContext)
+  const {theme} = useContext(ColorsContext)
 
   const [index, setIndex] = useState(0);
   const [routes] = useState([
@@ -46,7 +46,7 @@ const CourseDetail = (props) => {
       renderScene={renderScene}
       onIndexChange={setIndex}
       initialLayout={initialLayout}
-      sceneContainerStyle={{paddingHorizontal: 5, backgroundColor: defaultBackgroundColor.background}}
+      sceneContainerStyle={{paddingHorizontal: 5, backgroundColor: theme.background}}
     />
   </View>
 };

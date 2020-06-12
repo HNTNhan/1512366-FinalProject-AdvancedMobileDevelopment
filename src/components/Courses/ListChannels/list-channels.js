@@ -7,7 +7,7 @@ import ListChannelItems from "../ListChannelItems/list-channel-items";
 import {ColorsContext} from "../../../provider/colors-provider";
 
 const ListChannels = (props) => {
-  const {defaultBackgroundColor} = useContext(ColorsContext)
+  const {theme} = useContext(ColorsContext)
 
   const renderSeparator = () => {
     return (
@@ -19,7 +19,7 @@ const ListChannels = (props) => {
     props.navigation.navigate('ChannelDetail', {channel: channel})
   }
 
-  return <View style={[globalStyles.container, {backgroundColor: defaultBackgroundColor.background}]}>
+  return <View style={[globalStyles.container, {backgroundColor: theme.background}]}>
     <FlatList
       data={props.route.params.data}
       keyExtractor={(item, index) => item + index}

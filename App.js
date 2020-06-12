@@ -9,6 +9,7 @@ import MainScreen from "./src/components/Navigation/MainScreen/main-screen";
 import AccountManagementScreen from "./src/components/Navigation/AccountManagementScreen/account-management-screen";
 import {AuthenticationProvider} from "./src/provider/authentication-provider";
 import {ColorsProvider} from "./src/provider/colors-provider";
+import { MenuProvider } from 'react-native-popup-menu';
 
 const Stack = createStackNavigator();
 
@@ -17,14 +18,16 @@ export default function App() {
     <View style={styles.container}>
       <AuthenticationProvider>
         <ColorsProvider>
-          <NavigationContainer>
-            <Stack.Navigator>
-              <Stack.Screen name='SplashScreen' component={SplashScreen} options={{headerShown: false}}/>
-              <Stack.Screen name='Authentication' component={AuthenticationScreen} options={{headerShown: false}}/>
-              <Stack.Screen name='Main' component={MainScreen} options={{headerShown: false}}/>
-              <Stack.Screen name='AccountManagement' component={AccountManagementScreen} options={{headerShown: false}}/>
-            </Stack.Navigator>
-          </NavigationContainer>
+          <MenuProvider>
+            <NavigationContainer>
+              <Stack.Navigator>
+                <Stack.Screen name='SplashScreen' component={SplashScreen} options={{headerShown: false}}/>
+                <Stack.Screen name='Authentication' component={AuthenticationScreen} options={{headerShown: false}}/>
+                <Stack.Screen name='Main' component={MainScreen} options={{headerShown: false}}/>
+                <Stack.Screen name='AccountManagement' component={AccountManagementScreen} options={{headerShown: false}}/>
+              </Stack.Navigator>
+            </NavigationContainer>
+          </MenuProvider>
         </ColorsProvider>
       </AuthenticationProvider>
     </View>

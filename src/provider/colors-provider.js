@@ -4,11 +4,9 @@ import {defaultColors} from "../globles/constants";
 const ColorsContext = React.createContext({});
 
 const ColorsProvider = (props) => {
-  const [checkBackgroundColor, setCheckBackgroundColor] = useState(true);
-  let defaultBackgroundColor = checkBackgroundColor ? defaultColors.defaultBackgroundColor.light : defaultColors.defaultBackgroundColor.dark
+  const [theme, setTheme] = useState(defaultColors.themes.light);
 
-  
-  return <ColorsContext.Provider value={{defaultBackgroundColor, checkBackgroundColor, setCheckBackgroundColor: setCheckBackgroundColor}} >
+  return <ColorsContext.Provider value={{theme: theme, setTheme: setTheme}} >
     {props.children}
   </ColorsContext.Provider>
 };

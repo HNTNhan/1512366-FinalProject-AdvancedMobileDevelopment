@@ -8,9 +8,8 @@ import {globalStyles} from "../../../globles/styles";
 import {ColorsContext} from "../../../provider/colors-provider";
 
 const Download = (props) => {
-  const {defaultBackgroundColor} = useContext(ColorsContext)
+  const {theme} = useContext(ColorsContext)
   const {user, setUser} = useContext(AuthenticationContext);
-  const [downloads, setDownloads]  = useState(findByKey(coursesData, user.downloads));
 
   const renderSeparator = () => {
     return (
@@ -20,12 +19,11 @@ const Download = (props) => {
 
   const renderHeader = () => {
     return <View style={styles.header}>
-      <Text style={{fontSize: 18, fontWeight: 'bold'}}>Download</Text>
+      <Text style={styles.headerText}>Download</Text>
       <TouchableOpacity style={styles.button}
                         onPress={() => {
-                          let temp=user;
+                          let temp={...user};
                           temp.downloads=[];
-                          setDownloads([]);
                           setUser(temp);
                         }}>
         <Text style={styles.buttonText}> Remove all </Text>
@@ -37,9 +35,9 @@ const Download = (props) => {
     props.navigation.push('CourseDetail', {key: key});
   }
 
-  return <View style={[globalStyles.container, {backgroundColor: defaultBackgroundColor.background}]}>
+  return <View style={[globalStyles.container, {backgroundColor: theme.background}]}>
     <FlatList
-      data={downloads}
+      data={findByKey(coursesData, user.downloads)}
       keyExtractor={(item, index) => item.key}
       renderItem={({item}) => <ListCourseItems item={item} onPress={() => onPress(item.key)}/>}
       ItemSeparatorComponent= {renderSeparator}
@@ -65,6 +63,10 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginRight: 20,
     textAlign: 'center',
+  },
+  headerText: {
+    fontSize: 18,
+    fontWeight: 'bold'
   },
   buttonText: {
     color: 'blue',

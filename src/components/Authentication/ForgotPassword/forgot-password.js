@@ -1,10 +1,12 @@
-import React, {useState} from 'react';
+import React, {useContext, useState} from 'react';
 import {ScrollView, StyleSheet, View} from 'react-native';
 import {Button, Text} from "react-native-elements";
 import InputTextSae from "../../Common/input-text-sae";
 import {forgetPassword} from "../../../core/services/authentication-services";
+import {ColorsContext} from "../../../provider/colors-provider";
 
 const ForgotPassword = (props) => {
+  const {theme} = useContext(ColorsContext)
   const [email, setEmail] = useState('admin@email.com');
   const [status, setStatus] = useState(null);
 
@@ -24,8 +26,7 @@ const ForgotPassword = (props) => {
     setEmail(email)
   }
 
-  return <View style={styles.container}>
-
+  return <View style={{...styles.container, backgroundColor: theme.background}}>
       <ScrollView showsVerticalScrollIndicator={false}>
         <Text h2 style={styles.title}>Forgot Password</Text>
         {status===null||status.status!==200 ?
@@ -56,7 +57,6 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 30,
     paddingTop: 80,
-    backgroundColor: 'white'
   },
   title: {
     textAlign:'center'

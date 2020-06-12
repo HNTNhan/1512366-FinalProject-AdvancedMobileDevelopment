@@ -6,8 +6,6 @@ import {ColorsContext} from "../../../../provider/colors-provider";
 import {AuthenticationContext} from "../../../../provider/authentication-provider";
 
 const BeforeSearch = (props) => {
-  const {defaultBackgroundColor} = useContext(ColorsContext)
-
   const keys =[
     {
       title: 'Recent searches',
@@ -25,7 +23,7 @@ const BeforeSearch = (props) => {
     );
   };
 
-  return <View style={{backgroundColor: defaultBackgroundColor.background}}>
+  return <View>
     <SectionList
       showsVerticalScrollIndicator={false}
       sections={keys}

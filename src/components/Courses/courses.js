@@ -8,7 +8,7 @@ import {globalStyles} from "../../globles/styles";
 import {ColorsContext} from "../../provider/colors-provider";
 
 const Courses = (props) => {
-  const {defaultBackgroundColor} = useContext(ColorsContext);
+  const {theme} = useContext(ColorsContext);
 
   const renderSeparator = () => {
     return (
@@ -33,13 +33,13 @@ const Courses = (props) => {
     type==='Courses' ? props.jumpTo('second') : type==='Paths' ? props.jumpTo('third') : props.jumpTo('four');
   }
 
-  return <View style={[globalStyles.container, {backgroundColor: defaultBackgroundColor.background}]}>
+  return <View style={[globalStyles.container, {backgroundColor: theme.background}]}>
     <SectionList
       showsVerticalScrollIndicator={false}
       sections={props.data}
       keyExtractor={item => item.key}
       renderItem={({item,index, section}) =>
-        section.title==="Courses" ? <ListCourseItems item={item} onPress={() => onPressCourseItem(item.key)}/>
+        section.title==="Courses" ? <ListCourseItems key={item.key} item={item} onPress={() => onPressCourseItem(item.key)}/>
           : section.title==="Paths" ? <ListPathItems item={item} onPress={() => onPressPathItem(item.key)}/> :
           <ListAuthorItems item={item} onPress={() => onPressAuthorItem(item.key)}/>
       }

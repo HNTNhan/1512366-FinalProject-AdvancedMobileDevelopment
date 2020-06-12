@@ -11,12 +11,12 @@ import {pathsData} from "../../testdata/paths-data";
 import {authorsData} from "../../testdata/authors-data";
 
 const SkillDetail = (props) => {
-  const {defaultBackgroundColor} = useContext(ColorsContext)
+  const {theme} = useContext(ColorsContext)
   const courses = findByKey(coursesData, props.route.params.skill.courses);
   const paths  = findByKey(pathsData, props.route.params.skill.paths);
   const authors = findByKey(authorsData, props.route.params.skill.authors)
 
-  return <ScrollView style={[globalStyles.container, {backgroundColor: defaultBackgroundColor.background}]}>
+  return <ScrollView style={[globalStyles.container, {backgroundColor: theme.background}]}>
     <SectionCourses title={'Path in ' + props.route.params.skill.title}
                     type='Path'
                     hasButton={false}

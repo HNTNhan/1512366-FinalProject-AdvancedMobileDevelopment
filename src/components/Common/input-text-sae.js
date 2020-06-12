@@ -29,7 +29,8 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: 'gainsboro',
     marginBottom: 10,
-    backgroundColor: 'rgba(255, 255, 255, 0.8)'
+    backgroundColor: 'rgba(255, 255, 255, 0.8)',
+    width: '100%'
   },
   saeLabel: {
     color: '#03A9F4',

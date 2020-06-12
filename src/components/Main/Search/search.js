@@ -14,25 +14,37 @@ const Search = (props) => {
   const {user, setUser} = useContext(AuthenticationContext);
   const [searchKey, setSearchKey] = useState('');
   const [showResult, setShowResult] = useState(false);
-  const [recentSearch, setRecentSearch] = useState(user.recentSearch);
-  const {defaultBackgroundColor} = useContext(ColorsContext);
+  const {theme} = useContext(ColorsContext);
   const keysHelpSearch = skillsData.map(skill => { return {key: skill.title, type: 'skill'}}).
                          concat(categoriesData.map(category => {return {key: category.title, type: 'category'}})).
                          concat(authorsData.map(author => { return {key: author.detail.name, type: 'author'}}));
 
   const onPressItem = (value) => {
+    if(user.recentSearch.indexOf(value) === -1) {
+      let temp = {...user}
+      temp.recentSearch.unshift(value)
+      setUser(temp)
+    } else {}
     setSearchKey(value);
     setShowResult(true);
   }
 
   const onPressClear = () => {
-    setRecentSearch([]);
-    let temp = user;
-    temp.recentSearch = recentSearch;
+    let temp = {...user};
+    temp.recentSearch = [];
     setUser(temp);
   }
 
-  return <View style={[globalStyles.container, {backgroundColor: defaultBackgroundColor.background}]}>
+  const onSubmitEditing = () => {
+    setShowResult(true)
+    if(user.recentSearch.indexOf(searchKey) === -1) {
+      let temp = {...user}
+      temp.recentSearch.unshift(searchKey)
+      setUser(temp)
+    } else {}
+  }
+
+  return <View style={[globalStyles.container, {backgroundColor: theme.background}]}>
       <View style={styles.searchContainer}>
         <TextInput
           style={styles.searchInput}
@@ -44,11 +56,7 @@ const Search = (props) => {
           }}
           value={searchKey}
           returnKeyType={"search"}
-          onSubmitEditing={(target) => {
-            setShowResult(true)
-            recentSearch.unshift(searchKey)
-            setRecentSearch([...new Set(recentSearch)])
-          }}
+          onSubmitEditing={() => onSubmitEditing()}
         />
         { searchKey!=='' ?
           <TouchableOpacity
@@ -64,7 +72,7 @@ const Search = (props) => {
         }
     </View>
     {
-      showResult===false ? searchKey==='' ?  <BeforeSearch onPress={onPressItem} onPressClear={onPressClear} recentSearch={recentSearch} skills={user.skills}/> :
+      showResult===false ? searchKey==='' ?  <BeforeSearch onPress={onPressItem} onPressClear={onPressClear} recentSearch={user.recentSearch} skills={user.skills}/> :
         <WhileSearch searchKey={searchKey} keys={keysHelpSearch} onPress={onPressItem}/>
       : <ResultSearch searchKey={searchKey} route={props.route} navigation={props.navigation}/>
     }

@@ -1,14 +1,18 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {View, Image, StyleSheet, Text} from 'react-native';
 import Skills from "../../Main/Browse/Skills/skills";
+import {AuthenticationContext} from "../../../provider/authentication-provider";
+import {skillsData} from "../../../testdata/skills-data";
 
 const Profile = (props) => {
+  const {user} = useContext(AuthenticationContext);
+
   return <View style={styles.container}>
     <View style={styles.containerAccount}>
       <Image source={require('../../../../assets/ic_person.png')} style={styles.image}/>
       <Text style={styles.textContent}>Thien Nhan</Text>
     </View>
-    <Skills title={'Interests'}/>
+    <Skills title={'Interests'} skills={skillsData} interests={user.skills} navigation={props.navigation} route={props.route}/>
     <View>
       <Text style={styles.title}>Activity insights (last 30 days)</Text>
       <View>

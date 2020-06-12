@@ -10,17 +10,19 @@ import {skillsData} from "../../testdata/skills-data";
 import {pathsData} from "../../testdata/paths-data";
 import {coursesData} from "../../testdata/courses-data";
 import {authorsData} from "../../testdata/authors-data";
+import {ColorsContext} from "../../provider/colors-provider";
 
 const CategoryDetail = (props) => {
   const category = props.route.params.category;
   const {user} = useContext(AuthenticationContext);
+  const {theme} = useContext(ColorsContext);
   const skills = findSkillByName(skillsData, category.skills);
   const paths = findByKey(pathsData, category.paths);
   const newCourses = findByKey(coursesData, category.new);
   const trendingCourses = findByKey(coursesData, category.trending);
   const authors = findByKey(authorsData, category.authors)
 
-  return <View style={globalStyles.container}>
+  return <View style={{...globalStyles.container, backgroundColor: theme.background}}>
     <ScrollView>
       <Skills title={category.title + ' Skills'} skills={skills} interests={user.skills} navigation={props.navigation} route={props.route}/>
       <SectionCourses title={'Paths in ' + category.title}

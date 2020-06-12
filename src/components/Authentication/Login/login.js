@@ -6,8 +6,11 @@ import InputTextSae from "../../Common/input-text-sae";
 import {AuthenticationContext} from "../../../provider/authentication-provider";
 import {usersData} from "../../../testdata/users-data"
 import {ColorsContext} from "../../../provider/colors-provider";
+import {defaultColors} from "../../../globles/constants";
 
 const Login = (props) => {
+  const {setUser} = useContext(AuthenticationContext);
+  const {theme, setTheme} = useContext(ColorsContext)
   const [username, setUsername] = useState('admin');
   const [password, setPassword] = useState('123456');
   const [status, setStatus] = useState(null);
@@ -42,10 +45,7 @@ const Login = (props) => {
     setPassword(password)
   }
 
-  const {setUser} = useContext(AuthenticationContext);
-  const {defaultBackgroundColor, checkBackgroundColor, setCheckBackgroundColor} = useContext(ColorsContext)
-
-  return <View style={[styles.container, {backgroundColor: defaultBackgroundColor.background}]}>
+  return <View style={[styles.container, {backgroundColor: theme.background}]}>
       <ScrollView contentContainerStyle={{paddingBottom: 100}}>
         <RenderLoginStatus />
         <InputTextSae title='Username (or Email)' value={username} onChangeText={onChangeUsername}/>
@@ -70,7 +70,7 @@ const Login = (props) => {
         <Button
           buttonStyle={styles.button}
           titleStyle={styles.buttonText}
-          onPress={() => setCheckBackgroundColor(!checkBackgroundColor)}
+          onPress={() => theme===defaultColors.themes.light ? setTheme(defaultColors.themes.dark) : setTheme(defaultColors.themes.light)}
           title ='Change Color' />
       </ScrollView>
     </View>

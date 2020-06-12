@@ -8,8 +8,8 @@ const Skills = (props) => {
   }
 
   const renderListItems = () => {
-    return props.skills.map( (item) =>
-      <TouchableOpacity key={item.title} style={styles.button} onPress={() => onPress(item)}>
+    return props.skills.map( (item, index) =>
+      <TouchableOpacity key={item.title+index} style={styles.button} onPress={() => onPress(item)}>
         {
           props.interests.find((skill) => skill===item.title) === item.title ?
             <Image source={require('../../../../../assets/ic_check.png')} style={styles.image}/>

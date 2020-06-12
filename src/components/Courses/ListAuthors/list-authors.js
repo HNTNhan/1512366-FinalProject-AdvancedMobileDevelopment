@@ -6,7 +6,7 @@ import {globalStyles} from "../../../globles/styles";
 import {ColorsContext} from "../../../provider/colors-provider";
 
 const ListAuthors = (props) => {
-  const {defaultBackgroundColor} = useContext(ColorsContext);
+  const {theme} = useContext(ColorsContext);
   const data = !props.route.params ? props.data : !props.route.params.data ? props.data : props.route.params.data;
   const title = !props.route.params ? props.title : !props.route.params.title ? props.title : props.route.params.title;
 
@@ -21,14 +21,14 @@ const ListAuthors = (props) => {
     props.navigation.navigate('AuthorDetail')
   }
 
-  return <View style={[globalStyles.container, {backgroundColor: defaultBackgroundColor.background}]}>
+  return <View style={[globalStyles.container, {backgroundColor: theme.background}]}>
     <FlatList
       showsVerticalScrollIndicator={false}
       data={data}
       keyExtractor={(item, index) => item + index}
       renderItem={({item}) => <ListAuthorItems item={item} onPress={onPressItem}/>}
       ItemSeparatorComponent= {renderSeparator}
-      ListHeaderComponent = {title ? () =>  <SectionTitle title={'11 Result'} button={'Filter'} /> : null}
+      ListHeaderComponent = {title ? () =>  <SectionTitle title={title} /> : null}
     />
   </View>
 };

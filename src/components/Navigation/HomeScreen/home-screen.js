@@ -7,10 +7,10 @@ import ListChannels from "../../Courses/ListChannels/list-channels";
 import CourseDetail from "../../CourseDetail/course-detail";
 import PathDetail from "../../PathDetail/path-detail";
 import ChannelDetail from "../../ChannelDetail/channel-detail";
-
 import AuthorDetail from "../../AuthorDetail/author-detail";
 import {objectsConstant} from "../../../globles/constants";
 import IconMainHeaderRight from "../../Common/icon-main-hearder-right";
+import PathDetailRightHeader from "../../NavigationHeader/PathDetailHeader/PathDetailRightHeader";
 
 
 const HomeStack = createStackNavigator();
@@ -29,7 +29,14 @@ const HomeScreen = (props) => {
     <HomeStack.Screen name='ListPaths' component={ListPaths} options={{title: 'Paths'}} />
     <HomeStack.Screen name='ListChannels' component={ListChannels} options={{title: 'Channels'}}/>
     <HomeStack.Screen name='CourseDetail' component={CourseDetail} options={{headerShown: false}}/>
-    <HomeStack.Screen name='PathDetail' component={PathDetail}/>
+    <HomeStack.Screen name='PathDetail'
+                      component={PathDetail}
+                      options={({route, navigation}) => ({
+                        headerRight: () => {
+                          return <PathDetailRightHeader route={route} navigation={navigation}/>
+                        }
+                      })}
+    />
     <HomeStack.Screen name='ChannelDetail' component={ChannelDetail}/>
     <HomeStack.Screen name='AuthorDetail' component={AuthorDetail} options={{title: 'Author'}}/>
   </HomeStack.Navigator>
