@@ -15,10 +15,12 @@ const AddToChannelDialog = (props) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [newChannel, setNewChannel] = useState('');
   const {user, setUser} = useContext(AuthenticationContext)
+  const key = !props.keyItem ? props.route.params.key : props.keyItem;
+  const check = !!props.keyItem;
 
   const onPressModalItem = (pos, title) => {
     let temp = {...user}
-    temp.channels[pos].items.push({typeItem: 'path', data: [props.route.params.key],});
+    temp.channels[pos].items.push({typeItem: check ? 'course' : 'path', data: [key],});
     props.closeModel();
   }
 
@@ -37,8 +39,8 @@ const AddToChannelDialog = (props) => {
       progress: 0,
       items: [
         {
-          typeItem: 'path',
-          data: [props.route.params.key],
+          typeItem: check ? 'course' : 'path',
+          data: [key],
         },
       ]
     };
@@ -50,7 +52,7 @@ const AddToChannelDialog = (props) => {
   }
 
   const ModalItem = (channels) => {
-    const check = channels.channel.items.find(item => item.data[0]===props.route.params.key);
+    const check = channels.channel.items.find(item => item.data[0]===key);
     const pos = user.channels.indexOf(channels.channel);
 
     return <TouchableOpacity

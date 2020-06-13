@@ -3,9 +3,11 @@ import {StyleSheet, View} from 'react-native';
 import {Icon, Text} from "react-native-elements";
 import { Menu, MenuOptions, MenuOption, MenuTrigger} from "react-native-popup-menu";
 import {AuthenticationContext} from "../../provider/authentication-provider";
+import AddToChannelDialog from "./add-to-channel-dialog";
 
 const CourseDropDownButton = (props) => {
   const {user, setUser} = useContext(AuthenticationContext);
+  const [modalVisible, setModalVisible] = useState(false);
 
   const onSelectBookmark = () => {
     let temp = {...user};
@@ -29,6 +31,13 @@ const CourseDropDownButton = (props) => {
     setUser(temp);
   }
 
+  const onSelectAddToChannel = () => {
+    setModalVisible(true)
+  }
+
+  const onPressClose = () => {
+    setModalVisible(false)
+  }
 
   return <View style={styles.container}>
     <Menu style={styles.dropdown}>
@@ -39,7 +48,7 @@ const CourseDropDownButton = (props) => {
         <MenuOption onSelect={() => onSelectBookmark()} >
           <Text>{user.bookmarks.indexOf(props.keyItem)!==-1 ? 'UnBookmark' : 'Bookmark'}</Text>
         </MenuOption>
-        <MenuOption onSelect={() => alert(`2`)} text={'Add to channel'} />
+        <MenuOption onSelect={() => onSelectAddToChannel()} text={'Add to channel'} />
         <MenuOption onSelect={() => onSelectDownload()} text={user.downloads.indexOf(props.keyItem)!==-1 ? 'Downloaded' : 'Download'} />
       </MenuOptions>
     </Menu>
@@ -47,6 +56,7 @@ const CourseDropDownButton = (props) => {
           size={18}
           type='font-awesome-5'
     />
+    <AddToChannelDialog modalVisible={modalVisible} keyItem={props.keyItem} closeModel={() => onPressClose()}/>
   </View>
 };
 

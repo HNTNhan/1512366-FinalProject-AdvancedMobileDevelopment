@@ -10,6 +10,7 @@ import AuthorDetail from "../../AuthorDetail/author-detail";
 import CategoryDetail from "../../CategoryDetail/category-detail";
 import SkillDetail from "../../SkillDetail/skill-detai";
 import {objectsConstant} from "../../../globles/constants";
+import PathDetailRightHeader from "../../NavigationHeader/PathDetailHeader/PathDetailRightHeader";
 
 const BrowseStack = createStackNavigator();
 const BrowseScreen = (props) => {
@@ -19,7 +20,15 @@ const BrowseScreen = (props) => {
     <BrowseStack.Screen name='ListCourses' component={ListCourses} options={({ route }) => ({ title: route.params.name })}/>
     <BrowseStack.Screen name='ListPaths' component={ListPaths} options={({ route }) => ({ title: route.params.name })}/>
     <BrowseStack.Screen name='CourseDetail' component={CourseDetail} options={{headerShown: false}}/>
-    <BrowseStack.Screen name='PathDetail' component={PathDetail} options={({ route }) => ({ title: route.params.name })}/>
+    <BrowseStack.Screen name='PathDetail'
+                        component={PathDetail}
+                        options={({ route, navigation }) => ({
+                          title: route.params.name,
+                          headerRight: () => {
+                            return <PathDetailRightHeader route={route} navigation={navigation}/>
+                          }
+                        })}
+    />
     <BrowseStack.Screen name='AuthorDetail' component={AuthorDetail}/>
     <BrowseStack.Screen name='CategoryDetail' component={CategoryDetail} options={({ route }) => ({ title: route.params.name })}/>
     <BrowseStack.Screen name='SkillDetail' component={SkillDetail} options={({ route }) => ({ title: route.params.name })}/>
