@@ -47,7 +47,7 @@ const Search = (props) => {
   return <View style={[globalStyles.container, {backgroundColor: theme.background}]}>
       <View style={styles.searchContainer}>
         <TextInput
-          style={styles.searchInput}
+          style={{...styles.searchInput, backgroundColor: theme.foreground1, color: theme.text}}
           placeholder='Search'
           placeholderTextColor='darkgray'
           onChangeText={(text) => {
@@ -65,8 +65,8 @@ const Search = (props) => {
               setShowResult(false)
             }}
             title='Cancel'
-            style={styles.cancelButton}>
-            <Text style={styles.buttonText}>Cancel</Text>
+            style={{...styles.cancelButton}}>
+            <Text style={{...styles.buttonText, color: theme.text}}>Cancel</Text>
           </TouchableOpacity>
           : null
         }
@@ -89,7 +89,6 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
     marginRight: 10,
     flex: 1,
-    backgroundColor: 'lightgrey',
     borderRadius: 10,
     fontSize: 18,
   },

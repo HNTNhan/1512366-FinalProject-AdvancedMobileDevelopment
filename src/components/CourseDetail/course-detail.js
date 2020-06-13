@@ -38,7 +38,7 @@ const CourseDetail = (props) => {
     }
   };
 
-  return <View style={styles.container}>
+  return <View style={{...styles.container, backgroundColor: theme.background}}>
     <VideoPlayer />
     <TabView
       renderTabBar={TabBarStyle}

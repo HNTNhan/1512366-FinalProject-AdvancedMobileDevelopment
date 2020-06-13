@@ -1,7 +1,9 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {ScrollView, StyleSheet, Text, View, TouchableOpacity, Image} from 'react-native';
+import {ColorsContext} from "../../../../provider/colors-provider";
 
 const Skills = (props) => {
+  const {theme} = useContext(ColorsContext);
 
   const onPress = (item) => {
     return props.navigation.navigate('SkillDetail', {name: item.title, skill: item});
@@ -9,13 +11,13 @@ const Skills = (props) => {
 
   const renderListItems = () => {
     return props.skills.map( (item, index) =>
-      <TouchableOpacity key={item.title+index} style={styles.button} onPress={() => onPress(item)}>
+      <TouchableOpacity key={item.title+index} style={{...styles.button, backgroundColor: theme.foreground1}} onPress={() => onPress(item)}>
         {
           props.interests.find((skill) => skill===item.title) === item.title ?
             <Image source={require('../../../../../assets/ic_check.png')} style={styles.image}/>
             : null
         }
-        <Text style={{textAlign: 'center'}}> {item.title}</Text>
+        <Text style={{textAlign: 'center', color: theme.text}}> {item.title}</Text>
       </TouchableOpacity>
     );
   }

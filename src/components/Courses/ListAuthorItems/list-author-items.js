@@ -1,11 +1,14 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {ColorsContext} from "../../../provider/colors-provider";
 
 const ListAuthorItems = (props) => {
+  const {theme} = useContext(ColorsContext);
+
   return <TouchableOpacity style={styles.item} onPress={props.onPress}>
     <Image source={require('../../../../assets/ic_person.png')} style={styles.image}/>
     <View style={styles.detail}>
-      <Text>{props.item.detail.name}</Text>
+      <Text style={{fontSize: 16, color: theme.text}}>{props.item.detail.name}</Text>
       <Text style={styles.darkText}>{props.item.courses.length} Courses</Text>
     </View>
   </TouchableOpacity>

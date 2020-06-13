@@ -19,7 +19,7 @@ const Download = (props) => {
 
   const renderHeader = () => {
     return <View style={styles.header}>
-      <Text style={styles.headerText}>Download</Text>
+      <Text style={{...styles.headerText, color: theme.text}}>Download</Text>
       <TouchableOpacity style={styles.button}
                         onPress={() => {
                           let temp={...user};
@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold'
   },
   buttonText: {
-    color: 'blue',
+    color: '#19B5FE',
   },
   separator: {
     height: 1,

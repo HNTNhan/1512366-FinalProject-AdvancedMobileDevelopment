@@ -1,12 +1,15 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {View, StyleSheet, Image, Text, TouchableOpacity} from 'react-native';
+import {ColorsContext} from "../../../../provider/colors-provider";
 
 const PathItems = (props) => {
-  return <TouchableOpacity style={styles.item} onPress={props.onPress}>
+  const {theme} = useContext(ColorsContext)
+
+  return <TouchableOpacity style={{...styles.item, backgroundColor: theme.foreground1}} onPress={props.onPress}>
     <Image source={require('../../../../../assets/ic_course.png')} style={styles.image}/>
-    <View style={styles.detail}>
-      <Text>{props.item.detail.title}</Text>
-      <Text style={styles.darkText}>{props.item.detail.noCourses}</Text>
+    <View style={{...styles.detail}}>
+      <Text numberOfLines={2} style={{fontSize: 16, color: theme.text}}>{props.item.detail.title}</Text>
+      <Text numberOfLines={1} style={styles.darkText}>{props.item.detail.noCourses}</Text>
     </View>
   </TouchableOpacity>
 };
@@ -16,8 +19,8 @@ const styles = StyleSheet.create({
     margin: 5,
     marginRight: 10,
     marginBottom: 10,
-    width: 200,
-    height: 160,
+    width: 220,
+    height: 170,
     backgroundColor: 'rgb(219, 221, 231)',
     shadowColor: 'black',
     shadowOffset: { width: 10, height: -10 },
@@ -26,14 +29,18 @@ const styles = StyleSheet.create({
     elevation: 25,
   },
   image: {
-    width: 200,
-    height: 100,
+    width: 220,
+    height: 110,
+    opacity: 0.9,
   },
   detail: {
-    margin: 5,
+    padding: 5,
+    flexShrink: 1,
+    borderTopColor: 'gray',
+    borderTopWidth: 1,
   },
   darkText: {
-    color: 'darkgray',
+    color: '#777777',
   },
 })
 

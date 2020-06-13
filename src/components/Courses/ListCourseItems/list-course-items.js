@@ -10,7 +10,7 @@ const ListCourseItems = (props) => {
       <Image style={styles.image} source={require('../../../../assets/ic_course.png')} />
       <SubCourseInfo item={props.item} />
     </TouchableOpacity>
-    <CourseDropDownButton keyItem={props.item.key}/>
+    <CourseDropDownButton keyItem={props.item.key} iconSize={18}/>
   </View>
 };
 

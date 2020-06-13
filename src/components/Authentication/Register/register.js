@@ -4,7 +4,6 @@ import {Button, CheckBox, Text} from "react-native-elements";
 import InputTextSae from "../../Common/input-text-sae";
 import countryList from 'react-select-country-list'
 import {ColorsContext} from "../../../provider/colors-provider";
-import Select from 'react-select';
 import {Picker} from "@react-native-community/picker";
 
 const Register = (props) => {
@@ -35,26 +34,29 @@ const Register = (props) => {
 
   return <View style={{flex: 1, backgroundColor: theme.background}}>
     <ScrollView style={styles.container} contentContainerStyle={{paddingBottom: 100}}>
-      <Text h3 style={styles.title}>Create your account</Text>
+      <Text h3 style={{...styles.title, color: theme.text}}>Create your account</Text>
       <InputTextSae title={'Email*'} value={email} onChangeText={onChangeEmail}/>
       <InputTextSae title={'First name*'} value={firstName} onChangeText={onChangeFirstName}/>
       <InputTextSae title={'Last name*'} value={lastName} onChangeText={onChangeLastName}/>
       <InputTextSae title={'Phone'} value={phone} onChangeText={onChangePhone}/>
 
-      <Picker
-        mode={'dropdown'}
-        selectedValue={country}
-        style={{ height: 20, width: '100%', marginBottom: 10}}
-        onValueChange={(itemValue, itemIndex) => setCountry(itemValue)}>
-        { countries.map((country) => <Picker.Item key={country.value} label={country.label} value={country.value} />) }
-      </Picker>
+      <View style={{...styles.pickerContainer, backgroundColor: theme.foreground1}}>
+        <Picker
+          mode={'dropdown'}
+          selectedValue={country}
+          style={{...styles.picker, color: theme.text}}
+          onValueChange={(itemValue, itemIndex) => setCountry(itemValue)}>
+          { countries.map((country) => <Picker.Item key={country.value} label={country.label} value={country.value} />) }
+        </Picker>
+      </View>
 
-      <Text style={styles.text}>* Required field</Text>
+
+      <Text style={{...styles.text, color: theme.text}}>* Required field</Text>
       <CheckBox
         checked={check}
         title='By checking here and continuing, I agree to the Terms of Use.'
-        textStyle={{fontSize: 14}}
-        containerStyle={styles.checkBox}
+        textStyle={{fontSize: 16, color: theme.text}}
+        containerStyle={{...styles.checkBox, backgroundColor: theme.background}}
         onPress={() => setCheck(!check)}
       />
       <Button
@@ -62,6 +64,11 @@ const Register = (props) => {
         titleStyle={styles.buttonText}
         onPress={() => console.log('Create Account')}
         title ='Create Account' />
+      <Button
+        buttonStyle={[styles.button, {backgroundColor: '#9E9E9E'}]}
+        titleStyle={styles.buttonText}
+        onPress={() => props.navigation.goBack()}
+        title ='Cancel' />
     </ScrollView>
   </View>
 };
@@ -78,6 +85,7 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 16,
+    marginVertical: 5,
   },
   button: {
     marginVertical: 5,
@@ -90,10 +98,22 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
   checkBox: {
-    backgroundColor: 'white',
     marginLeft: 0,
     marginRight: 0,
     padding: 5
+  },
+  pickerContainer: {
+    height: 30,
+    paddingVertical: 2,
+    borderRadius: 7,
+    borderWidth: 2,
+    borderColor: 'gainsboro',
+  },
+  picker: {
+    height: '100%',
+    width: '100%',
+    paddingVertical: 10,
+    backgroundColor: 'transparent'
   }
 })
 export default Register;

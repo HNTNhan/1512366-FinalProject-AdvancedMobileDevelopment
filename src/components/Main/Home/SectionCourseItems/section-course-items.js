@@ -1,12 +1,18 @@
-import React from 'react';
-import {StyleSheet, Image, Text, TouchableOpacity} from 'react-native';
+import React, {useContext} from 'react';
+import {StyleSheet, Image, Text, TouchableOpacity, View} from 'react-native';
 import SubCourseInfo from "../../../Common/sub-course-info";
+import CourseDropDownButton from "../../../Common/course-drop-down-button";
+import {ColorsContext} from "../../../../provider/colors-provider";
 
 const SectionCourseItems = (props) => {
+  const {theme} = useContext(ColorsContext)
 
-  return <TouchableOpacity style={styles.item} onPress={props.onPress}>
+  return <TouchableOpacity style={{...styles.item, backgroundColor: theme.foreground1}} onPress={props.onPress}>
     <Image source={require('../../../../../assets/ic_course.png')} style={styles.image}/>
-    <SubCourseInfo item={props.item}/>
+    <SubCourseInfo item={props.item} section={true}/>
+    <View style={styles.dropDownButton}>
+      <CourseDropDownButton keyItem={props.item.key} iconSize={22}/>
+    </View>
   </TouchableOpacity>
 };
 
@@ -15,8 +21,8 @@ const styles = StyleSheet.create({
     margin: 5,
     marginRight: 10,
     marginBottom: 10,
-    width: 200,
-    height: 215,
+    width: 220,
+    height: 210,
     backgroundColor: 'rgb(219, 221, 231)',
     shadowColor: 'black',
     shadowOffset: { width: 10, height: -10 },
@@ -25,9 +31,17 @@ const styles = StyleSheet.create({
     elevation: 25,
   },
   image: {
-    width: 200,
-    height: 100,
+    width: 220,
+    height: 110,
+    opacity: 0.9,
   },
+  dropDownButton: {
+    position: 'absolute',
+    right: 0,
+    top: 0,
+    width: '20%',
+    height: '20%',
+  }
 })
 
 export default SectionCourseItems;

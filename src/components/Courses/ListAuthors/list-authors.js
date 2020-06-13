@@ -17,8 +17,8 @@ const ListAuthors = (props) => {
     );
   };
 
-  const onPressItem = () => {
-    props.navigation.navigate('AuthorDetail')
+  const onPressItem = (key, name) => {
+    props.navigation.navigate('AuthorDetail', {key: key, name: name})
   }
 
   return <View style={[globalStyles.container, {backgroundColor: theme.background}]}>
@@ -26,7 +26,7 @@ const ListAuthors = (props) => {
       showsVerticalScrollIndicator={false}
       data={data}
       keyExtractor={(item, index) => item + index}
-      renderItem={({item}) => <ListAuthorItems item={item} onPress={onPressItem}/>}
+      renderItem={({item}) => <ListAuthorItems item={item} onPress={() => onPressItem(item.key, item.detail.name)}/>}
       ItemSeparatorComponent= {renderSeparator}
       ListHeaderComponent = {title ? () =>  <SectionTitle title={title} /> : null}
     />

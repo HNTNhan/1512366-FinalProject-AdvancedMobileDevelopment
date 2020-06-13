@@ -16,8 +16,8 @@ const ListPaths = (props) => {
     );
   };
 
-  const onPressItem = (key) => {
-    props.navigation.navigate('PathDetail', {key: key})
+  const onPressItem = (key, title) => {
+    props.navigation.navigate('PathDetail', {key: key, name: title})
   }
 
   return <View style={[globalStyles.container, {backgroundColor: theme.background}]}>
@@ -25,7 +25,7 @@ const ListPaths = (props) => {
       showsVerticalScrollIndicator={false}
       data={data}
       keyExtractor={(item, index) => item + index}
-      renderItem={({item}) => <ListPathItems item={item} onPress={() => onPressItem(item.key)}/>}
+      renderItem={({item}) => <ListPathItems item={item} onPress={() => onPressItem(item.key, item.detail.title)}/>}
       ItemSeparatorComponent= {renderSeparator}
       ListHeaderComponent = {title ? () => <SectionTitle title={title} /> : null}
     />

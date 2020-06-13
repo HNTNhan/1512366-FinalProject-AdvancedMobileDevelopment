@@ -14,10 +14,12 @@ import ListCourses from "../../../Courses/ListCourses/list-courses";
 import ListPaths from "../../../Courses/ListPaths/list-paths";
 import ListAuthors from "../../../Courses/ListAuthors/list-authors";
 import {Icon} from "react-native-elements";
+import {ColorsContext} from "../../../../provider/colors-provider";
 
 const initialLayout = { width: Dimensions.get('window').width };
 
 const ResultSearch = (props) => {
+  const {theme} = useContext(ColorsContext);
   let allData;
   const constCourses = findCoursesThroughName(coursesData, props.searchKey);
   const [courses, setCourse] = useState(constCourses);
@@ -82,14 +84,14 @@ const ResultSearch = (props) => {
   };
 
   return allData ? <TabView
-    renderTabBar={TabBarStyle}
+    renderTabBar={(props) => <TabBarStyle {...props} foreground={theme.foreground1}/>}
     navigationState={{ index, routes }}
     renderScene={renderScene}
     onIndexChange={setIndex}
     initialLayout={initialLayout}
   /> : <View style={styles.containerNotFound}>
     <Icon name={'search'} type={"font-awesome-5"} />
-    <Text style={styles.textNotFound}>{`Sorry we couldn't find any matches for \n "${props.searchKey}"`}</Text>
+    <Text style={{...styles.textNotFound, color: theme.text}}>{`Sorry we couldn't find any matches for \n "${props.searchKey}"`}</Text>
   </View>
 };
 

@@ -1,12 +1,15 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {Text, TouchableOpacity, View, StyleSheet} from 'react-native';
+import {ColorsContext} from "../../provider/colors-provider";
 
 const SectionTitle = (props) => {
+  const {theme} = useContext(ColorsContext);
+
   return <View style={styles.title}>
-    <Text style={styles.titleText}>{props.title}</Text>
+    <Text style={{...styles.titleText, color: theme.text}}>{props.title}</Text>
     <TouchableOpacity style={styles.button}
                       onPress={props.onPress}>
-      <Text style={styles.buttonText}> {props.buttonText} </Text>
+      <Text style={{...styles.buttonText, color: theme.text}}> {props.buttonText} </Text>
     </TouchableOpacity>
   </View>
 };

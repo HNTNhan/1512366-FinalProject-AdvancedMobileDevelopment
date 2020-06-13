@@ -15,7 +15,7 @@ const ForgotPassword = (props) => {
       return <View />
     } else if(status.status === 404){
       return <View>
-        <Text style={styles.message}>{status.errorString}</Text>
+        <Text style={{...styles.message, color: theme.text}}>{status.errorString}</Text>
       </View>
     } else {
       return <View />
@@ -28,10 +28,10 @@ const ForgotPassword = (props) => {
 
   return <View style={{...styles.container, backgroundColor: theme.background}}>
       <ScrollView showsVerticalScrollIndicator={false}>
-        <Text h2 style={styles.title}>Forgot Password</Text>
+        <Text h2 style={{...styles.title, color: theme.text}}>Forgot Password</Text>
         {status===null||status.status!==200 ?
           <View>
-            <Text style={styles.content}>Enter your email address and we'll send you a link to reset your password</Text>
+            <Text style={{...styles.content, color: theme.text}}>Enter your email address and we'll send you a link to reset your password</Text>
             <RenderEmailStatus />
             <InputTextSae title={'Email'} value={email} onChangeText={onChangeEmail}/>
             <Button
@@ -46,7 +46,7 @@ const ForgotPassword = (props) => {
               title ='Cancel' />
           </View>
           :
-          <Text style={styles.content}>{status.message}</Text>
+          <Text style={{...styles.content, color: theme.text}}>{status.message}</Text>
         }
       </ScrollView>
   </View>
@@ -59,10 +59,10 @@ const styles = StyleSheet.create({
     paddingTop: 80,
   },
   title: {
-    textAlign:'center'
+    textAlign:'center',
   },
   content: {
-    fontSize: 18,
+    fontSize: 16,
     marginVertical: 10
   },
   button: {

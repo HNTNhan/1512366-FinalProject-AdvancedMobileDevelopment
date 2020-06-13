@@ -53,7 +53,7 @@ const CourseDropDownButton = (props) => {
       </MenuOptions>
     </Menu>
     <Icon name='ellipsis-v'
-          size={18}
+          size={props.iconSize}
           type='font-awesome-5'
     />
     <AddToChannelDialog modalVisible={modalVisible} keyItem={props.keyItem} closeModel={() => onPressClose()}/>
@@ -64,6 +64,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
+    width: '100%',
+    height: '100%'
   },
   dropdown: {
     position: 'absolute',

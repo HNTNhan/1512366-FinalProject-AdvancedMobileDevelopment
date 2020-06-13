@@ -10,37 +10,40 @@ export const renderSeparator = () => {
 
 export const objectsConstant = {
   bottomTabOption: {
-    activeTintColor: '#1297E0',
+    activeTintColor: '#19B5FE',
     inactiveTintColor: 'gray',
-    style: {
-      paddingBottom: 5,
-      paddingTop: 5,
-      height: 60,
-    },
     labelStyle: {
       fontSize: 16,
-    }
+    },
+    keyboardHidesTabBar: true,
   },
 
   defaultCenterHeaderBar: {
     headerStyle: {
       height: 50,
     },
+    headerTitleStyle: {
+      fontSize: 20,
+    },
     headerStatusBarHeight: 0,
-    headerTitleAlign: 'center'
+    headerTitleAlign: 'center',
   },
 }
 
 export const defaultColors = {
   themes: {
     dark: {
-      foreground: '#dddddd',
+      foreground1: '#222222',
+      foreground2: '#dddddd',
       background: '#000000',
+      text: '#ffffff',
     },
     light: {
-      foreground: '#222222',
+      foreground1: '#eeeeee',
+      foreground2: '#222222',
       background: '#ffffff',
+      text: '#000000',
     }
-  }
+  },
 }
 

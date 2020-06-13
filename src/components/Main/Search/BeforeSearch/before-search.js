@@ -6,6 +6,8 @@ import {ColorsContext} from "../../../../provider/colors-provider";
 import {AuthenticationContext} from "../../../../provider/authentication-provider";
 
 const BeforeSearch = (props) => {
+  const {theme} = useContext(ColorsContext);
+
   const keys =[
     {
       title: 'Recent searches',
@@ -23,14 +25,14 @@ const BeforeSearch = (props) => {
     );
   };
 
-  return <View>
+  return <View style={{paddingBottom: 50}}>
     <SectionList
       showsVerticalScrollIndicator={false}
       sections={keys}
       keyExtractor={(item, index) => item + index}
       renderItem={({item}) => <ListKeyItems item={item} onPress={() => props.onPress(item)}/>}
       renderSectionHeader={({section: {title}}) => <View style={styles.title}>
-          <Text style={styles.titleText}>{title}</Text>
+          <Text style={{...styles.titleText, color: theme.text}}>{title}</Text>
             {title!== 'Your interests' ? <TouchableOpacity style={styles.button}
                               onPress={props.onPressClear}>
             <Text style={styles.buttonText}> Clear </Text>

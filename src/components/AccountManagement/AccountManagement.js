@@ -1,20 +1,25 @@
-import React, {useState} from 'react';
+import React, {useState, useContext} from 'react';
 import {View, TouchableOpacity, Text, Image, StyleSheet, Switch, ScrollView} from 'react-native';
 import ButtonSetting from "./ButtonSetting/button-setting";
 import ButtonSwitch from "./ButtonSwitch/button-switch";
+import {ColorsContext} from "../../provider/colors-provider";
+import {defaultColors} from "../../globles/constants";
 
 const AccountManagement = (props) => {
-
-  return <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
+  const {theme, setTheme} = useContext(ColorsContext);
+  return <ScrollView style={{...styles.container, backgroundColor: theme.background}} showsVerticalScrollIndicator={false}>
     <ButtonSetting title={'Profile'} onPress={() => props.navigation.navigate("Profile")}/>
     <ButtonSetting title={'Account'} onPress={() => props.navigation.navigate("Setting")}/>
     <ButtonSetting title={'Subscription'} />
     <ButtonSetting title={'Communication Preferences'} />
 
-    <TouchableOpacity style={styles.itemContainer}>
+    <TouchableOpacity style={styles.itemContainer}
+                      onPress={() => theme===defaultColors.themes.light ? setTheme(defaultColors.themes.dark) : setTheme(defaultColors.themes.light)}>
       <Text style={styles.text}>Theme</Text>
       <View style={{flexDirection: 'row', alignItems: 'center',}}>
-        <Text style={{fontSize: 18, fontWeight: '500', color: 'gray'}}>Light</Text>
+        <Text style={{fontSize: 18, fontWeight: '500', color: 'gray'}}>
+          {theme===defaultColors.themes.light ? 'Light' : 'Dark'}
+        </Text>
         <Image source={require('../../../assets/ic_next.png')} style={styles.image}/>
       </View>
     </TouchableOpacity>
@@ -40,7 +45,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingHorizontal: 5,
-    backgroundColor: 'white'
   },
   itemContainer: {
     flexDirection: 'row',
