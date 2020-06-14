@@ -7,10 +7,10 @@ Hướng dẫn để cài đặt và chạy ứng dụng....
 ------------------------------------------------
 
 Deadline 1: Mock-up UI/UX cho toàn bộ ứng dụng
-  - Commit ID: ed656c0
+  - Commit ID: d6a70d1
   
 Deadline 2: Xây dựng ứng dụng offline cho toàn bộ ứng dụng
-  - Commit ID: da382e1
+  - Commit ID: 92dc56d
   - Video demo: https://drive.google.com/file/d/10jBn7cZqxGHxQaN3gAusqYuaCV5Kf4eU/view?usp=sharing
   
 ------------------------------------------------
