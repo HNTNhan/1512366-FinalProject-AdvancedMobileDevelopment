@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {View} from 'react-native';
 import {createBottomTabNavigator} from "@react-navigation/bottom-tabs";
 import {objectsConstant} from "../../../globles/constants";
@@ -7,6 +7,7 @@ import DownloadScreen from "../DownloadScreen/download-screen";
 import BrowseScreen from "../BrowseScreen/browse-screen";
 import SearchScreen from "../SearchScreen/search-screen";
 import {Icon} from "react-native-elements";
+import {ColorsContext} from "../../../provider/colors-provider";
 
 const bottomTabIcons = (route, focused) => {
   {
@@ -41,13 +42,14 @@ const bottomTabIcons = (route, focused) => {
 
 const MainTab = createBottomTabNavigator();
 const MainScreen = (props) => {
+  const {theme} = useContext(ColorsContext);
+
   return <MainTab.Navigator
     screenOptions={({route}) => ({
-
       tabBarIcon: ({focused}) => bottomTabIcons(route, focused),
     })
     }
-    tabBarOptions={objectsConstant.bottomTabOption}
+    tabBarOptions={{...objectsConstant.bottomTabOption, style: {backgroundColor: theme.foreground1, paddingBottom: 0, paddingTop: 0, height: 60}}}
   >
     <MainTab.Screen name="Home" component={HomeScreen}/>
     <MainTab.Screen name='Download' component={DownloadScreen}/>

@@ -11,17 +11,17 @@ import {ColorsContext} from "../../../provider/colors-provider";
 
 
 const Home = (props) => {
-  const {defaultBackgroundColor} = useContext(ColorsContext)
+  const {theme} = useContext(ColorsContext)
   const {user} = useContext(AuthenticationContext);
   const courses = findByKey(coursesData, user.continueLearning);
   const bookmarks = findByKey(coursesData, user.bookmarks);
   const paths  = findByKey(pathsData, user.paths);
   const channels = user.channels;
 
-  return <View style={[globalStyles.container, {backgroundColor: defaultBackgroundColor.background}]}>
+  return <View style={[globalStyles.container, {backgroundColor: theme.background}]}>
     <ScrollView showsVerticalScrollIndicator={false}>
       <SectionCourses title='Continue learning'
-                      type='Continue learning'
+                      type='Course'
                       navigation={props.navigation}
                       route={props.route}
                       data={courses}
@@ -39,7 +39,7 @@ const Home = (props) => {
                       data={channels}
                       pressSeeAll={() => props.navigation.navigate('ListChannels', {data: channels, title: false})}/>
       <SectionCourses title='Bookmarks'
-                      type='Bookmarks'
+                      type='Course'
                       navigation={props.navigation}
                       route={props.route}
                       data={bookmarks}

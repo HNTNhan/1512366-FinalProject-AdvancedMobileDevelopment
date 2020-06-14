@@ -1,13 +1,15 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {StyleSheet, View} from 'react-native';
 import FontAwesomeIcon from "react-native-vector-icons/FontAwesome";
 import {Sae} from "react-native-textinput-effects";
+import {ColorsContext} from "../../provider/colors-provider";
 
 const InputTextSae = (props) => {
+  const {theme} = useContext(ColorsContext)
   return <Sae
     label={props.title}
     labelStyle={styles.saeLabel}
-    inputStyle={styles.saeInput}
+    inputStyle={{...styles.saeInput, color: theme.text}}
     iconClass={FontAwesomeIcon}
     iconName={'pencil'}
     iconColor={'#03A9F4'}
@@ -18,7 +20,7 @@ const InputTextSae = (props) => {
     autoCorrect={false}
     secureTextEntry={props.secureTextEntry || false}
     value={props.value}
-    style={styles.saeContainer}
+    style={{...styles.saeContainer, backgroundColor: theme.foreground1}}
     onChangeText={(text) => props.onChangeText(text)}
   />
 };
@@ -29,10 +31,10 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: 'gainsboro',
     marginBottom: 10,
-    backgroundColor: 'rgba(255, 255, 255, 0.8)'
+    width: '100%'
   },
   saeLabel: {
-    color: '#03A9F4',
+    color: '#19B5FE',
     fontWeight: '600',
     paddingBottom: 12,
     paddingHorizontal: 10,

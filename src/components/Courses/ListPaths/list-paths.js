@@ -6,7 +6,9 @@ import ListPathItems from "../ListPathItems/list-path-items";
 import {ColorsContext} from "../../../provider/colors-provider";
 
 const ListPaths = (props) => {
-  const {defaultBackgroundColor} = useContext(ColorsContext)
+  const {theme} = useContext(ColorsContext);
+  const data = !props.route.params ? props.data : !props.route.params.data ? props.data : props.route.params.data;
+  const title = !props.route.params ? props.title : !props.route.params.title ? props.title : props.route.params.title;
 
   const renderSeparator = () => {
     return (
@@ -14,17 +16,18 @@ const ListPaths = (props) => {
     );
   };
 
-  const onPressItem = (key) => {
-    props.navigation.navigate('PathDetail', {key: key})
+  const onPressItem = (key, title) => {
+    props.navigation.navigate('PathDetail', {key: key, name: title})
   }
 
-  return <View style={[globalStyles.container, {backgroundColor: defaultBackgroundColor.background}]}>
+  return <View style={[globalStyles.container, {backgroundColor: theme.background}]}>
     <FlatList
-      data={props.route.params.data}
+      showsVerticalScrollIndicator={false}
+      data={data}
       keyExtractor={(item, index) => item + index}
-      renderItem={({item}) => <ListPathItems item={item} onPress={() => onPressItem(item.key)}/>}
+      renderItem={({item}) => <ListPathItems item={item} onPress={() => onPressItem(item.key, item.detail.title)}/>}
       ItemSeparatorComponent= {renderSeparator}
-      ListHeaderComponent = {props.route.params.title ? () => <SectionTitle title={'8 Result'} button={'Filter'}/> : null}
+      ListHeaderComponent = {title ? () => <SectionTitle title={title} /> : null}
     />
   </View>
 };

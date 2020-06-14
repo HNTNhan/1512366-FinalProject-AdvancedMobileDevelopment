@@ -1,18 +1,21 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {View, StyleSheet} from 'react-native';
 import {Button, Icon, Text} from "react-native-elements";
+import {ColorsContext} from "../../../provider/colors-provider";
 
 const ListLessonTitle = (props) => {
+  const {theme} = useContext(ColorsContext)
+
   return <View style={styles.container}>
     <View style={styles.subContainer}>
-      <Text style={styles.thumbnail}>{props.index}</Text>
+      <Text style={{...styles.thumbnail, color: theme.text}}>{props.index}</Text>
       <View style={{flex: 0.7, paddingHorizontal: 5}}>
-        <Text style={{fontSize: 16}}>{props.title}</Text>
-        <Text>{props.totalDuration}</Text>
+        <Text style={{fontSize: 18, color: theme.text}}>{props.title}</Text>
+        <Text style={{fontSize: 16, color: theme.text}}>{props.totalDuration}</Text>
       </View>
     </View>
 
-    <Button type='clear' icon={<Icon name='ellipsis-v' type='font-awesome-5' size={20}/>}/>
+    <Button type='clear' icon={<Icon name='ellipsis-v' type='font-awesome-5' size={20} color={theme.text}/>}/>
   </View>
 };
 

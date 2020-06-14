@@ -1,26 +1,53 @@
-import React, {useState} from 'react';
-import {View, TextInput, TouchableOpacity, StyleSheet, Text, Keyboard } from 'react-native';
+import React, {useContext, useState} from 'react';
+import {StyleSheet, Text, TextInput, TouchableOpacity, View} from 'react-native';
 import BeforeSearch from "./BeforeSearch/before-search";
 import WhileSearch from "./WhileSearch/while-search";
 import ResultSearch from "./ResultSearch/result_search";
 import {globalStyles} from "../../../globles/styles";
-import AllResultSearch from "./ResultSearch/AllResultSearch/all-result-search";
+import {ColorsContext} from "../../../provider/colors-provider";
+import {skillsData} from "../../../testdata/skills-data";
+import {categoriesData} from "../../../testdata/categories-data";
+import {authorsData} from "../../../testdata/authors-data";
+import {AuthenticationContext} from "../../../provider/authentication-provider";
 
 const Search = (props) => {
-  const [isDisplayCancel, setDisplayCancel] = useState(false);
+  const {user, setUser} = useContext(AuthenticationContext);
   const [searchKey, setSearchKey] = useState('');
-  const [showResult, setShowResult] = useState(false)
+  const [showResult, setShowResult] = useState(false);
+  const {theme} = useContext(ColorsContext);
+  const keysHelpSearch = skillsData.map(skill => { return {key: skill.title, type: 'skill'}}).
+                         concat(categoriesData.map(category => {return {key: category.title, type: 'category'}})).
+                         concat(authorsData.map(author => { return {key: author.detail.name, type: 'author'}}));
 
-  const onPress = (value) => {
-    console.log(value)
-    setSearchKey(value.key);
+  const onPressItem = (value) => {
+    if(user.recentSearch.indexOf(value) === -1) {
+      let temp = {...user}
+      temp.recentSearch.unshift(value)
+      setUser(temp)
+    } else {}
+    setSearchKey(value);
     setShowResult(true);
   }
 
-  return <View style={globalStyles.container}>
+  const onPressClear = () => {
+    let temp = {...user};
+    temp.recentSearch = [];
+    setUser(temp);
+  }
+
+  const onSubmitEditing = () => {
+    setShowResult(true)
+    if(user.recentSearch.indexOf(searchKey) === -1) {
+      let temp = {...user}
+      temp.recentSearch.unshift(searchKey)
+      setUser(temp)
+    } else {}
+  }
+
+  return <View style={[globalStyles.container, {backgroundColor: theme.background}]}>
       <View style={styles.searchContainer}>
         <TextInput
-          style={styles.searchInput}
+          style={{...styles.searchInput, backgroundColor: theme.foreground1, color: theme.text}}
           placeholder='Search'
           placeholderTextColor='darkgray'
           onChangeText={(text) => {
@@ -29,31 +56,26 @@ const Search = (props) => {
           }}
           value={searchKey}
           returnKeyType={"search"}
-          onSubmitEditing={(target) => {
-            setShowResult(true)
-          }}
+          onSubmitEditing={() => onSubmitEditing()}
         />
         { searchKey!=='' ?
           <TouchableOpacity
             onPress={() => {
               setSearchKey('')
-              setDisplayCancel(false)
               setShowResult(false)
             }}
             title='Cancel'
-            style={styles.cancelButton}>
-            <Text style={styles.buttonText}>Cancel</Text>
+            style={{...styles.cancelButton}}>
+            <Text style={{...styles.buttonText, color: theme.text}}>Cancel</Text>
           </TouchableOpacity>
           : null
         }
     </View>
     {
-      showResult===false ? searchKey==='' ?  <BeforeSearch onPress={onPress}/> :
-        <WhileSearch searchKey={searchKey} onPress={onPress}/>
-      : <ResultSearch navigation={props.navigation} route={props.route}/>
+      showResult===false ? searchKey==='' ?  <BeforeSearch onPress={onPressItem} onPressClear={onPressClear} recentSearch={user.recentSearch} skills={user.skills}/> :
+        <WhileSearch searchKey={searchKey} keys={keysHelpSearch} onPress={onPressItem}/>
+      : <ResultSearch searchKey={searchKey} route={props.route} navigation={props.navigation}/>
     }
-
-
   </View>
 };
 
@@ -67,7 +89,6 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
     marginRight: 10,
     flex: 1,
-    backgroundColor: 'lightgrey',
     borderRadius: 10,
     fontSize: 18,
   },

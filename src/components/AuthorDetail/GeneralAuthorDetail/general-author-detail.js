@@ -1,20 +1,23 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {Image, View, Text, StyleSheet} from 'react-native';
 import {Button} from "react-native-elements";
 import DescriptionOpenClose from "../../Common/description-open-close";
 import Icon from 'react-native-vector-icons/FontAwesome';
+import {ColorsContext} from "../../../provider/colors-provider";
 
 const GeneralAuthorDetail = (props) => {
+  const {theme} = useContext(ColorsContext)
+
   return <View>
     <View style={styles.container}>
       <Image source={require('../../../../assets/ic_person.png')} style={styles.image}/>
-      <Text style={styles.name}>{props.detail.name}</Text>
-      <Text style={styles.text}>{props.detail.work}</Text>
-      <Button title='Follow' onPress={props.onPress} containerStyle={styles.button}/>
-      <Text>Follow to bo notified when new courses are published</Text>
-      <DescriptionOpenClose description={props.detail.info} noLines={3} textSize={16}/>
+      <Text style={{...styles.name, color: theme.text}}>{props.detail.name}</Text>
+      <Text style={{...styles.text, color: theme.text}}>{props.detail.work}</Text>
+      <Button titleStyle={{fontSize: 20}} title='Follow' onPress={props.onPress} containerStyle={styles.button}/>
+      <Text style={{color: theme.text}}>Follow to bo notified when new courses are published</Text>
+      <DescriptionOpenClose description={props.detail.info} noLines={3} textSize={16} text={theme.text}/>
     </View>
-    <Text style={styles.text} onPress={() => console.log('link')}>{props.detail.other}</Text>
+    <Text style={{...styles.text, color: theme.text}} onPress={() => console.log('link')}>{props.detail.other}</Text>
     <View style={styles.linkContainer}>
       <Button icon={
                 <Icon
@@ -59,6 +62,7 @@ const GeneralAuthorDetail = (props) => {
 const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
+    paddingTop: 5,
   },
   image: {
     width: 100,

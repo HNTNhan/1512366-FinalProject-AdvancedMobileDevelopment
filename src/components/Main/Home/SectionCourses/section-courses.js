@@ -3,18 +3,21 @@ import {View, Text, ScrollView, TouchableOpacity, StyleSheet} from 'react-native
 import SectionCourseItems from "../SectionCourseItems/section-course-items";
 import PathItems from "../PathItems/path-items";
 import ChannelItems from "../ChanneItems/channel-items";
+import {ColorsContext} from "../../../../provider/colors-provider";
 
 const SectionCourses = (props) => {
+  const {theme} = useContext(ColorsContext)
+
   const onPressItemInListCourse = (key) => {
     props.navigation.navigate('CourseDetail', {key: key})
   }
 
-  const onPressItemInListPath = (key) => {
-    props.navigation.navigate('PathDetail', {key: key})
+  const onPressItemInListPath = (key, title) => {
+    props.navigation.navigate('PathDetail', {key: key, name: title})
   }
 
-  const onPressItemInListChannel = (channel) => {
-    props.navigation.navigate('ChannelDetail', {channel: channel})
+  const onPressItemInListChannel = (channel, title) => {
+    props.navigation.navigate('ChannelDetail', {channel: channel, name: title})
   }
 
   const renderListItems = () => {
@@ -22,22 +25,21 @@ const SectionCourses = (props) => {
   }
 
   const renderPathItems = () => {
-    return props.data.map( (item) => <PathItems key={item.key} item={item} onPress={() => onPressItemInListPath(item.key)} />);
+    return props.data.map( (item) => <PathItems key={item.key} item={item} onPress={() => onPressItemInListPath(item.key, item.detail.title)} />);
   }
 
   const renderChannelItems = () => {
-    return props.data.map( (item) => <ChannelItems key={item.detail.title} item={item} onPress={() => onPressItemInListChannel(item)} />);
+    return props.data.map( (item) => <ChannelItems key={item.detail.title} item={item} onPress={() => onPressItemInListChannel(item, item.detail.title)} />);
   }
 
   return <View style={styles.container}>
     <View style={styles.title}>
-      <Text style={styles.titleText}>{props.title}</Text>
-      {props.hasButton!==false ?<TouchableOpacity style={styles.button}
+      <Text style={{...styles.titleText, color: theme.text}}>{props.title}</Text>
+      {props.hasButton!==false ?<TouchableOpacity style={{...styles.button, backgroundColor: theme.foreground1}}
                         onPress={props.pressSeeAll}
       >
-        <Text>  See all >  </Text>
+        <Text style={{color: theme.text}}>  See all >  </Text>
       </TouchableOpacity> : null}
-
     </View>
     <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
       {props.type==='Path' ? renderPathItems() : props.type==='Channel'
@@ -57,7 +59,7 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   button: {
-    backgroundColor: 'rgb(219, 221, 231)',
+    backgroundColor: 'red',
     padding: 2,
     borderRadius: 10,
     marginRight: 20,

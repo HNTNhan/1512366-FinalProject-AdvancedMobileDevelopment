@@ -1,13 +1,17 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {Image, StyleSheet, Text, TouchableOpacity} from 'react-native';
+import {ColorsContext} from "../../../provider/colors-provider";
+import {Icon} from "react-native-elements";
 
 const ButtonSetting = (props) => {
+  const {theme} = useContext(ColorsContext);
+
   return <TouchableOpacity
             style={styles.itemContainer}
             onPress={props.onPress}
   >
-    <Text style={styles.text}>{props.title}</Text>
-    <Image source={require('../../../../assets/ic_next.png')} style={styles.image}/>
+    <Text style={{...styles.text, color: theme.text}}>{props.title}</Text>
+    <Icon style={{paddingTop: 3}} name={'chevron-right'} type={"font-awesome-5"} size={16} color={theme.text} />
   </TouchableOpacity>
 };
 
@@ -16,7 +20,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    borderBottomWidth: 2,
+    borderBottomWidth: 1,
     borderBottomColor: 'gainsboro',
     paddingVertical: 10,
   },

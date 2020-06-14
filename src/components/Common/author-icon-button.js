@@ -5,7 +5,7 @@ import {Image, Text} from "react-native-elements";
 const AuthorIconButton = (props) => {
   return <TouchableOpacity style={styles.container} onPress={props.onPress}>
     <Image source={props.item.detail.icon} style={styles.image}/>
-    <Text style={styles.text}>{props.item.detail.name}</Text>
+    <Text style={{...styles.text, color: props.text}}>{props.item.detail.name}</Text>
   </TouchableOpacity>
 };
 
@@ -25,7 +25,7 @@ const styles = StyleSheet.create({
     marginRight: 5,
   },
   text: {
-    color: 'black',
+    fontSize: 14,
   }
 })
 export default AuthorIconButton;

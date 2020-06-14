@@ -1,27 +1,15 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {FlatList, View} from 'react-native';
 import ListAuthorItems from "../ListAuthorItems/list-author-items";
 import SectionTitle from "../../Common/section-title";
 import {globalStyles} from "../../../globles/styles";
+import {ColorsContext} from "../../../provider/colors-provider";
 
 const ListAuthors = (props) => {
-  const authors = [
-    {
-      id: 1,
-      author: 'Matt Honeycutt',
-      no_courses: '5 course',
-    },
-    {
-      id: 2,
-      author: 'Jon Flanders',
-      no_courses: '10 course',
-    },
-    {
-      id: 3,
-      author: 'Steve Michelotti',
-      no_courses: '8 course',
-    },
-  ]
+  const {theme} = useContext(ColorsContext);
+  const data = !props.route.params ? props.data : !props.route.params.data ? props.data : props.route.params.data;
+  const title = !props.route.params ? props.title : !props.route.params.title ? props.title : props.route.params.title;
+
 
   const renderSeparator = () => {
     return (
@@ -29,16 +17,18 @@ const ListAuthors = (props) => {
     );
   };
 
-  const onPressItem = () => {
-    props.navigation.navigate('AuthorDetail')
+  const onPressItem = (key, name) => {
+    props.navigation.navigate('AuthorDetail', {key: key, name: name})
   }
 
-  return <View>
+  return <View style={[globalStyles.container, {backgroundColor: theme.background}]}>
     <FlatList
-      data={authors}
-      renderItem={({item}) => <ListAuthorItems item={item} onPress={onPressItem}/>}
+      showsVerticalScrollIndicator={false}
+      data={data}
+      keyExtractor={(item, index) => item + index}
+      renderItem={({item}) => <ListAuthorItems item={item} onPress={() => onPressItem(item.key, item.detail.name)}/>}
       ItemSeparatorComponent= {renderSeparator}
-      ListHeaderComponent = {() => <SectionTitle title={'11 Result'} button={'Filter'}/>}
+      ListHeaderComponent = {title ? () =>  <SectionTitle title={title} /> : null}
     />
   </View>
 };

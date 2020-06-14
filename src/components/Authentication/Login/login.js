@@ -8,9 +8,16 @@ import {usersData} from "../../../testdata/users-data"
 import {ColorsContext} from "../../../provider/colors-provider";
 
 const Login = (props) => {
+  const {setUser} = useContext(AuthenticationContext);
+  const {theme} = useContext(ColorsContext)
   const [username, setUsername] = useState('admin');
   const [password, setPassword] = useState('123456');
   const [status, setStatus] = useState(null);
+  if(props.route.params) {
+    props.route.params.signOut ? setUser({}) : null;
+  } else {
+
+  }
 
   useEffect(() => {
     if(status && status.status === 200){
@@ -25,11 +32,11 @@ const Login = (props) => {
       const user = usersData.find((user) => user.name===status.user.username)
       setUser(user)
       return <View>
-        <Text style={styles.message}>Login succeeded!</Text>
+        <Text style={{...styles.message, color: theme.text}}>Login succeeded!</Text>
       </View>
     } else {
       return <View>
-        <Text style={styles.message}>{status.errorString}</Text>
+        <Text style={{...styles.message, color: theme.text}}>{status.errorString}</Text>
       </View>
     }
   }
@@ -42,10 +49,7 @@ const Login = (props) => {
     setPassword(password)
   }
 
-  const {setUser} = useContext(AuthenticationContext);
-  const {defaultBackgroundColor, checkBackgroundColor, setCheckBackgroundColor} = useContext(ColorsContext)
-
-  return <View style={[styles.container, {backgroundColor: defaultBackgroundColor.background}]}>
+  return <View style={[styles.container, {backgroundColor: theme.background}]}>
       <ScrollView contentContainerStyle={{paddingBottom: 100}}>
         <RenderLoginStatus />
         <InputTextSae title='Username (or Email)' value={username} onChangeText={onChangeUsername}/>
@@ -67,11 +71,6 @@ const Login = (props) => {
           titleStyle={styles.buttonText}
           onPress={() => props.navigation.navigate('Sign Up')}
           title= 'SIGN UP FREE' />
-        <Button
-          buttonStyle={styles.button}
-          titleStyle={styles.buttonText}
-          onPress={() => setCheckBackgroundColor(!checkBackgroundColor)}
-          title ='Change Color' />
       </ScrollView>
     </View>
 };
@@ -92,10 +91,10 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     borderRadius: 5,
     paddingVertical: 5,
-    backgroundColor: '#03A9F4',
+    backgroundColor: '#19B5FE',
   },
   buttonText: {
-    color: '#03A9F4',
+    color: '#19B5FE',
     textAlign: 'center',
     fontSize: 18,
   },

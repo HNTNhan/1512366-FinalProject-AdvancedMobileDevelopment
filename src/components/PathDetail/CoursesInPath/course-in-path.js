@@ -1,18 +1,18 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {SectionList, Text, View} from 'react-native';
 import {renderSeparator} from "../../../globles/constants";
 import ListCourseItems from "../../Courses/ListCourseItems/list-course-items";
 import {findByKey} from "../../../testdata/find-data";
 import {coursesData} from "../../../testdata/courses-data";
+import {ColorsContext} from "../../../provider/colors-provider";
 
 const CourseInPath = (props) => {
+  const {theme} = useContext(ColorsContext)
+
   const onPress = (key) => {
     props.navigation.navigate('CourseDetail', {key: key})
   }
 
-  // for(let i=0; i<props.courses.length; i++){
-  //   props.courses[i].data = findByKey(coursesData, props.courses[i].data);
-  // }
   return <SectionList
     sections={props.courses}
     keyExtractor={(item, index) => item + index}
@@ -20,7 +20,7 @@ const CourseInPath = (props) => {
       const temp=findByKey(coursesData, [item])[0];
       return <ListCourseItems item={temp} onPress={() => onPress(temp.key)}/>
     }}
-    renderSectionHeader={({ section: { titleCourse } }) => <Text>{titleCourse}</Text>}
+    renderSectionHeader={({ section: { titleCourse } }) => <Text style={{color: theme.text}}>{titleCourse}</Text>}
     ItemSeparatorComponent= {renderSeparator}
   />
 };

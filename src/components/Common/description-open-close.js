@@ -7,14 +7,14 @@ const DescriptionOpenClose = (props) => {
   const [line, setLine] = useState(false)
 
   return <View style={styles.container}>
-    <Text numberOfLines={line ? 1000 : props.noLines} style={[styles.text, {fontSize: props.textSize || 14}]}>
+    <Text numberOfLines={line ? 1000 : props.noLines} style={[styles.text, {fontSize: props.textSize || 16, color: props.text}]}>
       {props.description}
     </Text>
-    <TouchableOpacity style={styles.button} onPress={() => {
+    <TouchableOpacity style={{...styles.button, backgroundColor: props.foreground}} onPress={() => {
       setIcon(!icon)
       setLine(!line)
     }}>
-      <Icon name={icon ? 'arrow-drop-down' : 'arrow-drop-down'}/>
+      <Icon name={icon ? 'arrow-drop-down' : 'arrow-drop-down'} color={props.text}/>
     </TouchableOpacity>
   </View>
 };
@@ -25,10 +25,10 @@ const styles = StyleSheet.create({
     marginVertical: 5,
   },
   text: {
-    flex: 0.9,
+    flex: 16,
   },
   button: {
-    flex: 0.1,
+    flex: 1,
     justifyContent: 'center',
     alignItems: 'center'
   },

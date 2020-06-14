@@ -1,52 +1,28 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {View, Text, ScrollView, TouchableOpacity, StyleSheet, Image} from 'react-native';
 import AuthorDetail from "../../../AuthorDetail/author-detail";
+import {ColorsContext} from "../../../../provider/colors-provider";
 
 const TopAuthors = (props) => {
-  const topAuthors = [
-    {
-      id: 1,
-      author: 'Matt Honeycutt',
-    },
-    {
-      id: 2,
-      author: 'Jon Flanders',
-    },
-    {
-      id: 3,
-      author: 'Steve Michelotti',
-    },
-    {
-      id: 4,
-      author: 'Scott Allen',
-    },
-    {
-      id: 5,
-      author: 'Jim Wilson',
-    },
-    {
-      id: 6,
-      author: 'Deborah Kurata',
-    },
-  ];
+  const {theme} = useContext(ColorsContext)
 
-  const onPressAuthorItem = () => {
-    props.navigation.navigate(AuthorDetail)
+  const onPressAuthorItem = (key, name) => {
+    props.navigation.navigate('AuthorDetail', {key: key, name: name})
   }
 
-  const renderTopAuthors = (topAuthors) => {
-    return topAuthors.map( item => <TouchableOpacity key={item.id} style={{marginRight: 10}} onPress={onPressAuthorItem}>
+  const renderTopAuthors = (authors) => {
+    return authors.map( item => <TouchableOpacity key={item.key} style={{marginRight: 10}} onPress={() => onPressAuthorItem(item.key, item.detail.name)}>
       <Image source={require('../../../../../assets/ic_person.png')} style={styles.image}/>
-      <Text style={styles.imageText} numberOfLines={1} ellipsizeMode='tail'>{item.author}</Text>
+      <Text style={{...styles.imageText, color: theme.text}} numberOfLines={2} ellipsizeMode='tail'>{item.detail.name}</Text>
     </TouchableOpacity>);
   }
 
   return <View style={styles.container}>
     <View style={styles.title}>
-      <Text style={styles.titleText}>{props.title}</Text>
+      <Text style={{...styles.titleText, color: theme.text}}>{props.title}</Text>
     </View>
     <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-      {renderTopAuthors(topAuthors)}
+      {renderTopAuthors(props.authors)}
     </ScrollView>
   </View>
 };

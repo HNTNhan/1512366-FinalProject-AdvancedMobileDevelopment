@@ -1,14 +1,15 @@
-import React, {useState} from 'react';
+import React, {useContext, useState} from 'react';
 import {ScrollView, StyleSheet, View} from 'react-native';
 import {Button, CheckBox, Text} from "react-native-elements";
 import InputTextSae from "../../Common/input-text-sae";
-import RNPickerSelect from 'react-native-picker-select';
 import countryList from 'react-select-country-list'
+import {ColorsContext} from "../../../provider/colors-provider";
+import {Picker} from "@react-native-community/picker";
 
 const Register = (props) => {
+  const {theme} = useContext(ColorsContext)
   const [check, setCheck] = useState(false);
   const countries = countryList().getData();
-
   const [country, setCountry] = useState('');
   const [email, setEmail] = useState('');
   const [firstName, setFirstName] = useState('');
@@ -22,6 +23,7 @@ const Register = (props) => {
   const onChangeFirstName = (firstName) => {
     setFirstName(firstName)
   }
+
   const onChangeLastName = (lastName) => {
     setLastName(lastName)
   }
@@ -30,27 +32,31 @@ const Register = (props) => {
     setPhone(phone)
   }
 
-  return <View style={{flex: 1}}>
+  return <View style={{flex: 1, backgroundColor: theme.background}}>
     <ScrollView style={styles.container} contentContainerStyle={{paddingBottom: 100}}>
-      <Text h3 style={styles.title}>Create your account</Text>
+      <Text h3 style={{...styles.title, color: theme.text}}>Create your account</Text>
       <InputTextSae title={'Email*'} value={email} onChangeText={onChangeEmail}/>
       <InputTextSae title={'First name*'} value={firstName} onChangeText={onChangeFirstName}/>
       <InputTextSae title={'Last name*'} value={lastName} onChangeText={onChangeLastName}/>
       <InputTextSae title={'Phone'} value={phone} onChangeText={onChangePhone}/>
-      <RNPickerSelect
-        placeholder={{label: "Select Country", value: null, color: '#03A9F4'}}
-        items={countries}
-        onValueChange={(value) => setCountry(value)}
-        style={{ ...picker}}
-        useNativeAndroidPickerStyle={false}
-      />
 
-      <Text style={styles.text}>* Required field</Text>
+      <View style={{...styles.pickerContainer, backgroundColor: theme.foreground1}}>
+        <Picker
+          mode={'dropdown'}
+          selectedValue={country}
+          style={{...styles.picker, color: theme.text}}
+          onValueChange={(itemValue, itemIndex) => setCountry(itemValue)}>
+          { countries.map((country) => <Picker.Item key={country.value} label={country.label} value={country.value} />) }
+        </Picker>
+      </View>
+
+
+      <Text style={{...styles.text, color: theme.text}}>* Required field</Text>
       <CheckBox
         checked={check}
         title='By checking here and continuing, I agree to the Terms of Use.'
-        textStyle={{fontSize: 14}}
-        containerStyle={styles.checkBox}
+        textStyle={{fontSize: 16, color: theme.text}}
+        containerStyle={{...styles.checkBox, backgroundColor: theme.background}}
         onPress={() => setCheck(!check)}
       />
       <Button
@@ -58,38 +64,20 @@ const Register = (props) => {
         titleStyle={styles.buttonText}
         onPress={() => console.log('Create Account')}
         title ='Create Account' />
+      <Button
+        buttonStyle={[styles.button, {backgroundColor: '#9E9E9E'}]}
+        titleStyle={styles.buttonText}
+        onPress={() => props.navigation.goBack()}
+        title ='Cancel' />
     </ScrollView>
   </View>
 };
-
-const picker = StyleSheet.create({
-  inputAndroid: {
-    borderRadius: 7,
-    marginBottom: 5,
-    padding: 10,
-    fontWeight: '600',
-    fontSize: 16,
-    backgroundColor: '#E0E0E0',
-  },
-  inputIOS: {
-    borderRadius: 7,
-    marginBottom: 5,
-    padding: 10,
-    fontWeight: '600',
-    fontSize: 16,
-    backgroundColor: 'rgba(255, 255, 255, 0.15)',
-  },
-  placeholder: {
-    color: '#03A9F4',
-  },
-});
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingHorizontal: 30,
     paddingTop: 50,
-    backgroundColor: 'white'
   },
   title: {
     textAlign:'center',
@@ -97,6 +85,7 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 16,
+    marginVertical: 5,
   },
   button: {
     marginVertical: 5,
@@ -109,10 +98,22 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
   checkBox: {
-    backgroundColor: 'white',
     marginLeft: 0,
     marginRight: 0,
     padding: 5
+  },
+  pickerContainer: {
+    height: 30,
+    paddingVertical: 2,
+    borderRadius: 7,
+    borderWidth: 2,
+    borderColor: 'gainsboro',
+  },
+  picker: {
+    height: '100%',
+    width: '100%',
+    paddingVertical: 10,
+    backgroundColor: 'transparent'
   }
 })
 export default Register;

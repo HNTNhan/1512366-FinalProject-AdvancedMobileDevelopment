@@ -1,7 +1,9 @@
-import React, {useState} from 'react';
+import React, {useContext, useState} from 'react';
 import {StyleSheet, Switch, Text, TouchableOpacity} from 'react-native';
+import {ColorsContext} from "../../../provider/colors-provider";
 
 const ButtonSwitch = (props) => {
+  const {theme} = useContext(ColorsContext);
   const [isEnabled, setIsEnabled] = useState(false);
   const toggleSwitch = () => setIsEnabled(previousState => !previousState);
 
@@ -12,9 +14,9 @@ const ButtonSwitch = (props) => {
               props.onPress
             }}
   >
-    <Text style={styles.text}>{props.title}</Text>
+    <Text style={{...styles.text, color: theme.text}}>{props.title}</Text>
     <Switch
-      trackColor={{ false: "#gainsboro", true: "#81b0ff" }}
+      trackColor={{ false: theme.foreground2, true: "#19B5FE" }}
       thumbColor={isEnabled ? "white" : "white"}
       onValueChange={toggleSwitch}
       value={isEnabled}
@@ -27,7 +29,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    borderBottomWidth: 2,
+    borderBottomWidth: 1,
     borderBottomColor: 'gainsboro',
     paddingVertical: 10,
   },

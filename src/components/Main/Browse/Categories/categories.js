@@ -3,45 +3,19 @@ import {ScrollView, View, FlatList, StyleSheet} from 'react-native';
 import ImageButton from "../../../Common/image-button";
 
 const Categories = (props) => {
-  const categories = [
-    {
-      id: 1,
-      title: 'Conferences',
-    },
-    {
-      id: 2,
-      title: 'Data Professional',
-    },
-    {
-      id: 3,
-      title: 'Creative Professional',
-    },
-    {
-      id: 4,
-      title: 'Software Development',
-    },
-    {
-      id: 5,
-      title: 'Business Professional',
-    },
-    {
-      id: 6,
-      title: 'Certifications',
-    },
-  ]
-
-  const onPressImageButton = () => {
-    props.navigation.navigate('CategoryDetail')
+  const onPressImageButton = (category) => {
+    props.navigation.navigate('CategoryDetail', {category: category, name: category.title})
   }
 
   return <View style={styles.container}>
     <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
       <FlatList
-        data={categories}
+        data={props.categories}
+        keyExtractor={(item) => item.title}
         renderItem={({item}) =>
-          <ImageButton title={item.title.replace(' ', '\n').toUpperCase()} onPress={() => onPressImageButton()}/>
+          <ImageButton title={item.title.replace(' ', '\n').toUpperCase()} onPress={() => onPressImageButton(item)}/>
         }
-        numColumns={categories.length/2}
+        numColumns={props.categories.length/2}
       />
     </ScrollView>
   </View>

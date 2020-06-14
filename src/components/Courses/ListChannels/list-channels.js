@@ -7,7 +7,7 @@ import ListChannelItems from "../ListChannelItems/list-channel-items";
 import {ColorsContext} from "../../../provider/colors-provider";
 
 const ListChannels = (props) => {
-  const {defaultBackgroundColor} = useContext(ColorsContext)
+  const {theme} = useContext(ColorsContext)
 
   const renderSeparator = () => {
     return (
@@ -15,15 +15,15 @@ const ListChannels = (props) => {
     );
   };
 
-  const onPressItem = (channel) => {
-    props.navigation.navigate('ChannelDetail', {channel: channel})
+  const onPressItem = (channel, title) => {
+    props.navigation.navigate('ChannelDetail', {channel: channel, name: title})
   }
 
-  return <View style={[globalStyles.container, {backgroundColor: defaultBackgroundColor.background}]}>
+  return <View style={[globalStyles.container, {backgroundColor: theme.background}]}>
     <FlatList
       data={props.route.params.data}
       keyExtractor={(item, index) => item + index}
-      renderItem={({item}) => <ListChannelItems item={item} onPress={() => onPressItem(item)}/>}
+      renderItem={({item}) => <ListChannelItems item={item} onPress={() => onPressItem(item, item.detail.title)}/>}
       ItemSeparatorComponent= {renderSeparator}
       //ListHeaderComponent = {() => <SectionTitle title={'8 Result'} button={'Filter'}/>}
     />

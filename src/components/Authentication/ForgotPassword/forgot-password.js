@@ -1,10 +1,12 @@
-import React, {useState} from 'react';
+import React, {useContext, useState} from 'react';
 import {ScrollView, StyleSheet, View} from 'react-native';
 import {Button, Text} from "react-native-elements";
 import InputTextSae from "../../Common/input-text-sae";
 import {forgetPassword} from "../../../core/services/authentication-services";
+import {ColorsContext} from "../../../provider/colors-provider";
 
 const ForgotPassword = (props) => {
+  const {theme} = useContext(ColorsContext)
   const [email, setEmail] = useState('admin@email.com');
   const [status, setStatus] = useState(null);
 
@@ -13,7 +15,7 @@ const ForgotPassword = (props) => {
       return <View />
     } else if(status.status === 404){
       return <View>
-        <Text style={styles.message}>{status.errorString}</Text>
+        <Text style={{...styles.message, color: theme.text}}>{status.errorString}</Text>
       </View>
     } else {
       return <View />
@@ -24,13 +26,12 @@ const ForgotPassword = (props) => {
     setEmail(email)
   }
 
-  return <View style={styles.container}>
-
+  return <View style={{...styles.container, backgroundColor: theme.background}}>
       <ScrollView showsVerticalScrollIndicator={false}>
-        <Text h2 style={styles.title}>Forgot Password</Text>
+        <Text h2 style={{...styles.title, color: theme.text}}>Forgot Password</Text>
         {status===null||status.status!==200 ?
           <View>
-            <Text style={styles.content}>Enter your email address and we'll send you a link to reset your password</Text>
+            <Text style={{...styles.content, color: theme.text}}>Enter your email address and we'll send you a link to reset your password</Text>
             <RenderEmailStatus />
             <InputTextSae title={'Email'} value={email} onChangeText={onChangeEmail}/>
             <Button
@@ -45,7 +46,7 @@ const ForgotPassword = (props) => {
               title ='Cancel' />
           </View>
           :
-          <Text style={styles.content}>{status.message}</Text>
+          <Text style={{...styles.content, color: theme.text}}>{status.message}</Text>
         }
       </ScrollView>
   </View>
@@ -56,13 +57,12 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 30,
     paddingTop: 80,
-    backgroundColor: 'white'
   },
   title: {
-    textAlign:'center'
+    textAlign:'center',
   },
   content: {
-    fontSize: 18,
+    fontSize: 16,
     marginVertical: 10
   },
   button: {

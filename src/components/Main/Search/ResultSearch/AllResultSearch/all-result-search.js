@@ -4,7 +4,7 @@ import Courses from "../../../../Courses/courses";
 
 const AllResultSearch = (props) => {
   return <View>
-    <Courses navigation={props.navigation} route={props.route}/>
+    <Courses searchKey={props.searchKey} route={props.route} navigation={props.navigation}/>
   </View>
 };
 
