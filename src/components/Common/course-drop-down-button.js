@@ -4,8 +4,10 @@ import {Icon, Text} from "react-native-elements";
 import { Menu, MenuOptions, MenuOption, MenuTrigger} from "react-native-popup-menu";
 import {AuthenticationContext} from "../../provider/authentication-provider";
 import AddToChannelDialog from "./add-to-channel-dialog";
+import {ColorsContext} from "../../provider/colors-provider";
 
 const CourseDropDownButton = (props) => {
+  const {theme} = useContext(ColorsContext);
   const {user, setUser} = useContext(AuthenticationContext);
   const [modalVisible, setModalVisible] = useState(false);
 

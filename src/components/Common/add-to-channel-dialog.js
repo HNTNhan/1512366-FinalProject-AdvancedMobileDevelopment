@@ -94,8 +94,7 @@ const AddToChannelDialog = (props) => {
       </TouchableWithoutFeedback>
     </Modal>
 
-    <Modal style={{background: 'red'}}
-           animationType="fade"
+    <Modal animationType="fade"
            transparent={true}
            visible={modalVisible}
            onRequestClose={() => setModalVisible(false)}>

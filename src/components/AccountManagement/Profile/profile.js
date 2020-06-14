@@ -3,29 +3,31 @@ import {View, Image, StyleSheet, Text} from 'react-native';
 import Skills from "../../Main/Browse/Skills/skills";
 import {AuthenticationContext} from "../../../provider/authentication-provider";
 import {skillsData} from "../../../testdata/skills-data";
+import {ColorsContext} from "../../../provider/colors-provider";
 
 const Profile = (props) => {
+  const {theme} = useContext(ColorsContext);
   const {user} = useContext(AuthenticationContext);
 
-  return <View style={styles.container}>
+  return <View style={{...styles.container, backgroundColor: theme.background}}>
     <View style={styles.containerAccount}>
       <Image source={require('../../../../assets/ic_person.png')} style={styles.image}/>
-      <Text style={styles.textContent}>Thien Nhan</Text>
+      <Text style={{...styles.textContent, color: theme.text}}>{user.name}</Text>
     </View>
     <Skills title={'Interests'} skills={skillsData} interests={user.skills} navigation={props.navigation} route={props.route}/>
     <View>
-      <Text style={styles.title}>Activity insights (last 30 days)</Text>
+      <Text style={{...styles.title, color: theme.text}}>Activity insights (last 30 days)</Text>
       <View>
-        <Text style={styles.subTitle}>TOTAL ACTIVE DAYS</Text>
+        <Text style={{...styles.subTitle, color: theme.text}}>TOTAL ACTIVE DAYS</Text>
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
-          <Text style={styles.textContent}>10</Text>
-          <Text style={{marginLeft: 10,}}>9 day streak</Text>
+          <Text style={{...styles.textContent, color: theme.text}}>10</Text>
+          <Text style={{marginLeft: 10, color: theme.text}}>9 day streak</Text>
         </View>
-        <Text style={styles.subTitle}>MOST ACTIVE TIME OF DAY</Text>
-        <View><Text style={styles.textContent}>12:00 PM</Text></View>
+        <Text style={{...styles.subTitle, color: theme.text}}>MOST ACTIVE TIME OF DAY</Text>
+        <View><Text style={{...styles.textContent, color: theme.text}}>12:00 PM</Text></View>
 
-        <Text style={styles.subTitle}>MOST VIEWED SUBJECT</Text>
-        <View><Text style={styles.textContent}>Software Development</Text></View>
+        <Text style={{...styles.subTitle, color: theme.text}}>MOST VIEWED SUBJECT</Text>
+        <View><Text style={{...styles.textContent, color: theme.text}}>Software Development</Text></View>
       </View>
     </View>
   </View>

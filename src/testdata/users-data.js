@@ -1,6 +1,8 @@
 export const usersData = [
   {
     name: 'admin',
+    email: 'admin@gmail.com',
+    additionEmail: [],
     skills: ['React', 'JavaScript', 'Python'],
     continueLearning: ['C00000', 'C00001', 'C00002'],
     paths: ['P00000', 'P00001'],
@@ -54,6 +56,8 @@ export const usersData = [
   },
   {
     name: 'user',
+    additionEmail: [],
+    email: 'user@gmail.com',
     skills: ['React', 'JavaScript', 'Python'],
     continueLearning: ['C00000', 'C00002'],
     paths: ['P00000', 'P00001'],

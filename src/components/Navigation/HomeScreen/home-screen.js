@@ -9,9 +9,9 @@ import PathDetail from "../../PathDetail/path-detail";
 import ChannelDetail from "../../ChannelDetail/channel-detail";
 import AuthorDetail from "../../AuthorDetail/author-detail";
 import {objectsConstant} from "../../../globles/constants";
-import IconMainHeaderRight from "../../Common/icon-main-hearder-right";
 import PathDetailRightHeader from "../../NavigationHeader/PathDetailHeader/PathDetailRightHeader";
 import {ColorsContext} from "../../../provider/colors-provider";
+import MainScreenRightHeader from "../../NavigationHeader/MainScreenRightHeader/main-screen-right-header";
 
 
 const HomeStack = createStackNavigator();
@@ -25,7 +25,7 @@ const HomeScreen = (props) => {
                       component={Home}
                       options={({route, navigation}) => (
                         {headerRight: () => {
-                            return <IconMainHeaderRight onPress={() => navigation.navigate('AccountManagement')}/>
+                            return <MainScreenRightHeader route={route} navigation={navigation}/>
                           }}
                       )}/>
     <HomeStack.Screen name='ListCourses' component={ListCourses} options={({ route }) => ({ title: route.params.name })}/>

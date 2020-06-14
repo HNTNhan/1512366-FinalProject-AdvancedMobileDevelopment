@@ -5,7 +5,7 @@ import {ColorsContext} from "../../provider/colors-provider";
 
 const IconButton = (props) => {
   const {theme} = useContext(ColorsContext)
-  return <TouchableOpacity style={styles.container}>
+  return <TouchableOpacity style={styles.container} onPress={props.onPress}>
     <Icon name={props.name} size={30} style={styles.icon} color={theme.text}/>
     <Text style={{color: theme.text, fontSize: 16}}>{props.title}</Text>
   </TouchableOpacity>

@@ -26,12 +26,11 @@ const SearchScreen = (props) => {
                           options={({route, navigation}) => ({
                             headerRight: () => {
                               return <PathDetailRightHeader route={route} navigation={navigation}/>
-                            }
+                            },
+                            title: route.params.name
                           })}
       />
-      <SearchStack.Screen name='AuthorDetail' component={AuthorDetail}/>
-      <SearchStack.Screen name='CategoryDetail' component={CategoryDetail}/>
-      <SearchStack.Screen name='SkillDetail' component={SkillDetail}/>
+      <SearchStack.Screen name='AuthorDetail' component={AuthorDetail} options={({ route }) => ({ title: route.params.name })}/>
     </SearchStack.Navigator>
 };
 

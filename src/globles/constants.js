@@ -33,7 +33,7 @@ export const objectsConstant = {
 export const defaultColors = {
   themes: {
     dark: {
-      foreground1: '#222222',
+      foreground1: '#444444',
       foreground2: '#dddddd',
       background: '#000000',
       text: '#ffffff',

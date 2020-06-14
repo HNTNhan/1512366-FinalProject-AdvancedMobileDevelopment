@@ -12,13 +12,21 @@ import SkillDetail from "../../SkillDetail/skill-detai";
 import {objectsConstant} from "../../../globles/constants";
 import PathDetailRightHeader from "../../NavigationHeader/PathDetailHeader/PathDetailRightHeader";
 import {ColorsContext} from "../../../provider/colors-provider";
+import MainScreenRightHeader from "../../NavigationHeader/MainScreenRightHeader/main-screen-right-header";
 
 const BrowseStack = createStackNavigator();
 const BrowseScreen = (props) => {
   const {theme} = useContext(ColorsContext)
   return <BrowseStack.Navigator
     screenOptions={{...objectsConstant.defaultCenterHeaderBar, headerStyle: {backgroundColor: theme.foreground1}, headerTintColor: theme.text}}>
-    <BrowseStack.Screen name='Browse' component={Browse}/>
+    <BrowseStack.Screen name='Browse'
+                        component={Browse}
+                        options={({route, navigation}) => (
+                          {headerRight: () => {
+                              return <MainScreenRightHeader route={route} navigation={navigation}/>
+                            }}
+                        )}
+    />
     <BrowseStack.Screen name='ListCourses' component={ListCourses} options={({ route }) => ({ title: route.params.name })}/>
     <BrowseStack.Screen name='ListPaths' component={ListPaths} options={({ route }) => ({ title: route.params.name })}/>
     <BrowseStack.Screen name='CourseDetail' component={CourseDetail} options={{headerShown: false}}/>

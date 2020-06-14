@@ -1,14 +1,18 @@
-import React, {useContext} from 'react';
+import React, {useContext, useState} from 'react';
 import {TouchableOpacity, View, StyleSheet, ScrollView} from 'react-native';
 import {Button, Icon, Image, Text} from "react-native-elements";
 import AuthorIconButton from "../../Common/author-icon-button";
 import IconButton from "../../Common/icon-button";
 import DescriptionOpenClose from "../../Common/description-open-close";
 import {ColorsContext} from "../../../provider/colors-provider";
+import {AuthenticationContext} from "../../../provider/authentication-provider";
+import AddToChannelDialog from "../../Common/add-to-channel-dialog";
 
 const GeneralCourseDetail = (props) => {
-  const {theme} = useContext(ColorsContext)
-
+  const {theme} = useContext(ColorsContext);
+  const {user, setUser} = useContext(AuthenticationContext);
+  const keyItem = props.route.params.key;
+  const [modalVisible, setModalVisible] = useState(false);
   const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
   const authorListItems = (author) => {
@@ -17,6 +21,36 @@ const GeneralCourseDetail = (props) => {
 
   const onPressAuthorItem = (key, name) => {
     props.navigation.navigate('AuthorDetail', {key: key, name: name})
+  }
+
+  const onPressBookmark = () => {
+    let temp = {...user};
+    const pos = user.bookmarks.indexOf(keyItem);
+    if(pos !== -1) {
+      temp.bookmarks.splice(pos, 1);
+    } else {
+      temp.bookmarks.push(keyItem);
+    }
+    setUser(temp);
+  }
+
+  const onPressDownload = () => {
+    let temp = {...user};
+    const pos = user.downloads.indexOf(keyItem);
+    if(pos !== -1) {
+      temp.downloads.splice(pos, 1);
+    } else {
+      temp.downloads.push(keyItem);
+    }
+    setUser(temp);
+  }
+
+  const onSelectAddToChannel = () => {
+    setModalVisible(true)
+  }
+
+  const onPressClose = () => {
+    setModalVisible(false)
   }
 
   return <ScrollView showsVerticalScrollIndicator={false}>
@@ -28,9 +62,9 @@ const GeneralCourseDetail = (props) => {
     </ScrollView>
     <Text style={{fontSize: 14, color: theme.text}}>{props.detail.level} . {monthNames[props.detail.released.getMonth()]} {props.detail.released.getDate()} {props.detail.released.getFullYear()} . {props.detail.duration}</Text>
     <View style={styles.activeContainer}>
-      <IconButton name='bookmark-border' title='Bookmark'/>
-      <IconButton name='cast-connected' title='Add to channel'/>
-      <IconButton name='get-app' title='Download'/>
+      <IconButton name='bookmark-border' title={user.bookmarks.indexOf(keyItem)!==-1 ? 'UnBookmark' : 'Bookmark'} onPress={() => onPressBookmark()}/>
+      <IconButton name='cast-connected' title='Add to channel' onPress={() => onSelectAddToChannel()}/>
+      <IconButton name='get-app' title={user.downloads.indexOf(keyItem)!==-1 ? 'Downloaded' : 'Download'} onPress={() => onPressDownload()}/>
     </View>
     <DescriptionOpenClose description={props.detail.description} noLines={3} text={theme.text} foreground={theme.foreground1}/>
     <Button
@@ -49,6 +83,7 @@ const GeneralCourseDetail = (props) => {
       }
       containerStyle={{marginVertical: 5}}
     />
+    <AddToChannelDialog modalVisible={modalVisible} keyItem={keyItem} closeModel={() => onPressClose()}/>
   </ScrollView>
 };
 

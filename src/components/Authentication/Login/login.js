@@ -6,14 +6,18 @@ import InputTextSae from "../../Common/input-text-sae";
 import {AuthenticationContext} from "../../../provider/authentication-provider";
 import {usersData} from "../../../testdata/users-data"
 import {ColorsContext} from "../../../provider/colors-provider";
-import {defaultColors} from "../../../globles/constants";
 
 const Login = (props) => {
   const {setUser} = useContext(AuthenticationContext);
-  const {theme, setTheme} = useContext(ColorsContext)
+  const {theme} = useContext(ColorsContext)
   const [username, setUsername] = useState('admin');
   const [password, setPassword] = useState('123456');
   const [status, setStatus] = useState(null);
+  if(props.route.params) {
+    props.route.params.signOut ? setUser({}) : null;
+  } else {
+
+  }
 
   useEffect(() => {
     if(status && status.status === 200){
@@ -28,11 +32,11 @@ const Login = (props) => {
       const user = usersData.find((user) => user.name===status.user.username)
       setUser(user)
       return <View>
-        <Text style={styles.message}>Login succeeded!</Text>
+        <Text style={{...styles.message, color: theme.text}}>Login succeeded!</Text>
       </View>
     } else {
       return <View>
-        <Text style={styles.message}>{status.errorString}</Text>
+        <Text style={{...styles.message, color: theme.text}}>{status.errorString}</Text>
       </View>
     }
   }
@@ -67,11 +71,6 @@ const Login = (props) => {
           titleStyle={styles.buttonText}
           onPress={() => props.navigation.navigate('Sign Up')}
           title= 'SIGN UP FREE' />
-        <Button
-          buttonStyle={styles.button}
-          titleStyle={styles.buttonText}
-          onPress={() => theme===defaultColors.themes.light ? setTheme(defaultColors.themes.dark) : setTheme(defaultColors.themes.light)}
-          title ='Change Color' />
       </ScrollView>
     </View>
 };

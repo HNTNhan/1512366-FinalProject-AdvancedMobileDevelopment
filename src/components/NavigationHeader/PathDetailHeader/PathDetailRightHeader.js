@@ -1,12 +1,13 @@
-import React, {useState, useContext} from 'react';
+import React, {useContext, useState} from 'react';
 import {StyleSheet, View, Alert, Modal, TouchableHighlight} from 'react-native';
 import { Menu, MenuOptions, MenuOption, MenuTrigger} from "react-native-popup-menu";
 import {Icon, Text} from "react-native-elements";
-import {AuthenticationContext} from "../../../provider/authentication-provider";
 import AddToChannelDialog from "../../Common/add-to-channel-dialog";
+import {ColorsContext} from "../../../provider/colors-provider";
 
 const PathDetailRightHeader = (props) => {
   const [modalVisible, setModalVisible] = useState(false);
+  const {theme} = useContext(ColorsContext)
 
   const onSelectAddToChannel = () => {
     setModalVisible(true)
@@ -37,6 +38,7 @@ const PathDetailRightHeader = (props) => {
     <Icon name='ellipsis-v'
           size={20}
           type='font-awesome-5'
+          color={theme.text}
     />
     <AddToChannelDialog modalVisible={modalVisible} route={props.route} closeModel={() => onPressClose()}/>
   </View>

@@ -1,18 +1,20 @@
-import React from 'react';
-import {View} from 'react-native';
+import React, {useContext} from 'react';
 import AccountManagement from "../../AccountManagement/AccountManagement";
 import Profile from "../../AccountManagement/Profile/profile";
-import Setting from "../../AccountManagement/Setting/setting";
+import Account from "../../AccountManagement/Account/account";
 import {createStackNavigator} from "@react-navigation/stack";
 import {objectsConstant} from "../../../globles/constants";
+import {ColorsContext} from "../../../provider/colors-provider";
 
 const AccountManagementStack = createStackNavigator();
 const AccountManagementScreen = (props) => {
+  const {theme} = useContext(ColorsContext);
+
   return <AccountManagementStack.Navigator
-    screenOptions={objectsConstant.defaultCenterHeaderBar}>
+    screenOptions={{...objectsConstant.defaultCenterHeaderBar, headerStyle: {backgroundColor: theme.foreground1}, headerTintColor: theme.text}}>
     <AccountManagementStack.Screen name='AccountManagement' component={AccountManagement} />
     <AccountManagementStack.Screen name='Profile' component={Profile} />
-    <AccountManagementStack.Screen name='Setting' component={Setting} />
+    <AccountManagementStack.Screen name='Account' component={Account} />
   </AccountManagementStack.Navigator>
 };
 
