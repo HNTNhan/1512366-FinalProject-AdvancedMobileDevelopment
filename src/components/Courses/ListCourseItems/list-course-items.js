@@ -7,10 +7,10 @@ const ListCourseItems = (props) => {
 
   return <View style={styles.container}>
     <TouchableOpacity style={styles.item} onPress={props.onPress} >
-      <Image style={styles.image} source={require('../../../../assets/ic_course.png')} />
+      <Image style={styles.image} source={{uri: props.item.courseImage}} />
       <SubCourseInfo item={props.item} />
     </TouchableOpacity>
-    <CourseDropDownButton keyItem={props.item.key} iconSize={18}/>
+    <CourseDropDownButton keyItem={props.item.id} iconSize={18}/>
   </View>
 };
 
@@ -25,8 +25,9 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
   image: {
-    width: 90,
+    width: 100,
     height: 50,
+    marginTop: 5
   },
 })
 

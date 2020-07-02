@@ -8,8 +8,8 @@ import {ColorsContext} from "../../../../provider/colors-provider";
 const SectionCourses = (props) => {
   const {theme} = useContext(ColorsContext)
 
-  const onPressItemInListCourse = (key) => {
-    props.navigation.navigate('CourseDetail', {key: key})
+  const onPressItemInListCourse = (id) => {
+    props.navigation.navigate('CourseDetail', {id: id})
   }
 
   const onPressItemInListPath = (key, title) => {
@@ -21,7 +21,7 @@ const SectionCourses = (props) => {
   }
 
   const renderListItems = () => {
-    return props.data.map( (item) => <SectionCourseItems key={item.key}  item={item} onPress={() => onPressItemInListCourse(item.key)} />);
+    return props.data.map( (item) => <SectionCourseItems key={item.id}  item={item} onPress={() => onPressItemInListCourse(item.id)} />);
   }
 
   const renderPathItems = () => {
