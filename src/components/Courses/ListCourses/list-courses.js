@@ -17,16 +17,16 @@ const ListCourses = (props) => {
     );
   };
 
-  const onPressItem = (key) => {
-    props.navigation.navigate('CourseDetail', {key: key})
+  const onPressItem = (id) => {
+    props.navigation.navigate('CourseDetail', {id: id})
   }
 
   return <View style={{...globalStyles.container, backgroundColor: theme.background}}>
     <FlatList
       showsVerticalScrollIndicator={false}
       data={data}
-      keyExtractor={(item, index) => item + index}
-      renderItem={({item}) => <ListCourseItems item={item} onPress={() => onPressItem(item.key)}/>}
+      keyExtractor={(item, index) => item.id}
+      renderItem={({item}) => <ListCourseItems item={item} onPress={() => onPressItem(item.id)}/>}
       ItemSeparatorComponent= {renderSeparator}
       ListHeaderComponent = {title ? !props.titleType ? () => <SectionTitle title={title} buttonText={props.button}/> :
         <SectionTitleFilter title={title}

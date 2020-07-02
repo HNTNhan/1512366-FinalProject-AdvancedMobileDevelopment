@@ -1,7 +1,7 @@
 export const usersData = [
   {
     name: 'admin',
-    email: 'admin@gmail.com',
+    email: 'hnmfrv@gmail.com',
     additionEmail: [],
     skills: ['React', 'JavaScript', 'Python'],
     continueLearning: ['C00000', 'C00001', 'C00002'],

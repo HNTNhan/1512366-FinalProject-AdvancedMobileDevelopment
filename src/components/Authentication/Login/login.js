@@ -8,11 +8,12 @@ import {usersData} from "../../../testdata/users-data"
 import {ColorsContext} from "../../../provider/colors-provider";
 
 const Login = (props) => {
-  const {setUser} = useContext(AuthenticationContext);
+  const {setUser, setUser1} = useContext(AuthenticationContext);
   const {theme} = useContext(ColorsContext)
-  const [username, setUsername] = useState('admin');
+  const [username, setUsername] = useState('hnmfrv@gmail.com');
   const [password, setPassword] = useState('123456');
   const [status, setStatus] = useState(null);
+
   if(props.route.params) {
     props.route.params.signOut ? setUser({}) : null;
   } else {
@@ -20,6 +21,9 @@ const Login = (props) => {
   }
 
   useEffect(() => {
+    setTimeout(() => {
+
+    }, 2000)
     if(status && status.status === 200){
       props.navigation.replace('Main')
     }
@@ -29,8 +33,9 @@ const Login = (props) => {
     if(!status) {
       return <View />
     } else if(status.status === 200){
-      const user = usersData.find((user) => user.name===status.user.username)
+      const user = usersData.find((user) => user.email===status.userInfo.email)
       setUser(user)
+      setUser1(status)
       return <View>
         <Text style={{...styles.message, color: theme.text}}>Login succeeded!</Text>
       </View>
@@ -58,7 +63,9 @@ const Login = (props) => {
         <Button buttonStyle={styles.signInButton}
                 titleStyle={styles.signInButtonText}
                 onPress={() => {
-                  setStatus(login(username, password))
+                  login(username, password).then(res => {
+                      setStatus(res)
+                    })
                 }}
                 title = 'SIGN IN' />
         <Button

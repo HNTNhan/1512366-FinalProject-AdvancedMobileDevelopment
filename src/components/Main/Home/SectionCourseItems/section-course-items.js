@@ -1,5 +1,5 @@
 import React, {useContext} from 'react';
-import {StyleSheet, Image, Text, TouchableOpacity, View} from 'react-native';
+import {StyleSheet, Image, TouchableOpacity, View} from 'react-native';
 import SubCourseInfo from "../../../Common/sub-course-info";
 import CourseDropDownButton from "../../../Common/course-drop-down-button";
 import {ColorsContext} from "../../../../provider/colors-provider";
@@ -8,10 +8,11 @@ const SectionCourseItems = (props) => {
   const {theme} = useContext(ColorsContext)
 
   return <TouchableOpacity style={{...styles.item, backgroundColor: theme.foreground1}} onPress={props.onPress}>
-    <Image source={require('../../../../../assets/ic_course.png')} style={styles.image}/>
+    {/*<Image source={require('../../../../../assets/ic_course.png')} style={styles.image}/>*/}
+    <Image source={{uri: props.item.courseImage}} style={styles.image}/>
     <SubCourseInfo item={props.item} section={true}/>
     <View style={styles.dropDownButton}>
-      <CourseDropDownButton keyItem={props.item.key} iconSize={22}/>
+      <CourseDropDownButton keyItem={props.item.id} iconSize={22}/>
     </View>
   </TouchableOpacity>
 };
@@ -22,7 +23,7 @@ const styles = StyleSheet.create({
     marginRight: 10,
     marginBottom: 10,
     width: 220,
-    height: 210,
+    height: 215,
     backgroundColor: 'rgb(219, 221, 231)',
     shadowColor: 'black',
     shadowOffset: { width: 10, height: -10 },
