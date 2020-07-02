@@ -7,16 +7,22 @@ import DescriptionOpenClose from "../../Common/description-open-close";
 import {ColorsContext} from "../../../provider/colors-provider";
 import {AuthenticationContext} from "../../../provider/authentication-provider";
 import AddToChannelDialog from "../../Common/add-to-channel-dialog";
+import RatingStart from "../../Common/rating-start";
 
 const GeneralCourseDetail = (props) => {
   const {theme} = useContext(ColorsContext);
   const {user, setUser} = useContext(AuthenticationContext);
-  const keyItem = props.route.params.key;
   const [modalVisible, setModalVisible] = useState(false);
+
+  const courseDetail = props.detail.courseDetail;
+  const instructorInfo = props.detail.instructorInfo;
+  const keyItem = props.route.params.key;
+  const date = new Date(courseDetail.updatedAt);
   const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
-  const authorListItems = (author) => {
-    return author.map((item, index) => <AuthorIconButton key={index} item={item} text={theme.text} onPress={() => onPressAuthorItem(item.key, item.detail.name)}/>);
+  const authorListItems = (instructorInfo) => {
+    return <AuthorIconButton key={instructorInfo.id} instructorInfo={instructorInfo} text={theme.text}
+                             onPress={() => onPressAuthorItem(instructorInfo.id, instructorInfo.name)}/>
   }
 
   const onPressAuthorItem = (key, name) => {
@@ -53,25 +59,43 @@ const GeneralCourseDetail = (props) => {
     setModalVisible(false)
   }
 
-  return <ScrollView showsVerticalScrollIndicator={false}>
-    <Text style={{...styles.title, color: theme.text}}>{props.detail.title}</Text>
+  return <ScrollView>
+    <Text style={{...styles.title, color: theme.text}}>{courseDetail.title}</Text>
+
     <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
       <View style={styles.author}>
-        {authorListItems(props.author)}
+        {authorListItems(instructorInfo)}
       </View>
     </ScrollView>
-    <Text style={{fontSize: 14, color: theme.text}}>{props.detail.level} . {monthNames[props.detail.released.getMonth()]} {props.detail.released.getDate()} {props.detail.released.getFullYear()} . {props.detail.duration}</Text>
+
+    <View style={styles.subInfo}>
+      <Text style={{fontSize: 14, color: theme.text}}>
+        {`${monthNames[date.getMonth()]} ${date.getDate()} ${date.getFullYear()} . ${Math.floor(courseDetail.totalHours)}h ${Math.floor((courseDetail.totalHours-Math.floor(courseDetail.totalHours))*60)}m  `}
+      </Text>
+      <RatingStart rating={(courseDetail.formalityPoint + courseDetail.contentPoint + courseDetail.presentationPoint)/3.0} size={12}/>
+    </View>
+
     <View style={styles.activeContainer}>
       <IconButton name='bookmark-border' title={user.bookmarks.indexOf(keyItem)!==-1 ? 'UnBookmark' : 'Bookmark'} onPress={() => onPressBookmark()}/>
       <IconButton name='cast-connected' title='Add to channel' onPress={() => onSelectAddToChannel()}/>
       <IconButton name='get-app' title={user.downloads.indexOf(keyItem)!==-1 ? 'Downloaded' : 'Download'} onPress={() => onPressDownload()}/>
     </View>
-    <DescriptionOpenClose description={props.detail.description} noLines={3} text={theme.text} foreground={theme.foreground1}/>
+
+    <View style={{...styles.descriptionContainer}}>
+      <Text style={{...styles.subTitle, color: theme.text}}>Description: </Text>
+      <DescriptionOpenClose description={courseDetail.description} noLines={3} text={theme.text} foreground={theme.foreground1}/>
+      <Text style={{...styles.subTitle, color: theme.text}}>{'Requirement: '}</Text>
+      <Text style={{...styles.text, color: theme.text}}>{courseDetail.requirement}</Text>
+      <Text style={{...styles.subTitle, color: theme.text}}>{'Learn what: '}</Text>
+      <Text style={{...styles.text, color: theme.text}}>{courseDetail.learnWhat}</Text>
+    </View>
+
+
     <Button
       title='Take a learning check'
       type='outline'
       icon={
-        <Icon name='tasks' type='font-awesome-5' color='#3498db' iconStyle={{marginHorizontal: 8}}/>
+        <Icon name='tasks' type='font-awesome-5' color='#19B5FE' iconStyle={{marginHorizontal: 8}}/>
       }
       containerStyle={{marginVertical: 5}}
     />
@@ -79,17 +103,17 @@ const GeneralCourseDetail = (props) => {
       title='View related paths & course'
       type='outline'
       icon={
-        <Icon name='layer-group' type='font-awesome-5' color='#3498db' iconStyle={{marginHorizontal: 8}}/>
+        <Icon name='layer-group' type='font-awesome-5' color='#19B5FE' iconStyle={{marginHorizontal: 8}}/>
       }
       containerStyle={{marginVertical: 5}}
     />
-    <AddToChannelDialog modalVisible={modalVisible} keyItem={keyItem} closeModel={() => onPressClose()}/>
+    {/*<AddToChannelDialog modalVisible={modalVisible} keyItem={keyItem} closeModel={() => onPressClose()}/>*/}
   </ScrollView>
 };
 
 const styles = StyleSheet.create({
   title: {
-    fontSize: 20,
+    fontSize: 22,
     fontWeight: '600',
   },
   author: {
@@ -98,6 +122,19 @@ const styles = StyleSheet.create({
   activeContainer: {
     flexDirection: 'row',
     justifyContent: 'space-around',
+  },
+  subInfo: {
+    flexDirection: 'row',
+  },
+  descriptionContainer: {
+    marginBottom: 20
+  },
+  subTitle: {
+    fontSize: 16
+  },
+  text: {
+    fontSize: 16,
+    paddingLeft: 15
   },
 })
 export default GeneralCourseDetail;

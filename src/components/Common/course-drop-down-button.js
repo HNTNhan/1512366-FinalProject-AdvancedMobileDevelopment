@@ -1,25 +1,31 @@
-import React, {useContext, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {StyleSheet, View} from 'react-native';
 import {Icon, Text} from "react-native-elements";
 import { Menu, MenuOptions, MenuOption, MenuTrigger} from "react-native-popup-menu";
 import {AuthenticationContext} from "../../provider/authentication-provider";
 import AddToChannelDialog from "./add-to-channel-dialog";
 import {ColorsContext} from "../../provider/colors-provider";
+import {getFavoriteStatus, setFavoriteStatus} from "../../core/services/user-services";
 
 const CourseDropDownButton = (props) => {
   const {theme} = useContext(ColorsContext);
-  const {user, setUser} = useContext(AuthenticationContext);
+  const {user, setUser, user1} = useContext(AuthenticationContext);
   const [modalVisible, setModalVisible] = useState(false);
+  const [favorite, setFavorite] = useState(false);
 
-  const onSelectBookmark = () => {
-    let temp = {...user};
-    const pos = user.bookmarks.indexOf(props.keyItem);
-    if(pos !== -1) {
-      temp.bookmarks.splice(pos, 1);
-    } else {
-      temp.bookmarks.push(props.keyItem);
-    }
-    setUser(temp);
+  useEffect(() => {
+    getFavoriteStatus(user1.token, props.keyItem)
+      .then((res) => {
+        setFavorite(res)
+      })
+  }, [])
+
+  const onSelectFavorite = () => {
+    setFavoriteStatus(user1.token, props.keyItem)
+      .then((res) => {
+        console.log('onPress: ', res)
+        setFavorite(!favorite);
+      })
   }
 
   const onSelectDownload = () => {
@@ -47,8 +53,8 @@ const CourseDropDownButton = (props) => {
         <View style={styles.trigger} />
       </MenuTrigger>
       <MenuOptions>
-        <MenuOption onSelect={() => onSelectBookmark()} >
-          <Text>{user.bookmarks.indexOf(props.keyItem)!==-1 ? 'UnBookmark' : 'Bookmark'}</Text>
+        <MenuOption onSelect={() => onSelectFavorite()} >
+          <Text>{favorite ? 'UnFavorite' : 'Favorite'}</Text>
         </MenuOption>
         <MenuOption onSelect={() => onSelectAddToChannel()} text={'Add to channel'} />
         <MenuOption onSelect={() => onSelectDownload()} text={user.downloads.indexOf(props.keyItem)!==-1 ? 'Downloaded' : 'Download'} />
