@@ -1,69 +1,134 @@
 import React, {useContext, useState} from 'react';
-import {ScrollView, StyleSheet, View} from 'react-native';
-import {Button, CheckBox, Text} from "react-native-elements";
+import {ScrollView, StyleSheet, TouchableOpacity, View} from 'react-native';
+import {Button, Icon, Text} from "react-native-elements";
 import InputTextSae from "../../Common/input-text-sae";
-import countryList from 'react-select-country-list'
 import {ColorsContext} from "../../../provider/colors-provider";
-import {Picker} from "@react-native-community/picker";
+import {checkEmail, checkName, checkPhone, register} from "../../../core/services/authentication-services";
 
 const Register = (props) => {
   const {theme} = useContext(ColorsContext)
-  const [check, setCheck] = useState(false);
-  const countries = countryList().getData();
-  const [country, setCountry] = useState('');
-  const [email, setEmail] = useState('');
+  const [checkBox, setCheckBox] = useState(false);
+  const [email, setEmail] = useState();
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
-  const [phone, setPhone] = useState('')
+  const [phone, setPhone] = useState('');
+  const [password, setPassword] = useState('');
+  const [checkInput, setCheckInput] = useState({email: false, firstName: false, lastName: false, phone: false, password: false})
+  const [message, setMessage] = useState('');
 
   const onChangeEmail = (email) => {
-    setEmail(email)
+    if(email.length) {
+      let temp = {...checkInput}
+      temp.email = checkEmail(email)
+      setCheckInput(temp)
+      setEmail(email)
+    } else {
+      setEmail(email)
+    }
   }
 
   const onChangeFirstName = (firstName) => {
-    setFirstName(firstName)
+    if(firstName.length) {
+      let temp = {...checkInput}
+      temp.firstName = checkName(firstName)
+      setCheckInput(temp)
+      setFirstName(firstName)
+    } else {
+      setFirstName(firstName)
+    }
   }
 
   const onChangeLastName = (lastName) => {
-    setLastName(lastName)
+    if(lastName.length) {
+      let temp = {...checkInput}
+      temp.lastName = checkName(lastName)
+      setCheckInput(temp)
+      setLastName(lastName)
+    } else {
+      setLastName(lastName)
+    }
+  }
+
+  const onChangePassword = (password) => {
+    if(password.length) {
+      let temp = {...checkInput}
+      temp.password = !(password.length<8 || password.length>20)
+      setCheckInput(temp)
+      setPassword(password)
+    } else {
+      setPassword(password)
+    }
   }
 
   const onChangePhone = (phone) => {
-    setPhone(phone)
+    if(phone.length) {
+      let temp = {...checkInput}
+      temp.phone = phone.length===10 || checkPhone(phone)
+      setCheckInput(temp)
+      setPhone(phone)
+    } else {
+      setPhone(phone)
+    }
+  }
+
+  const onPressCreateAccount = () => {
+    const username = firstName + ' ' + lastName
+    register(username, email, phone, password)
+      .then((res) => {
+        console.log(res)
+      })
+      .catch(err => {
+        console.log(err)
+      })
   }
 
   return <View style={{flex: 1, backgroundColor: theme.background}}>
     <ScrollView style={styles.container} contentContainerStyle={{paddingBottom: 100}}>
       <Text h3 style={{...styles.title, color: theme.text}}>Create your account</Text>
+
       <InputTextSae title={'Email*'} value={email} onChangeText={onChangeEmail}/>
+      {
+        email ? !checkInput.email ? <Text style={{...styles.checkText}}>Invalid email!</Text> : null : null
+      }
+
       <InputTextSae title={'First name*'} value={firstName} onChangeText={onChangeFirstName}/>
+      {
+        firstName ? !checkInput.firstName ? <Text style={{...styles.checkText}}>Name cannot contain numbers or special characters like #,%, $, ...!</Text> : null : null
+      }
+
       <InputTextSae title={'Last name*'} value={lastName} onChangeText={onChangeLastName}/>
-      <InputTextSae title={'Phone'} value={phone} onChangeText={onChangePhone}/>
+      {
+        lastName ? !checkInput.lastName ? <Text style={{...styles.checkText}}>Name cannot contain numbers or special characters like #,%, $, ...!</Text> : null : null
+      }
 
-      <View style={{...styles.pickerContainer, backgroundColor: theme.foreground1}}>
-        <Picker
-          mode={'dropdown'}
-          selectedValue={country}
-          style={{...styles.picker, color: theme.text}}
-          onValueChange={(itemValue, itemIndex) => setCountry(itemValue)}>
-          { countries.map((country) => <Picker.Item key={country.value} label={country.label} value={country.value} />) }
-        </Picker>
-      </View>
+      <InputTextSae title='Password*' value={password} onChangeText={onChangePassword} secureTextEntry={true}/>
+      {
+        password ? !checkInput.password ? <Text style={{...styles.checkText}}>Password must be between 8 and 20 characters!</Text>: null : null
+      }
 
+      <InputTextSae title={'Phone*'} value={phone} onChangeText={onChangePhone}/>
+      {
+        phone ? !checkInput.phone ? <Text style={{...styles.checkText}}>Please enter a valid phone number!</Text>: null : null
+      }
 
       <Text style={{...styles.text, color: theme.text}}>* Required field</Text>
-      <CheckBox
-        checked={check}
-        title='By checking here and continuing, I agree to the Terms of Use.'
-        textStyle={{fontSize: 16, color: theme.text}}
-        containerStyle={{...styles.checkBox, backgroundColor: theme.background}}
-        onPress={() => setCheck(!check)}
-      />
+      <TouchableOpacity onPress={() => setCheckBox(!checkBox)}>
+        <View style={{...styles.checkBoxContainer}}>
+          <Icon name={!checkBox ? 'square' : 'check-square'} type={"font-awesome-5"} size={18} color={!checkBox ? theme.color : '#03A9F4'}/>
+          <Text style={{...styles.checkBoxText, color: theme.text}}>
+            By checking here and continuing, I agree to the
+            <Text style={{fontWeight: 'bold'}} onPress={() => alert('Terms of Use')}> Terms of Use.</Text>
+          </Text>
+        </View>
+      </TouchableOpacity>
+
       <Button
+        disabled={!(checkInput.email && checkInput.phone && checkInput.password && checkInput.lastName && checkInput.firstName && checkBox)}
         buttonStyle={styles.button}
         titleStyle={styles.buttonText}
-        onPress={() => console.log('Create Account')}
+        onPress={() => onPressCreateAccount()}
         title ='Create Account' />
+
       <Button
         buttonStyle={[styles.button, {backgroundColor: '#9E9E9E'}]}
         titleStyle={styles.buttonText}
@@ -87,6 +152,9 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginVertical: 5,
   },
+  checkText: {
+    color: 'red',
+  },
   button: {
     marginVertical: 5,
     borderRadius: 5,
@@ -97,23 +165,15 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 18,
   },
-  checkBox: {
-    marginLeft: 0,
-    marginRight: 0,
-    padding: 5
+  checkBoxContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 5,
   },
-  pickerContainer: {
-    height: 30,
-    paddingVertical: 2,
-    borderRadius: 7,
-    borderWidth: 2,
-    borderColor: 'gainsboro',
+  checkBoxText: {
+    fontSize: 16,
+    marginLeft: 10,
+    flexShrink: 1
   },
-  picker: {
-    height: '100%',
-    width: '100%',
-    paddingVertical: 10,
-    backgroundColor: 'transparent'
-  }
 })
 export default Register;

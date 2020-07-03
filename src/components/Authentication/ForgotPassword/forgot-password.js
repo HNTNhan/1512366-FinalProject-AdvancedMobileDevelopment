@@ -10,12 +10,22 @@ const ForgotPassword = (props) => {
   const [email, setEmail] = useState('admin@email.com');
   const [status, setStatus] = useState(null);
 
+  const onPressSendEmail = (email) => {
+    forgetPassword(email)
+      .then(res => {
+        setStatus({status: 200, message: `Check your email.\nWe just sent an email to you with a link to reset your password!`})
+      })
+      .catch(err => {
+        setStatus({status: 404, errorString: "Email is Not Correct!"})
+      })
+  }
+
   const RenderEmailStatus = () => {
     if(!status) {
       return <View />
     } else if(status.status === 404){
       return <View>
-        <Text style={{...styles.message, color: theme.text}}>{status.errorString}</Text>
+        <Text style={{...styles.message, color: 'red'}}>{status.errorString}</Text>
       </View>
     } else {
       return <View />
@@ -37,7 +47,7 @@ const ForgotPassword = (props) => {
             <Button
               buttonStyle={styles.button}
               titleStyle={styles.buttonText}
-              onPress={() => setStatus(forgetPassword(email))}
+              onPress={() => onPressSendEmail(email)}
               title ='Send Email' />
             <Button
               buttonStyle={[styles.button, {backgroundColor: '#9E9E9E'}]}

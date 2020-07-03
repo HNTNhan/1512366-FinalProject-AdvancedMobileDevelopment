@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
     borderRadius: 7,
     borderWidth: 2,
     borderColor: 'gainsboro',
-    marginBottom: 10,
+    marginTop: 10,
     width: '100%'
   },
   saeLabel: {
