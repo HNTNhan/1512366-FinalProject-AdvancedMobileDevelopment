@@ -1,51 +1,54 @@
-import React, {useContext, useState} from 'react';
-import {ScrollView, StyleSheet, TouchableOpacity, View} from 'react-native';
+import React, {useContext, useEffect, useState} from 'react';
+import {ActivityIndicator, ScrollView, StyleSheet, TouchableOpacity, View} from 'react-native';
 import {Button, Icon, Text} from "react-native-elements";
 import InputTextSae from "../../Common/input-text-sae";
 import {ColorsContext} from "../../../provider/colors-provider";
-import {checkEmail, checkName, checkPhone, register} from "../../../core/services/authentication-services";
+import {checkEmail, checkName, checkPhone} from "../../../core/services/authentication-services";
+import {AuthenticationContext} from "../../../provider/authentication-provider";
+import TermsOfUseDialog from "../../Others/TermsOfUse/terms-of-use-dialog";
 
 const Register = (props) => {
   const {theme} = useContext(ColorsContext)
+  const authContext = useContext(AuthenticationContext)
+
+  const initialStateUserInfo = {
+    // fullName: "abcdefgh",
+    // email: "test@gmail.com",
+    // password: "123456789",
+    // confirmPassword: '123456789',
+    // phone: "0385552556",
+    fullName: "",
+    email: "",
+    password: "",
+    confirmPassword: '',
+    phone: ""
+  };
+
+  const [userInfo, setUserInfo] = useState(initialStateUserInfo);
   const [checkBox, setCheckBox] = useState(false);
-  const [email, setEmail] = useState();
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [phone, setPhone] = useState('');
-  const [password, setPassword] = useState('');
-  const [checkInput, setCheckInput] = useState({email: false, firstName: false, lastName: false, phone: false, password: false})
-  const [message, setMessage] = useState('');
+  const [checkInput, setCheckInput] = useState({email: false, fullName: false, phone: false, password: false, confirmPassword: false});
+  const [pressCreateFail, setPressCreateFail] = useState(false)
+  const [showTermsOfUse, setShowTermsOfUse]  = useState(false)
 
   const onChangeEmail = (email) => {
     if(email.length) {
       let temp = {...checkInput}
       temp.email = checkEmail(email)
       setCheckInput(temp)
-      setEmail(email)
+      setUserInfo({...userInfo, email: email})
     } else {
-      setEmail(email)
+      setUserInfo({...userInfo, email: email})
     }
   }
 
-  const onChangeFirstName = (firstName) => {
-    if(firstName.length) {
+  const onChangeFullName = (fullName) => {
+    if(fullName.length) {
       let temp = {...checkInput}
-      temp.firstName = checkName(firstName)
+      temp.fullName = checkName(fullName)
       setCheckInput(temp)
-      setFirstName(firstName)
+      setUserInfo({...userInfo, fullName: fullName})
     } else {
-      setFirstName(firstName)
-    }
-  }
-
-  const onChangeLastName = (lastName) => {
-    if(lastName.length) {
-      let temp = {...checkInput}
-      temp.lastName = checkName(lastName)
-      setCheckInput(temp)
-      setLastName(lastName)
-    } else {
-      setLastName(lastName)
+      setUserInfo({...userInfo, fullName: fullName})
     }
   }
 
@@ -53,10 +56,22 @@ const Register = (props) => {
     if(password.length) {
       let temp = {...checkInput}
       temp.password = !(password.length<8 || password.length>20)
+      temp.confirmPassword = (userInfo.confirmPassword === password)
       setCheckInput(temp)
-      setPassword(password)
+      setUserInfo({...userInfo, password: password})
     } else {
-      setPassword(password)
+      setUserInfo({...userInfo, password: password})
+    }
+  }
+
+  const onChangeConfirmPassword = (confirmPassword) => {
+    if(confirmPassword.length) {
+      let temp = {...checkInput}
+      temp.confirmPassword = (confirmPassword === userInfo.password)
+      setCheckInput(temp)
+      setUserInfo({...userInfo, confirmPassword: confirmPassword})
+    } else {
+      setUserInfo({...userInfo, confirmPassword: confirmPassword})
     }
   }
 
@@ -65,84 +80,109 @@ const Register = (props) => {
       let temp = {...checkInput}
       temp.phone = phone.length===10 || checkPhone(phone)
       setCheckInput(temp)
-      setPhone(phone)
+      setUserInfo({...userInfo, phone: phone})
     } else {
-      setPhone(phone)
+      setUserInfo({...userInfo, phone: phone})
     }
   }
 
   const onPressCreateAccount = () => {
-    const username = firstName + ' ' + lastName
-    register(username, email, phone, password)
-      .then((res) => {
-        console.log(res)
-      })
-      .catch(err => {
-        console.log(err)
-      })
+    if(checkInput.email && checkInput.phone && checkInput.password && checkInput.confirmPassword && checkInput.fullName && checkBox){
+      authContext.register(userInfo.fullName, userInfo.email, userInfo.phone, userInfo.password)
+    } else {
+      setPressCreateFail(true)
+    }
   }
 
-  return <View style={{flex: 1, backgroundColor: theme.background}}>
-    <ScrollView style={styles.container} contentContainerStyle={{paddingBottom: 100}}>
-      <Text h3 style={{...styles.title, color: theme.text}}>Create your account</Text>
+  if(!authContext.state.isRegistered) {
+    return <View style={{flex: 1, backgroundColor: theme.background}}>
+      <ScrollView style={styles.container} contentContainerStyle={{paddingBottom: 100}} showsVerticalScrollIndicator={false}>
+        <Text h3 style={{...styles.title, color: theme.text}}>Create your account</Text>
+        {
+          authContext.state.isRegistering ? <ActivityIndicator size="large" color="#0000ff"/> : authContext.state.isRegistered!==null ?
+          <Text style={{...styles.failMessage}}>{authContext.state.message || 'Email or phone already exist!'} </Text> : null
+        }
+        <InputTextSae title={'Email*'} value={userInfo.email} onChangeText={onChangeEmail}/>
+        {
+          pressCreateFail ? !checkInput.email ? <Text style={{...styles.checkText}}>Invalid email!</Text> : null : null
+        }
 
-      <InputTextSae title={'Email*'} value={email} onChangeText={onChangeEmail}/>
-      {
-        email ? !checkInput.email ? <Text style={{...styles.checkText}}>Invalid email!</Text> : null : null
-      }
+        <InputTextSae title={'Full Name*'} value={userInfo.fullName} onChangeText={onChangeFullName}/>
+        {
+          userInfo.fullName ? !checkInput.fullName ?
+            <Text style={{...styles.checkText}}>Name cannot contain numbers or special characters like #,%, $,
+              ...!</Text> : null : pressCreateFail ? <Text style={{...styles.checkText}}>Please type your full name!</Text> : null
+        }
 
-      <InputTextSae title={'First name*'} value={firstName} onChangeText={onChangeFirstName}/>
-      {
-        firstName ? !checkInput.firstName ? <Text style={{...styles.checkText}}>Name cannot contain numbers or special characters like #,%, $, ...!</Text> : null : null
-      }
+        <InputTextSae title='Password* (8-20 characters)' value={userInfo.password} onChangeText={onChangePassword} secureTextEntry={true}/>
+        {
+          pressCreateFail ? !checkInput.password ?
+            <Text style={{...styles.checkText}}>Password must be between 8 and 20 characters!</Text> : null : null
+        }
 
-      <InputTextSae title={'Last name*'} value={lastName} onChangeText={onChangeLastName}/>
-      {
-        lastName ? !checkInput.lastName ? <Text style={{...styles.checkText}}>Name cannot contain numbers or special characters like #,%, $, ...!</Text> : null : null
-      }
+        <InputTextSae title='Confirm Password*' value={userInfo.confirmPassword} onChangeText={onChangeConfirmPassword} secureTextEntry={true}/>
+        {
+          userInfo.confirmPassword || userInfo.password ? !checkInput.confirmPassword ?
+            <Text style={{...styles.checkText}}>Password and Confirm Password do not match!</Text> : null : null
+        }
 
-      <InputTextSae title='Password*' value={password} onChangeText={onChangePassword} secureTextEntry={true}/>
-      {
-        password ? !checkInput.password ? <Text style={{...styles.checkText}}>Password must be between 8 and 20 characters!</Text>: null : null
-      }
+        <InputTextSae title={'Phone*'} value={userInfo.phone} onChangeText={onChangePhone}/>
+        {
+          pressCreateFail ? !checkInput.phone ?
+            <Text style={{...styles.checkText}}>Please enter a valid phone number!</Text> : null : null
+        }
 
-      <InputTextSae title={'Phone*'} value={phone} onChangeText={onChangePhone}/>
-      {
-        phone ? !checkInput.phone ? <Text style={{...styles.checkText}}>Please enter a valid phone number!</Text>: null : null
-      }
+        <Text style={{...styles.text, color: theme.text}}>* Required field</Text>
+        <TouchableOpacity onPress={() => setCheckBox(!checkBox)}>
+          <View style={{...styles.checkBoxContainer}}>
+            <Icon name={!checkBox ? 'square' : 'check-square'} type={"font-awesome-5"} size={18}
+                  color={!checkBox ? theme.color : '#03A9F4'}/>
+            <Text style={{...styles.checkBoxText, color: theme.text}}>
+              {'By checking here and continuing, I agree to the '}
+              <Text style={{...styles.termsOfUse}} onPress={() => setShowTermsOfUse(true)}>Terms of Use.</Text>
+            </Text>
+          </View>
+        </TouchableOpacity>
+        {
+          !checkBox && pressCreateFail ? <Text style={{...styles.checkText}}>Please check Terms of Use!</Text> : null
+        }
 
-      <Text style={{...styles.text, color: theme.text}}>* Required field</Text>
-      <TouchableOpacity onPress={() => setCheckBox(!checkBox)}>
-        <View style={{...styles.checkBoxContainer}}>
-          <Icon name={!checkBox ? 'square' : 'check-square'} type={"font-awesome-5"} size={18} color={!checkBox ? theme.color : '#03A9F4'}/>
-          <Text style={{...styles.checkBoxText, color: theme.text}}>
-            By checking here and continuing, I agree to the
-            <Text style={{fontWeight: 'bold'}} onPress={() => alert('Terms of Use')}> Terms of Use.</Text>
-          </Text>
-        </View>
-      </TouchableOpacity>
+        <TermsOfUseDialog modalVisible={showTermsOfUse} closeModel={() => setShowTermsOfUse(false)}/>
 
+        <Button
+          buttonStyle={styles.button}
+          titleStyle={styles.buttonText}
+          onPress={() => onPressCreateAccount()}
+          title='Create Account'/>
+
+        <Button
+          buttonStyle={[styles.button, {backgroundColor: '#9E9E9E'}]}
+          titleStyle={styles.buttonText}
+          onPress={() => props.navigation.goBack()}
+          title='Cancel'/>
+      </ScrollView>
+    </View>
+  } else {
+    return <View style={{...styles.messageContainer}}>
+      <Icon name={'check-circle'} type={"font-awesome-5"} size={60} color={'green'}/>
+      <Text style={{...styles.successMessage, color: theme.text}}>Registration complete successfully!</Text>
+      <Text style={{...styles.successMessage, fontSize: 16, color: theme.text}}>Please check your registered email for email verification</Text>
       <Button
-        disabled={!(checkInput.email && checkInput.phone && checkInput.password && checkInput.lastName && checkInput.firstName && checkBox)}
-        buttonStyle={styles.button}
+        buttonStyle={{...styles.button, width: 80}}
         titleStyle={styles.buttonText}
-        onPress={() => onPressCreateAccount()}
-        title ='Create Account' />
-
-      <Button
-        buttonStyle={[styles.button, {backgroundColor: '#9E9E9E'}]}
-        titleStyle={styles.buttonText}
-        onPress={() => props.navigation.goBack()}
-        title ='Cancel' />
-    </ScrollView>
-  </View>
+        onPress={() => {
+          authContext.registerEnd()
+          props.navigation.goBack()
+        }}
+        title='OK'/>
+    </View>
+  }
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingHorizontal: 30,
-    paddingTop: 50,
   },
   title: {
     textAlign:'center',
@@ -175,5 +215,24 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     flexShrink: 1
   },
+  failMessage: {
+    fontSize: 16,
+    color: 'red',
+    textAlign: 'center'
+  },
+  messageContainer: {
+    flex: 0.8,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  successMessage: {
+    fontSize: 20,
+    textAlign: 'center',
+    marginHorizontal: 5,
+  },
+  termsOfUse: {
+    fontWeight: 'bold',
+    textDecorationLine: 'underline',
+  }
 })
 export default Register;

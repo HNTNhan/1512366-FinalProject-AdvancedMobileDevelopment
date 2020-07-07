@@ -7,7 +7,7 @@ const ListCourseItems = (props) => {
 
   return <View style={styles.container}>
     <TouchableOpacity style={styles.item} onPress={props.onPress} >
-      <Image style={styles.image} source={{uri: props.item.courseImage}} />
+      <Image style={styles.image} source={{uri: props.item.courseImage || props.item.imageUrl}} />
       <SubCourseInfo item={props.item} />
     </TouchableOpacity>
     <CourseDropDownButton keyItem={props.item.id} iconSize={18}/>

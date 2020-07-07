@@ -5,23 +5,25 @@ import RatingStart from "./rating-start";
 
 const SubCourseInfo = (props) => {
   const {theme} = useContext(ColorsContext);
-  const date = new Date(props.item.latestLearnTime);
+  const course = props.item;
+  const date = new Date(course.latestLearnTime);
   const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
   return <View style={[styles.detail, props.section ? {borderTopColor: 'gray', borderTopWidth: 1} : null]}>
-    <Text style={{...styles.title, color: theme.text}} numberOfLines={2}>{props.item.courseTitle}</Text>
-    <Text style={styles.darkText} numberOfLines={1}>{props.item.instructorName}</Text>
+    <Text style={{...styles.title, color: theme.text}} numberOfLines={2}>{course.courseTitle || course.title}</Text>
+    <Text style={styles.darkText} numberOfLines={1}>{course.instructorName || course['instructor.user.name']}</Text>
     {
-      props.item.process ? <Text style={styles.darkText} numberOfLines={1}>Process: {Math.round(props.item.process * 100) / 100}%</Text> : null
+      course.process ? <Text style={styles.darkText} numberOfLines={1}>Process: {Math.round(course.process * 100) / 100}%</Text> : null
     }
     {
-      props.item.latestLearnTime ? <Text style={styles.darkText} numberOfLines={1}>{`Last learned: ${monthNames[date.getMonth()]} ${date.getDate()} ${date.getFullYear()}`}</Text> : null
+      course.latestLearnTime ? <Text style={styles.darkText} numberOfLines={1}>{`Last learned: ${monthNames[date.getMonth()]} ${date.getDate()} ${date.getFullYear()}`}</Text> : null
     }
     {
-      props.item.courseAveragePoint>=0 ? <RatingStart rating={props.item.courseAveragePoint}/> : null
+      course.courseAveragePoint>=0 ? <RatingStart rating={course.courseAveragePoint}/> : course.formalityPoint >=0 ? <RatingStart rating={(course.formalityPoint + course.contentPoint + course.presentationPoint)/3} /> : null
     }
     {
-      props.item.coursePrice>=0 ? <Text style={styles.priceText} numberOfLines={1}>{props.item.coursePrice===0 ? 'Free' : props.item.coursePrice}</Text> : null
+      course.coursePrice>=0 ? <Text style={styles.priceText} numberOfLines={1}>{course.coursePrice===0 ? 'Free' : course.coursePrice}</Text> :
+        course.price>=0 ? <Text style={styles.priceText} numberOfLines={1}>{course.price===0 ? 'Free' : course.price}</Text> : null
     }
   </View>
 };

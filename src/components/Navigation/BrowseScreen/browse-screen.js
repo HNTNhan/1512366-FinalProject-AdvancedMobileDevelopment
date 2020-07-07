@@ -13,6 +13,7 @@ import {objectsConstant} from "../../../globles/constants";
 import PathDetailRightHeader from "../../NavigationHeader/PathDetailHeader/PathDetailRightHeader";
 import {ColorsContext} from "../../../provider/colors-provider";
 import MainScreenRightHeader from "../../NavigationHeader/MainScreenRightHeader/main-screen-right-header";
+import ListCoursesScrollLoad from "../../Courses/ListCoursesScrollLoad/list-course-scroll-load";
 
 const BrowseStack = createStackNavigator();
 const BrowseScreen = (props) => {
@@ -28,6 +29,7 @@ const BrowseScreen = (props) => {
                         )}
     />
     <BrowseStack.Screen name='ListCourses' component={ListCourses} options={({ route }) => ({ title: route.params.name })}/>
+    <BrowseStack.Screen name='ListCoursesScrollLoad' component={ListCoursesScrollLoad} options={({ route }) => ({ title: route.params.name })}/>
     <BrowseStack.Screen name='ListPaths' component={ListPaths} options={({ route }) => ({ title: route.params.name })}/>
     <BrowseStack.Screen name='CourseDetail' component={CourseDetail} options={{headerShown: false}}/>
     <BrowseStack.Screen name='PathDetail'

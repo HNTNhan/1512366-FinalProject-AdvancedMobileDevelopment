@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {View, Text, ScrollView} from 'react-native';
 import ImageButton from "../../Common/image-button";
 import Skills from "./Skills/skills";
@@ -13,10 +13,12 @@ import {pathsData} from "../../../testdata/paths-data";
 import {authorsData} from "../../../testdata/authors-data";
 import {skillsData} from "../../../testdata/skills-data";
 import {categoriesData} from "../../../testdata/categories-data";
+import {getCoursesNewRelease} from "../../../core/services/course-services";
 
 const Browse = (props) => {
   const {theme} = useContext(ColorsContext)
   const {user} = useContext(AuthenticationContext);
+  const [newRelease, setNewRelease] = useState();
   const courses = coursesData;
   const skills = skillsData;
   const categories = categoriesData;
@@ -24,10 +26,14 @@ const Browse = (props) => {
   const paths  = pathsData
 
   const onPressNewReleases = () => {
-    props.navigation.navigate('ListCourses', {data: courses, title: false, name: 'New Releases'})
+    getCoursesNewRelease(1)
+      .then(res => {
+        props.navigation.navigate('ListCourses', {data: res.data.payload, title: false, name: 'New Releases'})
+      })
+
   }
   const onRecommendedForYou = () => {
-    props.navigation.navigate('ListCourses', {data: courses, title: false, name: 'Recommended For You'})
+    props.navigation.navigate('ListCoursesScrollLoad', {url: 'https://api.itedu.me/course/top-sell', name: 'Recommended For You'})
   }
 
   return <ScrollView showsVerticalScrollIndicator={false} style={{...globalStyles.container, backgroundColor: theme.background}}>

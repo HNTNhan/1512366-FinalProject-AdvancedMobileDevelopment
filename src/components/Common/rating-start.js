@@ -5,9 +5,9 @@ import {Icon} from "react-native-elements";
 const RatingStart = (props) => {
 
   const RatingIcon = (rating) => {
-    if(rating.count>=1) return <Icon name={'star'} solid={true} type={"font-awesome-5"} color={'#FBDC14'} size={props.size || 16}/>
-    else if(rating.count>0) return <Icon name={'star-half-alt'} solid={true} type={"font-awesome-5"} color={'#FBDC14'} size={props.size || 16}/>
-    else return <Icon name={'star'} solid={false} type={"font-awesome-5"} color={'#FBDC14'} size={props.size || 16}/>
+    if(rating.count>=1) return <Icon name={'star'} solid={true} type={"font-awesome-5"} color={'#FBDC14'} size={props.size || 14}/>
+    else if(rating.count>0) return <Icon name={'star-half-alt'} solid={true} type={"font-awesome-5"} color={'#FBDC14'} size={props.size || 14}/>
+    else return <Icon name={'star'} solid={false} type={"font-awesome-5"} color={'#FBDC14'} size={props.size || 14}/>
   }
 
   return <View style={styles.container}>

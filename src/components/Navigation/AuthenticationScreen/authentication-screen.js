@@ -10,7 +10,11 @@ const AuthenticationStack = createStackNavigator();
 const AuthenticationScreen = (props) => {
   const {theme} = useContext(ColorsContext)
   return <AuthenticationStack.Navigator
-            screenOptions={{...objectsConstant.defaultCenterHeaderBar, headerStyle: {backgroundColor: theme.foreground1}, headerTintColor: theme.text}}>
+            screenOptions={{...objectsConstant.defaultCenterHeaderBar,
+              headerStyle: {backgroundColor: theme.foreground1},
+              headerTintColor: theme.text,
+              headerLeft: null
+            }}>
     <AuthenticationStack.Screen name='Sign In' component={Login} />
     <AuthenticationStack.Screen name="Forgot Password" component={ForgotPassword} />
     <AuthenticationStack.Screen name='Sign Up' component={Register} />

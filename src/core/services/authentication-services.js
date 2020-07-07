@@ -15,34 +15,28 @@ export const checkPhone = (phone) => {
   return reg.test(phone)
 }
 
-export const login = async (email, password) => {
-  let res = await axios.post('https://api.itedu.me/user/login', {"email": email, "password": password})
-    .then(res => {
-      return {status: 200, userInfo: res.data.userInfo, token: res.data.token}
-    })
-    .catch(err => {
-      return {status: 400, errorString: 'Username & password wrong!'}
-    })
-  return res
+export const apiLogin = async (email, password) => {
+  return await axios.post('https://api.itedu.me/user/login', {
+    "email": email,
+    "password": password
+  })
 }
 
-export const register = async (username, email, phone, password) => {
+export const apiRegister = (username, email, phone, password) => {
   const body = {
-    username: username,
+    name: username,
     email: email,
     phone: phone,
     password: password
   }
-
-  return await axios.post('https://api.itedu.me/user/register', body)
+  return axios.post('https://api.itedu.me/user/register', body)
 }
 
-export const forgetPassword = async (email) => {
+export const apiForgotPassword = (email) => {
   const body = {
     email: email,
   }
-
-  return await axios.post('https://api.itedu.me/user/forget-pass/send-email', body)
+  return axios.post('https://api.itedu.me/user/forget-pass/send-email', body)
 }
 
 // export const forgetPassword = (email) => {

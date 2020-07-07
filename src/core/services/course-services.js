@@ -1,5 +1,16 @@
 const axios = require('axios');
 
+
+export const getCoursesTopSell = async (page) => {
+  return await axios.post('https://api.itedu.me/course/top-sell', {limit: 20, page: page})
+}
+
+export const getCoursesNewRelease = async (page) => {
+  return await axios.post('https://api.itedu.me/course/top-new', {limit: 20, page: page})
+}
+
+
+
 export const getCourseInfo = async (courseId, token) => {
   const config = {
     params: {id: courseId},

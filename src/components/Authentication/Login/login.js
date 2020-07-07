@@ -1,18 +1,18 @@
 import React, {useContext, useEffect, useState} from 'react';
-import {View, Text, StyleSheet, ScrollView} from 'react-native';
+import {View, Text, StyleSheet, ScrollView, ActivityIndicator} from 'react-native';
 import {Button} from "react-native-elements";
-import {login} from "../../../core/services/authentication-services";
 import InputTextSae from "../../Common/input-text-sae";
 import {AuthenticationContext} from "../../../provider/authentication-provider";
 import {usersData} from "../../../testdata/users-data"
 import {ColorsContext} from "../../../provider/colors-provider";
 
 const Login = (props) => {
-  const {setUser, setUser1} = useContext(AuthenticationContext);
+  const {setUser} = useContext(AuthenticationContext);
   const {theme} = useContext(ColorsContext)
-  const [username, setUsername] = useState('hnmfrv@gmail.com');
-  const [password, setPassword] = useState('123456');
-  const [status, setStatus] = useState(null);
+  const [email, setEmail] = useState(''/*'hnmfrv@gmail.com'*/);
+  const [password, setPassword] = useState(''/*'123456789'*/);
+  const [pressedSignIn, setPressedSignIn] = useState(false);
+  const authContext = useContext(AuthenticationContext)
 
   if(props.route.params) {
     props.route.params.signOut ? setUser({}) : null;
@@ -21,53 +21,60 @@ const Login = (props) => {
   }
 
   useEffect(() => {
-    setTimeout(() => {
-
-    }, 2000)
-    if(status && status.status === 200){
+    if(authContext.state.isAuthenticated){
+      const user = usersData.find((user) => user.email===authContext.state.userInfo.email)
+      setUser(user)
       props.navigation.replace('Main')
     }
-  }, [status])
+  }, [authContext])
 
-  const RenderLoginStatus = () => {
-    if(!status) {
-      return <View />
-    } else if(status.status === 200){
-      const user = usersData.find((user) => user.email===status.userInfo.email)
-      setUser(user)
-      setUser1(status)
-      return <View>
-        <Text style={{...styles.message, color: theme.text}}>Login succeeded!</Text>
-      </View>
+  const renderLoginStatus = (status) => {
+    if (pressedSignIn) {
+      if (!authContext.state.isAuthenticating) {
+        if (status) {
+          return <Text style={{...styles.message, color: theme.text}}>{authContext.state.message}</Text>
+        } else {
+          return <Text style={{...styles.message}}>{authContext.state.message}</Text>
+        }
+      } else {
+        return <ActivityIndicator size="large" color="#0000ff"/>
+      }
     } else {
-      return <View>
-        <Text style={{...styles.message, color: theme.text}}>{status.errorString}</Text>
-      </View>
+      return <View/>
     }
   }
 
-  const onChangeUsername = (username) => {
-    setUsername(username)
+  const onChangeUsername = (email) => {
+    setEmail(email)
   }
 
   const onChangePassword = (password) => {
     setPassword(password)
   }
 
-  return <View style={[styles.container, {backgroundColor: theme.background}]}>
-      <ScrollView contentContainerStyle={{paddingBottom: 100}}>
-        <RenderLoginStatus />
-        <InputTextSae title='Username (or Email)' value={username} onChangeText={onChangeUsername}/>
+  const onPressSignIn = () => {
+    authContext.login(email, password);
+
+    if(!pressedSignIn) {
+      setPressedSignIn(true)
+    }
+    else {
+
+    }
+  }
+
+  return <View style={{...styles.container, backgroundColor: theme.background}}>
+      <ScrollView contentContainerStyle={{paddingBottom: 100}} showsVerticalScrollIndicator={false}>
+        {renderLoginStatus(authContext.state.isAuthenticated)}
+        <InputTextSae title='Email' value={email} onChangeText={onChangeUsername}/>
         <InputTextSae title='Password' value={password} onChangeText={onChangePassword} secureTextEntry={true}/>
 
-        <Button buttonStyle={styles.signInButton}
-                titleStyle={styles.signInButtonText}
-                onPress={() => {
-                  login(username, password).then(res => {
-                      setStatus(res)
-                    })
-                }}
-                title = 'SIGN IN' />
+        <Button
+          disabled={!(email.length > 0 && password.length > 0)}
+          buttonStyle={styles.signInButton}
+          titleStyle={styles.signInButtonText}
+          onPress={() => onPressSignIn()}
+          title = 'SIGN IN' />
         <Button
           buttonStyle={styles.button}
           titleStyle={styles.buttonText}
@@ -87,9 +94,10 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 30,
     paddingTop: 80,
+    justifyContent: 'center',
   },
   button: {
-    marginVertical: 5,
+    marginTop: 5,
     borderRadius: 5,
     paddingVertical: 5,
     backgroundColor: null,
@@ -114,6 +122,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 16,
     marginVertical: 5,
+    color: 'red'
   }
 })
 

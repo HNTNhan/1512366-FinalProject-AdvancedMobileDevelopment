@@ -1,22 +1,19 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useContext, useEffect, useReducer, useState} from 'react';
 import {View, StyleSheet, ScrollView, Button} from 'react-native';
 import SectionCourses from "./SectionCourses/section-courses";
 import {globalStyles} from "../../../globles/styles";
 import {AuthenticationContext} from "../../../provider/authentication-provider";
-import {coursesData} from "../../../testdata/courses-data";
-import {findByKey} from "../../../testdata/find-data";
-import {pathsData} from "../../../testdata/paths-data";
 import {ColorsContext} from "../../../provider/colors-provider";
 import {getContinueCourses, getFavoriteCourses} from "../../../core/services/user-services";
 
 const Home = (props) => {
   const {theme} = useContext(ColorsContext)
-  const {user1} = useContext(AuthenticationContext);
+  const {state} = useContext(AuthenticationContext);
   const [isLoading, setIsLoading] = useState(true);
   const [data, setData] = useState([]);
 
   useEffect(() =>{
-    Promise.all([getContinueCourses(user1.token), getFavoriteCourses(user1.token)])
+    Promise.all([getContinueCourses(state.token), getFavoriteCourses(state.token)])
       .then((res) => {
         if(data !== res){
           setData(res)

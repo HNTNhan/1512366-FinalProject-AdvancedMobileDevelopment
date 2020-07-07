@@ -1,34 +1,30 @@
-import React, {useContext, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {ScrollView, StyleSheet, View} from 'react-native';
-import {Button, Text} from "react-native-elements";
+import {Button, Icon, Text} from "react-native-elements";
 import InputTextSae from "../../Common/input-text-sae";
-import {forgetPassword} from "../../../core/services/authentication-services";
 import {ColorsContext} from "../../../provider/colors-provider";
+import {AuthenticationContext} from "../../../provider/authentication-provider";
 
 const ForgotPassword = (props) => {
   const {theme} = useContext(ColorsContext)
-  const [email, setEmail] = useState('admin@email.com');
-  const [status, setStatus] = useState(null);
+  const authContext = useContext(AuthenticationContext)
+  const [email, setEmail] = useState('test@gmail.com');
 
   const onPressSendEmail = (email) => {
-    forgetPassword(email)
-      .then(res => {
-        setStatus({status: 200, message: `Check your email.\nWe just sent an email to you with a link to reset your password!`})
-      })
-      .catch(err => {
-        setStatus({status: 404, errorString: "Email is Not Correct!"})
-      })
+    authContext.forgotPassword(email)
   }
 
-  const RenderEmailStatus = () => {
-    if(!status) {
+  const RenderSendEmailStatus = () => {
+    if(authContext.state.isForgotPassword===null) {
       return <View />
-    } else if(status.status === 404){
+    } else if(authContext.state.isForgotPassword){
       return <View>
-        <Text style={{...styles.message, color: 'red'}}>{status.errorString}</Text>
+        <Text style={{...styles.message, color: theme.text}}>{authContext.state.message}</Text>
       </View>
     } else {
-      return <View />
+      return <View>
+        <Text style={{...styles.message, color: 'red'}}>{authContext.state.message}</Text>
+      </View>
     }
   }
 
@@ -38,11 +34,10 @@ const ForgotPassword = (props) => {
 
   return <View style={{...styles.container, backgroundColor: theme.background}}>
       <ScrollView showsVerticalScrollIndicator={false}>
-        <Text h2 style={{...styles.title, color: theme.text}}>Forgot Password</Text>
-        {status===null||status.status!==200 ?
-          <View>
+        {!authContext.state.isForgotPassword ? <View>
+        <Text style={{...styles.title, color: theme.text}}>Forgot Password</Text>
             <Text style={{...styles.content, color: theme.text}}>Enter your email address and we'll send you a link to reset your password</Text>
-            <RenderEmailStatus />
+            <RenderSendEmailStatus />
             <InputTextSae title={'Email'} value={email} onChangeText={onChangeEmail}/>
             <Button
               buttonStyle={styles.button}
@@ -56,7 +51,18 @@ const ForgotPassword = (props) => {
               title ='Cancel' />
           </View>
           :
-          <Text style={{...styles.content, color: theme.text}}>{status.message}</Text>
+          <View style={{alignItems: 'center'}}>
+            <Icon name={'check-circle'} type={"font-awesome-5"} size={60} color={'green'}/>
+            <Text style={{...styles.content, fontSize: 20, color: theme.text}}>{authContext.state.message}</Text>
+            <Button
+              buttonStyle={{...styles.button, width: 80}}
+              titleStyle={styles.buttonText}
+              onPress={() => {
+                authContext.forgotPasswordEnd()
+                props.navigation.goBack()
+              }}
+              title='OK'/>
+          </View>
         }
       </ScrollView>
   </View>
@@ -66,12 +72,15 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingHorizontal: 30,
-    paddingTop: 80,
+    paddingTop: 100,
   },
   title: {
     textAlign:'center',
+    fontSize: 30,
+    fontWeight: 'bold'
   },
   content: {
+    textAlign: 'center',
     fontSize: 16,
     marginVertical: 10
   },
