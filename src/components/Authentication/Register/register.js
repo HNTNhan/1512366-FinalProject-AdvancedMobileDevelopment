@@ -1,5 +1,5 @@
 import React, {useContext, useEffect, useState} from 'react';
-import {ActivityIndicator, ScrollView, StyleSheet, TouchableOpacity, View} from 'react-native';
+import {ActivityIndicator, ScrollView, StyleSheet, TouchableOpacity, View, BackHandler, Alert} from 'react-native';
 import {Button, Icon, Text} from "react-native-elements";
 import InputTextSae from "../../Common/input-text-sae";
 import {ColorsContext} from "../../../provider/colors-provider";
@@ -29,6 +29,26 @@ const Register = (props) => {
   const [checkInput, setCheckInput] = useState({email: false, fullName: false, phone: false, password: false, confirmPassword: false});
   const [pressCreateFail, setPressCreateFail] = useState(false)
   const [showTermsOfUse, setShowTermsOfUse]  = useState(false)
+
+  useEffect(() => {
+    const backAction = () => {
+      if(authContext.state.isRegistered !== null) {
+        authContext.registerEnd()
+      } else {
+
+      }
+      props.navigation.goBack()
+
+      return true;
+    };
+
+    const backHandler = BackHandler.addEventListener(
+      "hardwareBackPress",
+      backAction
+    );
+
+    return () => backHandler.remove();
+  }, [authContext])
 
   const onChangeEmail = (email) => {
     if(email.length) {
@@ -158,7 +178,14 @@ const Register = (props) => {
         <Button
           buttonStyle={[styles.button, {backgroundColor: '#9E9E9E'}]}
           titleStyle={styles.buttonText}
-          onPress={() => props.navigation.goBack()}
+          onPress={() => {
+            if(authContext.state.isRegistered !== null) {
+              authContext.registerEnd()
+            } else {
+
+            }
+            props.navigation.goBack()
+          }}
           title='Cancel'/>
       </ScrollView>
     </View>
@@ -171,7 +198,11 @@ const Register = (props) => {
         buttonStyle={{...styles.button, width: 80}}
         titleStyle={styles.buttonText}
         onPress={() => {
-          authContext.registerEnd()
+          if(authContext.state.isRegistered !== null) {
+            authContext.registerEnd()
+          } else {
+
+          }
           props.navigation.goBack()
         }}
         title='OK'/>

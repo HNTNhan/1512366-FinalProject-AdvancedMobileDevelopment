@@ -1,5 +1,5 @@
 import React, {useContext, useEffect, useState} from 'react';
-import {ScrollView, StyleSheet, View} from 'react-native';
+import {BackHandler, ScrollView, StyleSheet, View} from 'react-native';
 import {Button, Icon, Text} from "react-native-elements";
 import InputTextSae from "../../Common/input-text-sae";
 import {ColorsContext} from "../../../provider/colors-provider";
@@ -9,6 +9,26 @@ const ForgotPassword = (props) => {
   const {theme} = useContext(ColorsContext)
   const authContext = useContext(AuthenticationContext)
   const [email, setEmail] = useState('test@gmail.com');
+
+  useEffect(() => {
+    const backAction = () => {
+      if(authContext.state.isForgotPassword !== null) {
+        authContext.forgotPasswordEnd()
+      } else {
+
+      }
+      props.navigation.goBack()
+
+      return true;
+    };
+
+    const backHandler = BackHandler.addEventListener(
+      "hardwareBackPress",
+      backAction
+    );
+
+    return () => backHandler.remove();
+  }, [authContext])
 
   const onPressSendEmail = (email) => {
     authContext.forgotPassword(email)
@@ -47,7 +67,14 @@ const ForgotPassword = (props) => {
             <Button
               buttonStyle={[styles.button, {backgroundColor: '#9E9E9E'}]}
               titleStyle={styles.buttonText}
-              onPress={() => props.navigation.goBack()}
+              onPress={() => {
+                if(authContext.state.isForgotPassword !== null) {
+                  authContext.forgotPasswordEnd()
+                } else {
+
+                }
+                props.navigation.goBack()
+              }}
               title ='Cancel' />
           </View>
           :
@@ -58,7 +85,11 @@ const ForgotPassword = (props) => {
               buttonStyle={{...styles.button, width: 80}}
               titleStyle={styles.buttonText}
               onPress={() => {
-                authContext.forgotPasswordEnd()
+                if(authContext.state.isForgotPassword !== null) {
+                  authContext.forgotPasswordEnd()
+                } else {
+
+                }
                 props.navigation.goBack()
               }}
               title='OK'/>
