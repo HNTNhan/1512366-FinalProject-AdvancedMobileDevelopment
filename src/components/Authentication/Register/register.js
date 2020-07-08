@@ -24,9 +24,17 @@ const Register = (props) => {
     phone: ""
   };
 
+  const initialStateCheckInput = {
+    fullName: false,
+    email: false,
+    password: false,
+    confirmPassword: false,
+    phone: false,
+    checkBox: false
+  };
+
   const [userInfo, setUserInfo] = useState(initialStateUserInfo);
-  const [checkBox, setCheckBox] = useState(false);
-  const [checkInput, setCheckInput] = useState({email: false, fullName: false, phone: false, password: false, confirmPassword: false});
+  const [checkInput, setCheckInput] = useState(initialStateCheckInput);
   const [pressCreateFail, setPressCreateFail] = useState(false)
   const [showTermsOfUse, setShowTermsOfUse]  = useState(false)
 
@@ -107,7 +115,7 @@ const Register = (props) => {
   }
 
   const onPressCreateAccount = () => {
-    if(checkInput.email && checkInput.phone && checkInput.password && checkInput.confirmPassword && checkInput.fullName && checkBox){
+    if(checkInput.email && checkInput.phone && checkInput.password && checkInput.confirmPassword && checkInput.fullName && checkInput.checkBox){
       authContext.register(userInfo.fullName, userInfo.email, userInfo.phone, userInfo.password)
     } else {
       setPressCreateFail(true)
@@ -153,10 +161,10 @@ const Register = (props) => {
         }
 
         <Text style={{...styles.text, color: theme.text}}>* Required field</Text>
-        <TouchableOpacity onPress={() => setCheckBox(!checkBox)}>
+        <TouchableOpacity onPress={() => setCheckInput({...checkInput, checkBox: !checkInput.checkBox})}>
           <View style={{...styles.checkBoxContainer}}>
-            <Icon name={!checkBox ? 'square' : 'check-square'} type={"font-awesome-5"} size={18}
-                  color={!checkBox ? theme.color : '#03A9F4'}/>
+            <Icon name={!checkInput.checkBox ? 'square' : 'check-square'} type={"font-awesome-5"} size={18}
+                  color={!checkInput.checkBox ? theme.color : '#03A9F4'}/>
             <Text style={{...styles.checkBoxText, color: theme.text}}>
               {'By checking here and continuing, I agree to the '}
               <Text style={{...styles.termsOfUse}} onPress={() => setShowTermsOfUse(true)}>Terms of Use.</Text>
@@ -164,7 +172,7 @@ const Register = (props) => {
           </View>
         </TouchableOpacity>
         {
-          !checkBox && pressCreateFail ? <Text style={{...styles.checkText}}>Please check Terms of Use!</Text> : null
+          !checkInput.checkBox && pressCreateFail ? <Text style={{...styles.checkText}}>Please check Terms of Use!</Text> : null
         }
 
         <TermsOfUseDialog modalVisible={showTermsOfUse} closeModel={() => setShowTermsOfUse(false)}/>
@@ -203,7 +211,9 @@ const Register = (props) => {
           } else {
 
           }
-          props.navigation.goBack()
+          setUserInfo(initialStateUserInfo)
+          setCheckInput(initialStateCheckInput)
+          //props.navigation.goBack()
         }}
         title='OK'/>
     </View>

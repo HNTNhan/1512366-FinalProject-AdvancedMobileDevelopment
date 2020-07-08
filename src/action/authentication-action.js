@@ -7,6 +7,7 @@ export const REGISTER_REQUEST = 'REGISTER_REQUEST';
 export const REGISTER_SUCCESSED = 'REGISTER_SUCCESSED';
 export const REGISTER_FAILED = 'REGISTER_FAILED';
 export const REGISTER_END = 'REGISTER_END';
+export const FORGOT_PASSWORD_REQUEST = 'FORGOT_PASSWORD_REQUEST';
 export const FORGOT_PASSWORD_SUCCESSED = 'FORGOT_PASSWORD_SUCCESSED';
 export const FORGOT_PASSWORD_FAILED = 'FORGOT_PASSWORD_FAILED';
 export const FORGOT_PASSWORD_END = 'FORGOT_PASSWORD_END';
@@ -86,6 +87,7 @@ export const registerEnd = (dispatch) => () => {
 }
 
 export const forgotPassword = (dispatch) => (email) => {
+  dispatch({type: FORGOT_PASSWORD_REQUEST})
   apiForgotPassword(email).then(res => {
     if(res.status === 200) {
       dispatch(forgotPasswordSuccessed(res.data.message))

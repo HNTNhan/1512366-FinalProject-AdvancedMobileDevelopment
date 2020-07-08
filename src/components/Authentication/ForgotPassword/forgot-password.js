@@ -1,5 +1,5 @@
 import React, {useContext, useEffect, useState} from 'react';
-import {BackHandler, ScrollView, StyleSheet, View} from 'react-native';
+import {BackHandler, ScrollView, StyleSheet, View, ActivityIndicator} from 'react-native';
 import {Button, Icon, Text} from "react-native-elements";
 import InputTextSae from "../../Common/input-text-sae";
 import {ColorsContext} from "../../../provider/colors-provider";
@@ -57,7 +57,9 @@ const ForgotPassword = (props) => {
         {!authContext.state.isForgotPassword ? <View>
         <Text style={{...styles.title, color: theme.text}}>Forgot Password</Text>
             <Text style={{...styles.content, color: theme.text}}>Enter your email address and we'll send you a link to reset your password</Text>
-            <RenderSendEmailStatus />
+            {
+              authContext.state.isForgettingPassword ? <ActivityIndicator size="large" color="#0000ff"/> : <RenderSendEmailStatus/>
+            }
             <InputTextSae title={'Email'} value={email} onChangeText={onChangeEmail}/>
             <Button
               buttonStyle={styles.button}
@@ -90,7 +92,7 @@ const ForgotPassword = (props) => {
                 } else {
 
                 }
-                props.navigation.goBack()
+                //props.navigation.goBack()
               }}
               title='OK'/>
           </View>

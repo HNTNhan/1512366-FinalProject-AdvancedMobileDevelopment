@@ -1,6 +1,6 @@
 import {
   FORGOT_PASSWORD_END,
-  FORGOT_PASSWORD_FAILED,
+  FORGOT_PASSWORD_FAILED, FORGOT_PASSWORD_REQUEST,
   FORGOT_PASSWORD_SUCCESSED,
   LOGIN_FAILED,
   LOGIN_REQUEST,
@@ -26,10 +26,12 @@ export const reducer = (prevState, action) => {
       return {...prevState, isRegistered: false, isRegistering: false, message: action.message}
     case REGISTER_END:
       return {...prevState, isRegistered: null, message: null}
+    case FORGOT_PASSWORD_REQUEST:
+      return {...prevState, isForgettingPassword: true}
     case FORGOT_PASSWORD_SUCCESSED:
-      return {...prevState, message: action.message, isForgotPassword: true}
+      return {...prevState, message: action.message, isForgotPassword: true, isForgettingPassword: false}
     case FORGOT_PASSWORD_FAILED:
-      return {...prevState, message: action.message, isForgotPassword: false}
+      return {...prevState, message: action.message, isForgotPassword: false, isForgettingPassword: false}
     case FORGOT_PASSWORD_END:
       return {...prevState, message: null, isForgotPassword: null}
     default:

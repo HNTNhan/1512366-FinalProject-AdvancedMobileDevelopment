@@ -9,8 +9,8 @@ import {ColorsContext} from "../../../provider/colors-provider";
 const Login = (props) => {
   const {setUser} = useContext(AuthenticationContext);
   const {theme} = useContext(ColorsContext)
-  const [email, setEmail] = useState(''/*'hnmfrv@gmail.com'*/);
-  const [password, setPassword] = useState(''/*'123456789'*/);
+  const [email, setEmail] = useState('hnmfrv@gmail.com');
+  const [password, setPassword] = useState('12345678');
   const [pressedSignIn, setPressedSignIn] = useState(false);
   const authContext = useContext(AuthenticationContext)
 

@@ -10,6 +10,7 @@ const initialState = {
   isRegistered: null,
   isRegistering: false,
   isForgotPassword: null,
+  isForgettingPassword: false,
   message: null,
   userInfo: null,
   token: null,
