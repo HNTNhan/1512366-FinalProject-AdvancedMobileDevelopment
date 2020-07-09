@@ -1,7 +1,6 @@
 import React, {useContext} from 'react';
 import { TabBar } from 'react-native-tab-view';
 import {objectsConstant} from "../../globles/constants";
-import {ColorsContext} from "../../provider/colors-provider";
 
 const TabBarStyle = (props) => {
   return <TabBar

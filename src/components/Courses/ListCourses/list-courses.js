@@ -5,17 +5,16 @@ import SectionTitle from "../../Common/section-title";
 import {globalStyles} from "../../../globles/styles";
 import {ColorsContext} from "../../../provider/colors-provider";
 import SectionTitleFilter from "../../Common/section-title-filter";
+import {UserContext} from "../../../provider/user-provider";
 
 const ListCourses = (props) => {
-  const {theme} = useContext(ColorsContext)
+  const {theme} = useContext(ColorsContext);
+  const userContext = useContext(UserContext);
+  const type = !props.route.params ? '' : props.route.params.name;
   const data = !props.route.params ? props.data : !props.route.params.data ? props.data : props.route.params.data;
   const title = !props.route.params ? props.title : !props.route.params.title ? props.title : props.route.params.title;
 
-  const renderSeparator = () => {
-    return (
-      <View style={globalStyles.separator} />
-    );
-  };
+
 
   const onPressItem = (id) => {
     props.navigation.navigate('CourseDetail', {id: id})
@@ -24,10 +23,10 @@ const ListCourses = (props) => {
   return <View style={{...globalStyles.container, backgroundColor: theme.background}}>
     <FlatList
       showsVerticalScrollIndicator={false}
-      data={data}
+      data={type === 'Continue learning' ? userContext.state.continueCoures : type === 'Favorite courses' ? userContext.state.favoriteCourses : data}
       keyExtractor={(item, index) => item.id}
       renderItem={({item}) => <ListCourseItems item={item} onPress={() => onPressItem(item.id)}/>}
-      ItemSeparatorComponent= {renderSeparator}
+      ItemSeparatorComponent= {() => <View style={globalStyles.separator} />}
       ListHeaderComponent = {title ? !props.titleType ? () => <SectionTitle title={title} buttonText={props.button}/> :
         <SectionTitleFilter title={title}
                             onPressFilterLevel={props.onPressFilterLevel}

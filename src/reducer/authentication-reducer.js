@@ -10,7 +10,7 @@ import {
 } from "../action/authentication-action";
 
 export const reducer = (prevState, action) => {
-  console.log('reducer')
+  console.log('reducer: ', action.type)
   switch (action.type) {
     case LOGIN_REQUEST:
       return {...prevState, isAuthenticating: true}

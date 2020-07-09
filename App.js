@@ -10,6 +10,7 @@ import AccountManagementScreen from "./src/components/Navigation/AccountManageme
 import {AuthenticationProvider} from "./src/provider/authentication-provider";
 import {ColorsProvider} from "./src/provider/colors-provider";
 import { MenuProvider } from 'react-native-popup-menu';
+import {UserProvider} from "./src/provider/user-provider";
 
 const Stack = createStackNavigator();
 
@@ -17,18 +18,20 @@ export default function App() {
   return (
     <View style={styles.container}>
       <AuthenticationProvider>
-        <ColorsProvider>
-          <MenuProvider>
-            <NavigationContainer>
-              <Stack.Navigator>
-                <Stack.Screen name='SplashScreen' component={SplashScreen} options={{headerShown: false}}/>
-                <Stack.Screen name='Authentication' component={AuthenticationScreen} options={{headerShown: false}}/>
-                <Stack.Screen name='Main' component={MainScreen} options={{headerShown: false}}/>
-                <Stack.Screen name='AccountManagement' component={AccountManagementScreen} options={{headerShown: false}}/>
-              </Stack.Navigator>
-            </NavigationContainer>
-          </MenuProvider>
-        </ColorsProvider>
+        <UserProvider>
+          <ColorsProvider>
+            <MenuProvider>
+              <NavigationContainer>
+                <Stack.Navigator>
+                  <Stack.Screen name='SplashScreen' component={SplashScreen} options={{headerShown: false}}/>
+                  <Stack.Screen name='Authentication' component={AuthenticationScreen} options={{headerShown: false}}/>
+                  <Stack.Screen name='Main' component={MainScreen} options={{headerShown: false}}/>
+                  <Stack.Screen name='AccountManagement' component={AccountManagementScreen} options={{headerShown: false}}/>
+                </Stack.Navigator>
+              </NavigationContainer>
+            </MenuProvider>
+          </ColorsProvider>
+        </UserProvider>
       </AuthenticationProvider>
     </View>
   );

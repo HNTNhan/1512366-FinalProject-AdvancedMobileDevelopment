@@ -7,7 +7,7 @@ const DescriptionOpenClose = (props) => {
   const [line, setLine] = useState(false)
 
   return <View style={styles.container}>
-    <Text numberOfLines={line ? 1000 : props.noLines} style={[styles.text, {fontSize: props.textSize || 16, color: props.text}]}>{props.description}</Text>
+    <Text numberOfLines={line ? 1000 : props.noLines} style={[styles.text, {fontSize: props.textSize || 16, color: props.text}]}>{props.description || '(Waiting for the update update)'}</Text>
     <TouchableOpacity style={{...styles.button, backgroundColor: props.foreground}} onPress={() => {
       setIcon(!icon)
       setLine(!line)

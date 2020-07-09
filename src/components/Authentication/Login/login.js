@@ -85,6 +85,11 @@ const Login = (props) => {
           titleStyle={styles.buttonText}
           onPress={() => props.navigation.navigate('Sign Up')}
           title= 'SIGN UP FREE' />
+        <Button
+          buttonStyle={styles.button}
+          titleStyle={styles.buttonText}
+          onPress={() => props.navigation.replace('Main')}
+          title= 'JOIN AS GUEST' />
       </ScrollView>
     </View>
 };

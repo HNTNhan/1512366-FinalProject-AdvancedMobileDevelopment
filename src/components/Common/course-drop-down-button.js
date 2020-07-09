@@ -6,26 +6,61 @@ import {AuthenticationContext} from "../../provider/authentication-provider";
 import AddToChannelDialog from "./add-to-channel-dialog";
 import {ColorsContext} from "../../provider/colors-provider";
 import {getFavoriteStatus, setFavoriteStatus} from "../../core/services/user-services";
+import {UserContext} from "../../provider/user-provider";
 
 const CourseDropDownButton = (props) => {
   const {theme} = useContext(ColorsContext);
-  const {user, setUser, user1} = useContext(AuthenticationContext);
+  const {user, setUser, state} = useContext(AuthenticationContext);
+  const userContext = useContext(UserContext);
   const [modalVisible, setModalVisible] = useState(false);
   const [favorite, setFavorite] = useState(false);
 
   useEffect(() => {
-    getFavoriteStatus(user1.token, props.keyItem)
+    let mounted = true;
+    getFavoriteStatus(state.token, props.keyItem)
       .then((res) => {
-        setFavorite(res)
+        if(res.status === 200) {
+          if(mounted){
+            if(favorite !== res.data.likeStatus) {
+              setFavorite(res.data.likeStatus)
+            } else {}
+          }
+        } else {
+          //return res.data.message
+        }
       })
+      .catch((err) => {
+        alert(err.response.data.message || err)
+      })
+
+    return () => mounted = false
   }, [])
 
+  useEffect(() => {
+    if(userContext.state.favoriteCoursesChange === props.keyItem) {
+      setFavorite(!favorite);
+    } else {
+
+    }
+  }, [userContext.state.favoriteCoursesChange])
+
   const onSelectFavorite = () => {
-    setFavoriteStatus(user1.token, props.keyItem)
+    let mounted = true;
+    setFavoriteStatus(state.token, props.keyItem)
       .then((res) => {
-        console.log('onPress: ', res)
-        setFavorite(!favorite);
+        if(res.status === 200) {
+          if(mounted) {
+            console.log()
+            userContext.favoriteCoursesChange(props.keyItem)
+          }
+        } else {
+          alert(res.data.message)
+        }
       })
+      .catch((err) => {
+        alert(err.response.data.message || err)
+      })
+    return () => mounted = false
   }
 
   const onSelectDownload = () => {

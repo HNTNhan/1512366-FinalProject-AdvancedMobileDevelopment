@@ -21,7 +21,7 @@ const loginSuccess = (data) => {
   }
 }
 
-const loginFailed = (message) => {
+const loginFail = (message) => {
   return {
     type: LOGIN_FAILED,
     message: message
@@ -35,21 +35,21 @@ const registerSuccess = (message) => {
   }
 }
 
-const registerFailed = (message) => {
+const registerFail = (message) => {
   return {
     type: REGISTER_FAILED,
     message: message
   }
 }
 
-const forgotPasswordSuccessed = (message) => {
+const forgotPasswordSuccess = (message) => {
   return {
     type: FORGOT_PASSWORD_SUCCESSED,
     message: message
   }
 }
 
-const forgotPasswordFailed = (message) => {
+const forgotPasswordFail = (message) => {
   return {
     type: FORGOT_PASSWORD_FAILED,
     message: message
@@ -62,10 +62,10 @@ export const login = (dispatch) => (email, password) => {
     if(res.status === 200) {
       dispatch(loginSuccess(res.data))
     } else {
-      dispatch(loginFailed(res.data.message))
+      dispatch(loginFail(res.data.message))
     }
   }).catch(err => {
-    dispatch(loginFailed(err.response.data.message || err))
+    dispatch(loginFail(err.response.data.message || err))
   })
 }
 
@@ -75,10 +75,10 @@ export const register = (dispatch) => (username, email, phone, password) => {
     if(res.status === 200) {
       dispatch(registerSuccess(res.data.message))
     } else {
-      dispatch(registerFailed(res.data.message))
+      dispatch(registerFail(res.data.message))
     }
   }).catch(err => {
-    dispatch(registerFailed(err.response.data.message || err))
+    dispatch(registerFail(err.response.data.message || err))
   })
 }
 
@@ -90,12 +90,12 @@ export const forgotPassword = (dispatch) => (email) => {
   dispatch({type: FORGOT_PASSWORD_REQUEST})
   apiForgotPassword(email).then(res => {
     if(res.status === 200) {
-      dispatch(forgotPasswordSuccessed(res.data.message))
+      dispatch(forgotPasswordSuccess(res.data.message))
     } else {
-      dispatch(forgotPasswordFailed(res.data.message))
+      dispatch(forgotPasswordFail(res.data.message))
     }
   }).catch(err => {
-    dispatch(forgotPasswordFailed(err.response.data.message || err))
+    dispatch(forgotPasswordFail(err.response.data.message || err))
   })
 }
 

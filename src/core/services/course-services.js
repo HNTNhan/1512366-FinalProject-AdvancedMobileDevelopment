@@ -1,12 +1,12 @@
 const axios = require('axios');
 
 
-export const getCoursesTopSell = async (page) => {
-  return await axios.post('https://api.itedu.me/course/top-sell', {limit: 20, page: page})
+export const getCoursesTopSell = (page) => {
+  return axios.post('https://api.itedu.me/course/top-sell', {limit: 20, page: page*20})
 }
 
-export const getCoursesNewRelease = async (page) => {
-  return await axios.post('https://api.itedu.me/course/top-new', {limit: 20, page: page})
+export const getCoursesNewRelease = (page) => {
+  return axios.post('https://api.itedu.me/course/top-new', {limit: 20, page: page*20})
 }
 
 
@@ -26,16 +26,10 @@ export const getCourseInfo = async (courseId, token) => {
     })
 }
 
-export const getUserCourseDetail = async (courseId, userId) => {
+export const getUserCourseDetail = (courseId, userId) => {
   const url = 'https://api.itedu.me/course/get-course-detail/' + courseId +'/' + userId
 
-  return await axios.get(url)
-    .then((res) => {
-      return res.data.payload
-    })
-    .catch((err) => {
-      return err
-    })
+  return axios.get(url)
 }
 
   export const getCourseAndLessonsDetail = async (courseId, token) => {

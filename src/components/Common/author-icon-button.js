@@ -3,6 +3,7 @@ import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import {Image, Text} from "react-native-elements";
 
 const AuthorIconButton = (props) => {
+
   return <TouchableOpacity style={styles.container} onPress={props.onPress}>
     <Image source={{uri: props.instructorInfo.avatar}} style={styles.image}/>
     <Text style={{...styles.text, color: props.text}}>{props.instructorInfo.name}</Text>

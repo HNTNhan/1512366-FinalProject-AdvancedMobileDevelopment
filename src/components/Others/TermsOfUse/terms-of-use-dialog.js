@@ -26,7 +26,7 @@ const TermsOfUseDialog = (props) => {
     })
   }
 
-  return<Modal
+  return <Modal
     animationType="fade"
     transparent={true}
     visible={props.modalVisible}

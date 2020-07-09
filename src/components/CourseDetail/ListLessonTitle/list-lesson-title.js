@@ -11,7 +11,13 @@ const ListLessonTitle = (props) => {
       <Text style={{...styles.thumbnail, color: theme.text}}>{props.index}</Text>
       <View style={{flex: 0.7, paddingHorizontal: 5}}>
         <Text style={{fontSize: 18, color: theme.text}}>{props.title}</Text>
-        <Text style={{fontSize: 16, color: theme.text}}>{`${Math.floor(props.totalDuration) ? Math.floor(props.totalDuration) + 'h ' : ''}${Math.floor((props.totalDuration-Math.floor(props.totalDuration))*60)}m`}</Text>
+        {
+          props.totalDuration===0 ? null :
+          <Text style={{
+          fontSize: 16,
+          color: theme.text
+        }}>{`${Math.floor(props.totalDuration) ? Math.floor(props.totalDuration) + 'h ' : ''}${Math.floor((props.totalDuration - Math.floor(props.totalDuration)) * 60)}m`}</Text>
+        }
       </View>
     </View>
 

@@ -3,27 +3,38 @@ import {View, FlatList} from 'react-native';
 import ListCourseItems from "../ListCourseItems/list-course-items";
 import {globalStyles} from "../../../globles/styles";
 import {ColorsContext} from "../../../provider/colors-provider";
-import {getCoursesTopSell} from "../../../core/services/course-services";
+import {getCoursesNewRelease, getCoursesTopSell} from "../../../core/services/course-services";
 const axios = require('axios');
 
 
 const ListCoursesScrollLoad = (props) => {
   const {theme} = useContext(ColorsContext);
-  const [data, setData] = useState({nextPage: 1, courses: []});
+  const type = props.route.params.type;
+  const [data, setData] = useState({nextPage: 0, courses: []});
 
   useEffect(() => {
     getData()
   }, [])
 
   const getData = () => {
-    const url = props.route.params.url;
-    getCoursesTopSell(data.nextPage)
-      .then(res => {
-        let temp = {...data}
-        temp.nextPage += 1
-        temp.courses = temp.courses.concat(res.data.payload)
-        setData(temp)
-      })
+    if(type==='New Releases') {
+      getCoursesNewRelease(data.nextPage)
+        .then(res => {
+          let temp = {...data}
+          temp.nextPage += 1
+          temp.courses = temp.courses.concat(res.data.payload)
+          setData(temp)
+        })
+    } else {
+      getCoursesTopSell(data.nextPage)
+        .then(res => {
+          let temp = {...data}
+          temp.nextPage += 1
+          temp.courses = temp.courses.concat(res.data.payload)
+          setData(temp)
+        })
+    }
+
     //axios.post(url, {limit: 20, page: data.nextPage})
   }
 
