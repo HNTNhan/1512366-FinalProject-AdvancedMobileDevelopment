@@ -11,7 +11,7 @@ const SubCourseInfo = (props) => {
 
   return <View style={[styles.detail, props.section ? {borderTopColor: 'gray', borderTopWidth: 1} : null]}>
     <Text style={{...styles.title, color: theme.text}} numberOfLines={2}>{course.courseTitle || course.title}</Text>
-    <Text style={styles.darkText} numberOfLines={1}>{course.instructorName || course['instructor.user.name']}</Text>
+    <Text style={styles.darkText} numberOfLines={1}>{course.instructorName || course['instructor.user.name'] || course.name}</Text>
     {
       course.process>=0 ? <Text style={styles.darkText} numberOfLines={1}>Process: {Math.round(course.process * 100) / 100}%</Text> : null
     }

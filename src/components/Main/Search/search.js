@@ -1,50 +1,57 @@
-import React, {useContext, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {StyleSheet, Text, TextInput, TouchableOpacity, View} from 'react-native';
 import BeforeSearch from "./BeforeSearch/before-search";
 import WhileSearch from "./WhileSearch/while-search";
 import ResultSearch from "./ResultSearch/result_search";
 import {globalStyles} from "../../../globles/styles";
 import {ColorsContext} from "../../../provider/colors-provider";
-import {skillsData} from "../../../testdata/skills-data";
-import {categoriesData} from "../../../testdata/categories-data";
-import {authorsData} from "../../../testdata/authors-data";
 import {AuthenticationContext} from "../../../provider/authentication-provider";
+import {getAllCategory} from "../../../core/services/category-service";
+import CenterActivityIndicator from "../../Common/center-activity-indicator";
 
 const Search = (props) => {
-  const {user, setUser} = useContext(AuthenticationContext);
+  const {theme} = useContext(ColorsContext);
+  const {user, setUser, state} = useContext(AuthenticationContext);
   const [searchKey, setSearchKey] = useState('');
   const [showResult, setShowResult] = useState(false);
-  const {theme} = useContext(ColorsContext);
-  const keysHelpSearch = skillsData.map(skill => { return {key: skill.title, type: 'skill'}}).
-                         concat(categoriesData.map(category => {return {key: category.title, type: 'category'}})).
-                         concat(authorsData.map(author => { return {key: author.detail.name, type: 'author'}}));
+  const [favoriteCategories, setFavoriteCategories] = useState(null)
+
+  useEffect(() => {
+    getAllCategory().then(res => {
+      if(res.status === 200) {
+        let favoriteCategories = [];
+        for(let i=0 ; i<state.userInfo.favoriteCategories.length; i++) {
+          favoriteCategories.push(res.data.payload.find((categoryId) => categoryId===state.userInfo.favoriteCategories[i].id))
+        }
+        setFavoriteCategories(favoriteCategories)
+      } else {}
+    }).catch(err => {
+      console.log(err.response.data.message || err)
+    })
+  }, [])
 
   const onPressItem = (value) => {
-    if(user.recentSearch.indexOf(value) === -1) {
-      let temp = {...user}
-      temp.recentSearch.unshift(value)
-      setUser(temp)
-    } else {}
-    setSearchKey(value);
-    setShowResult(true);
+    // if(user.recentSearch.indexOf(value) === -1) {
+    //   let temp = {...user}
+    //   temp.recentSearch.unshift(value)
+    //   setUser(temp)
+    // } else {}
+    // setSearchKey(value);
+    // setShowResult(true);
   }
 
   const onPressClear = () => {
-    let temp = {...user};
-    temp.recentSearch = [];
-    setUser(temp);
+    // let temp = {...user};
+    // temp.recentSearch = [];
+    // setUser(temp);
   }
 
   const onSubmitEditing = () => {
     setShowResult(true)
-    if(user.recentSearch.indexOf(searchKey) === -1) {
-      let temp = {...user}
-      temp.recentSearch.unshift(searchKey)
-      setUser(temp)
-    } else {}
   }
 
-  return <View style={[globalStyles.container, {backgroundColor: theme.background}]}>
+  if(favoriteCategories) {
+    return <View style={[globalStyles.container, {backgroundColor: theme.background}]}>
       <View style={styles.searchContainer}>
         <TextInput
           style={{...styles.searchInput, backgroundColor: theme.foreground1, color: theme.text}}
@@ -70,13 +77,17 @@ const Search = (props) => {
           </TouchableOpacity>
           : null
         }
+      </View>
+      {
+        showResult===false ? searchKey==='' ?  <BeforeSearch onPress={onPressItem} onPressClear={onPressClear} recentSearch={[]} favoriteCategories={favoriteCategories}/>
+        : null /*<WhileSearch searchKey={searchKey} keys={keysHelpSearch} onPress={onPressItem}/>*/
+          : <ResultSearch searchKey={searchKey} route={props.route} navigation={props.navigation}/>
+      }
     </View>
-    {
-      showResult===false ? searchKey==='' ?  <BeforeSearch onPress={onPressItem} onPressClear={onPressClear} recentSearch={user.recentSearch} skills={user.skills}/> :
-        <WhileSearch searchKey={searchKey} keys={keysHelpSearch} onPress={onPressItem}/>
-      : <ResultSearch searchKey={searchKey} route={props.route} navigation={props.navigation}/>
-    }
-  </View>
+  } else {
+     return <CenterActivityIndicator />
+  }
+
 };
 
 const styles = StyleSheet.create({

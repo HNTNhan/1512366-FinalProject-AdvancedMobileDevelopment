@@ -25,8 +25,7 @@ const BrowseScreen = (props) => {
                         options={({route, navigation}) => (
                           {headerRight: () => {
                               return <MainScreenRightHeader route={route} navigation={navigation}/>
-                            }}
-                        )}
+                        }})}
     />
     <BrowseStack.Screen name='ListCourses' component={ListCourses} options={({ route }) => ({ title: route.params.name })}/>
     <BrowseStack.Screen name='ListCoursesScrollLoad' component={ListCoursesScrollLoad} options={({ route }) => ({ title: route.params.name })}/>

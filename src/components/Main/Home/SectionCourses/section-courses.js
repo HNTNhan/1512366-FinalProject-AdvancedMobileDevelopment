@@ -12,25 +12,25 @@ const SectionCourses = (props) => {
     props.navigation.navigate('CourseDetail', {id: id})
   }
 
-  const onPressItemInListPath = (key, title) => {
-    props.navigation.navigate('PathDetail', {key: key, name: title})
-  }
-
-  const onPressItemInListChannel = (channel, title) => {
-    props.navigation.navigate('ChannelDetail', {channel: channel, name: title})
-  }
+  // const onPressItemInListPath = (key, title) => {
+  //   props.navigation.navigate('PathDetail', {key: key, name: title})
+  // }
+  //
+  // const onPressItemInListChannel = (channel, title) => {
+  //   props.navigation.navigate('ChannelDetail', {channel: channel, name: title})
+  // }
 
   const renderListItems = () => {
     return props.data.map( (item) => <SectionCourseItems key={item.id}  item={item} onPress={() => onPressItemInListCourse(item.id)} />);
   }
 
-  const renderPathItems = () => {
-    return props.data.map( (item) => <PathItems key={item.key} item={item} onPress={() => onPressItemInListPath(item.key, item.detail.title)} />);
-  }
-
-  const renderChannelItems = () => {
-    return props.data.map( (item) => <ChannelItems key={item.detail.title} item={item} onPress={() => onPressItemInListChannel(item, item.detail.title)} />);
-  }
+  // const renderPathItems = () => {
+  //   return props.data.map( (item) => <PathItems key={item.key} item={item} onPress={() => onPressItemInListPath(item.key, item.detail.title)} />);
+  // }
+  //
+  // const renderChannelItems = () => {
+  //   return props.data.map( (item) => <ChannelItems key={item.detail.title} item={item} onPress={() => onPressItemInListChannel(item, item.detail.title)} />);
+  // }
 
   return <View style={styles.container}>
     <View style={styles.title}>
@@ -42,8 +42,9 @@ const SectionCourses = (props) => {
       </TouchableOpacity> : null}
     </View>
     <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-      {props.type==='Path' ? renderPathItems() : props.type==='Channel'
-        ? renderChannelItems() : renderListItems()}
+      {renderListItems()}
+      {/*{props.type==='Path' ? renderPathItems() : props.type==='Channel'*/}
+      {/*  ? renderChannelItems() : renderListItems()}*/}
     </ScrollView>
   </View>
 };

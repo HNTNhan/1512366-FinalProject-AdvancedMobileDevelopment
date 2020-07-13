@@ -6,6 +6,7 @@ import {AuthenticationContext} from "../../../provider/authentication-provider";
 import {ColorsContext} from "../../../provider/colors-provider";
 import {UserContext} from "../../../provider/user-provider";
 import {Button, Icon} from "react-native-elements";
+import CenterActivityIndicator from "../../Common/center-activity-indicator";
 
 const Home = (props) => {
   const {theme} = useContext(ColorsContext)
@@ -61,7 +62,7 @@ const Home = (props) => {
                                name: 'Favorite courses'
                              })}/>
           </ScrollView>
-        : <ActivityIndicator size="large" color="#0000ff"/> :
+        : <CenterActivityIndicator /> :
         <View style={{...styles.container}}>
           <Text style={{...styles.title, color: theme.text}}>Let's get you started</Text>
           <View style={{...styles.subContiner}}>

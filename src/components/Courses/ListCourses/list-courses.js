@@ -4,7 +4,6 @@ import ListCourseItems from "../ListCourseItems/list-course-items";
 import SectionTitle from "../../Common/section-title";
 import {globalStyles} from "../../../globles/styles";
 import {ColorsContext} from "../../../provider/colors-provider";
-import SectionTitleFilter from "../../Common/section-title-filter";
 import {UserContext} from "../../../provider/user-provider";
 
 const ListCourses = (props) => {
@@ -24,14 +23,10 @@ const ListCourses = (props) => {
     <FlatList
       showsVerticalScrollIndicator={false}
       data={type === 'Continue learning' ? userContext.state.continueCoures : type === 'Favorite courses' ? userContext.state.favoriteCourses : data}
-      keyExtractor={(item, index) => item.id}
+      keyExtractor={(item) => item.id}
       renderItem={({item}) => <ListCourseItems item={item} onPress={() => onPressItem(item.id)}/>}
       ItemSeparatorComponent= {() => <View style={globalStyles.separator} />}
-      ListHeaderComponent = {title ? !props.titleType ? () => <SectionTitle title={title} buttonText={props.button}/> :
-        <SectionTitleFilter title={title}
-                            onPressFilterLevel={props.onPressFilterLevel}
-                            onPressFilterTime={props.onPressFilterTime} />
-      : null}
+      ListHeaderComponent = {title ? () => <SectionTitle title={title} buttonText={props.button}/> : null}
     />
   </View>
 };

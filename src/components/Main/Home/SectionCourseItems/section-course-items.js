@@ -3,15 +3,12 @@ import {StyleSheet, Image, TouchableOpacity, View} from 'react-native';
 import SubCourseInfo from "../../../Common/sub-course-info";
 import CourseDropDownButton from "../../../Common/course-drop-down-button";
 import {ColorsContext} from "../../../../provider/colors-provider";
-import {getFavoriteStatus} from "../../../../core/services/user-services";
-import {AuthenticationContext} from "../../../../provider/authentication-provider";
-import {UserContext} from "../../../../provider/user-provider";
 
 const SectionCourseItems = (props) => {
   const {theme} = useContext(ColorsContext)
 
   return <TouchableOpacity style={{...styles.item, backgroundColor: theme.foreground1}} onPress={props.onPress}>
-    <Image source={{uri: props.item.courseImage}} style={styles.image}/>
+    <Image source={{uri: props.item.courseImage || props.item.imageUrl}} style={styles.image}/>
     <SubCourseInfo item={props.item} section={true}/>
     <View style={styles.dropDownButton}>
       <CourseDropDownButton keyItem={props.item.id} iconSize={22}/>

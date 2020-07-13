@@ -1,5 +1,5 @@
 import React, {useContext, useEffect, useState} from 'react';
-import {View, Text, ScrollView} from 'react-native';
+import {View, StyleSheet, ScrollView} from 'react-native';
 import ImageButton from "../../Common/image-button";
 import Skills from "./Skills/skills";
 import Categories from "./Categories/categories";
@@ -14,16 +14,32 @@ import {authorsData} from "../../../testdata/authors-data";
 import {skillsData} from "../../../testdata/skills-data";
 import {categoriesData} from "../../../testdata/categories-data";
 import {getCoursesNewRelease} from "../../../core/services/course-services";
+import {getAllCategory} from "../../../core/services/category-service";
+import {getAllInstructor} from "../../../core/services/instructor-services";
+import CenterActivityIndicator from "../../Common/center-activity-indicator";
 
 const Browse = (props) => {
   const {theme} = useContext(ColorsContext)
-  const {user} = useContext(AuthenticationContext);
-  const [newRelease, setNewRelease] = useState();
-  const courses = coursesData;
-  const skills = skillsData;
-  const categories = categoriesData;
-  const authors = authorsData;
-  const paths  = pathsData
+  const [categories, setCategories] = useState(null)
+  const [instructors, setInstructors] = useState(null)
+
+  useEffect(() => {
+    getAllCategory().then(res => {
+      if(res.status === 200) {
+        setCategories(res.data.payload)
+      } else {}
+    }).catch(err => {
+      alert(err.response.data.message || err)
+    })
+
+    getAllInstructor().then(res => {
+      if(res.status === 200) {
+        setInstructors(res.data.payload)
+      } else {}
+    }).catch(err => {
+      alert(err.response.data.message || err)
+    })
+  }, [])
 
   const onPressNewReleases = () => {
     props.navigation.navigate('ListCoursesScrollLoad', {type: 'New Releases', name: 'New Releases'})
@@ -32,19 +48,27 @@ const Browse = (props) => {
     props.navigation.navigate('ListCoursesScrollLoad', {type: 'Recommended', name: 'Recommended For You'})
   }
 
-  return <ScrollView showsVerticalScrollIndicator={false} style={{...globalStyles.container, backgroundColor: theme.background}}>
-    <ImageButton title={`NEW\nRELEASES`} onPress={onPressNewReleases} />
-    <ImageButton title={`RECOMMENDED\nFOR YOU`} onPress={onRecommendedForYou} />
-    {/*<Skills title='Popular skills' skills={skills} interests={user.skills} navigation={props.navigation} route={props.route}/>*/}
-    {/*<Categories categories={categories} navigation={props.navigation} route={props.route}/>*/}
-    {/*<SectionCourses title='Path'*/}
-    {/*                type='Path'*/}
-    {/*                navigation={props.navigation}*/}
-    {/*                route={props.route}*/}
-    {/*                data={paths}*/}
-    {/*                pressSeeAll={() => props.navigation.navigate('ListPaths', {data: paths, title: false})}/>*/}
-    {/*<TopAuthors title={'Top Authors'} authors={authors} navigation={props.navigation} route={props.route}/>*/}
-  </ScrollView>
+  if(categories && instructors) {
+    return <ScrollView showsVerticalScrollIndicator={false} style={{...globalStyles.container, backgroundColor: theme.background}}>
+      <View style={{...styles.imageButtonContainer}}>
+        <ImageButton title={`NEW\nRELEASES`} onPress={onPressNewReleases} />
+        <ImageButton title={`RECOMMENDED\nFOR YOU`} onPress={onRecommendedForYou} />
+      </View>
+
+      {/*<Skills title='Popular skills' skills={skills} interests={user.skills} navigation={props.navigation} route={props.route}/>*/}
+
+      <Categories categories={categories} navigation={props.navigation} route={props.route}/>
+      <TopAuthors title={'Top Authors'} authors={instructors} navigation={props.navigation} route={props.route}/>
+    </ScrollView>
+  } else {
+    return <CenterActivityIndicator />
+  }
 };
+
+const styles = StyleSheet.create({
+  imageButtonContainer: {
+    marginRight: 10,
+  }
+})
 
 export default Browse;

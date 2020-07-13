@@ -11,14 +11,14 @@ const TopAuthors = (props) => {
   }
 
   const renderTopAuthors = (authors) => {
-    return authors.map( item => <TouchableOpacity key={item.key} style={{marginRight: 10}} onPress={() => onPressAuthorItem(item.key, item.detail.name)}>
-      <Image source={require('../../../../../assets/ic_person.png')} style={styles.image}/>
-      <Text style={{...styles.imageText, color: theme.text}} numberOfLines={2} ellipsizeMode='tail'>{item.detail.name}</Text>
+    return authors.map( item => <TouchableOpacity key={item.id} style={{marginRight: 10}} onPress={() => onPressAuthorItem(item.id, [item['user.name']])}>
+      <Image source={{uri: item['user.avatar']}} style={styles.image}/>
+      <Text style={{...styles.imageText, color: theme.text}} numberOfLines={2} ellipsizeMode='tail'>{item["user.name"]}</Text>
     </TouchableOpacity>);
   }
 
   return <View style={styles.container}>
-    <View style={styles.title}>
+    <View style={styles.titleContainer}>
       <Text style={{...styles.titleText, color: theme.text}}>{props.title}</Text>
     </View>
     <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
@@ -31,10 +31,7 @@ const styles = StyleSheet.create({
   container: {
     marginBottom: 20,
   },
-  title: {
-    flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+  titleContainer: {
     marginBottom: 5,
   },
   titleText: {

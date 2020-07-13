@@ -1,20 +1,34 @@
-import React, {useContext} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {View, Image, StyleSheet, Text} from 'react-native';
 import Skills from "../../Main/Browse/Skills/skills";
 import {AuthenticationContext} from "../../../provider/authentication-provider";
 import {skillsData} from "../../../testdata/skills-data";
 import {ColorsContext} from "../../../provider/colors-provider";
+import {getAllCategory} from "../../../core/services/category-service";
+import {getAllInstructor} from "../../../core/services/instructor-services";
 
 const Profile = (props) => {
   const {theme} = useContext(ColorsContext);
-  const {user} = useContext(AuthenticationContext);
+  const {state} = useContext(AuthenticationContext);
+
+  const [categories, setCategories] = useState(null)
+
+  useEffect(() => {
+    getAllCategory().then(res => {
+      if(res.status === 200) {
+        setCategories(res.data.payload)
+      } else {}
+    }).catch(err => {
+      console.log(err.response.data.message || err)
+    })
+  }, [])
 
   return <View style={{...styles.container, backgroundColor: theme.background}}>
     <View style={styles.containerAccount}>
       <Image source={require('../../../../assets/ic_person.png')} style={styles.image}/>
-      <Text style={{...styles.textContent, color: theme.text}}>{user.name}</Text>
+      <Text style={{...styles.textContent, color: theme.text}}>{state.userInfo.name}</Text>
     </View>
-    <Skills title={'Interests'} skills={skillsData} interests={user.skills} navigation={props.navigation} route={props.route}/>
+    <Skills title={'Interests'} skills={skillsData} interests={state.userInfo.favoriteCategories} navigation={props.navigation} route={props.route}/>
     <View>
       <Text style={{...styles.title, color: theme.text}}>Activity insights (last 30 days)</Text>
       <View>
