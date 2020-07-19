@@ -1,31 +1,35 @@
-import {apiFetchContinueCourses, apiFetchFavoriteCourses} from "../core/services/user-services";
+import {
+  apiFetchContinueCourses,
+  apiFetchFavoriteCourses,
+  apiUpdateFavoriteCategories
+} from "../core/services/user-services";
 
-export const FETCH_CONTINUE_COURSES_REQUEST = 'FETCH_CONTINUE_LEARNING_REQUEST'
-export const FETCH_CONTINUE_COURSES_SUCCESSED = 'FETCH_CONTINUE_LEARNING_SUCCESSED'
-export const FETCH_CONTINUE_COURSES_FAILED = 'FETCH_CONTINUE_LEARNING_FAILED'
-export const FETCH_FAVORITE_COURSES_REQUEST = 'FETCH_FAVORITE_COURSES_REQUEST'
-export const FETCH_FAVORITE_COURSES_SUCCESSED = 'FETCH_FAVORITE_COURSES_SUCCESSED'
-export const FETCH_FAVORITE_COURSES_FAILED = 'FETCH_FAVORITE_COURSES_FAILED'
-export const FAVORITE_COURSES_CHANGE = 'FAVORITE_COURSES_CHANGE'
+export const FETCH_CONTINUE_COURSES_REQUEST = 'FETCH_CONTINUE_LEARNING_REQUEST';
+export const FETCH_CONTINUE_COURSES_SUCCESS = 'FETCH_CONTINUE_LEARNING_SUCCESS';
+export const FETCH_CONTINUE_COURSES_FAILED = 'FETCH_CONTINUE_LEARNING_FAILED';
+export const FETCH_FAVORITE_COURSES_REQUEST = 'FETCH_FAVORITE_COURSES_REQUEST';
+export const FETCH_FAVORITE_COURSES_SUCCESS = 'FETCH_FAVORITE_COURSES_SUCCESS';
+export const FETCH_FAVORITE_COURSES_FAILED = 'FETCH_FAVORITE_COURSES_FAILED';
+export const FAVORITE_COURSES_CHANGE = 'FAVORITE_COURSES_CHANGE';
 
 
 const fetchContinueCoursesSuccess = (data) => {
   return {
-    type: FETCH_CONTINUE_COURSES_SUCCESSED,
+    type: FETCH_CONTINUE_COURSES_SUCCESS,
     data,
   }
 }
 
 const fetchContinueCoursesFail = (message) => {
   return {
-    type: FETCH_CONTINUE_COURSES_SUCCESSED,
+    type: FETCH_CONTINUE_COURSES_SUCCESS,
     message: message,
   }
 }
 
 const fetchFavoriteCoursesSuccess = (data) => {
   return {
-    type: FETCH_FAVORITE_COURSES_SUCCESSED,
+    type: FETCH_FAVORITE_COURSES_SUCCESS,
     data,
   }
 }

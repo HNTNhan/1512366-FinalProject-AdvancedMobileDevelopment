@@ -1,19 +1,10 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {View, StyleSheet, ScrollView} from 'react-native';
 import ImageButton from "../../Common/image-button";
-import Skills from "./Skills/skills";
 import Categories from "./Categories/categories";
-import SectionCourses from "../Home/SectionCourses/section-courses";
 import TopAuthors from "./TopAuthors/top-authors";
 import {globalStyles} from "../../../globles/styles";
 import {ColorsContext} from "../../../provider/colors-provider";
-import {AuthenticationContext} from "../../../provider/authentication-provider";
-import {coursesData} from "../../../testdata/courses-data";
-import {pathsData} from "../../../testdata/paths-data";
-import {authorsData} from "../../../testdata/authors-data";
-import {skillsData} from "../../../testdata/skills-data";
-import {categoriesData} from "../../../testdata/categories-data";
-import {getCoursesNewRelease} from "../../../core/services/course-services";
 import {getAllCategory} from "../../../core/services/category-service";
 import {getAllInstructor} from "../../../core/services/instructor-services";
 import CenterActivityIndicator from "../../Common/center-activity-indicator";
@@ -55,7 +46,7 @@ const Browse = (props) => {
         <ImageButton title={`RECOMMENDED\nFOR YOU`} onPress={onRecommendedForYou} />
       </View>
 
-      {/*<Skills title='Popular skills' skills={skills} interests={user.skills} navigation={props.navigation} route={props.route}/>*/}
+      {/*<FavoriteCategories title='Popular skills' skills={skills} interests={user.skills} navigation={props.navigation} route={props.route}/>*/}
 
       <Categories categories={categories} navigation={props.navigation} route={props.route}/>
       <TopAuthors title={'Top Authors'} authors={instructors} navigation={props.navigation} route={props.route}/>

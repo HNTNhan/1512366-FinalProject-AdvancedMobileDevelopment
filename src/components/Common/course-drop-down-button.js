@@ -3,37 +3,38 @@ import {StyleSheet, View} from 'react-native';
 import {Icon, Text} from "react-native-elements";
 import { Menu, MenuOptions, MenuOption, MenuTrigger} from "react-native-popup-menu";
 import {AuthenticationContext} from "../../provider/authentication-provider";
-import AddToChannelDialog from "./add-to-channel-dialog";
 import {ColorsContext} from "../../provider/colors-provider";
 import {getFavoriteStatus, setFavoriteStatus} from "../../core/services/user-services";
 import {UserContext} from "../../provider/user-provider";
+import {alertSignIn} from "../../globles/alert";
 
 const CourseDropDownButton = (props) => {
-  const {theme} = useContext(ColorsContext);
-  const {user, setUser, state} = useContext(AuthenticationContext);
+  const {state} = useContext(AuthenticationContext);
   const userContext = useContext(UserContext);
-  const [modalVisible, setModalVisible] = useState(false);
   const [favorite, setFavorite] = useState(false);
 
   useEffect(() => {
-    let mounted = true;
-    getFavoriteStatus(state.token, props.keyItem)
-      .then((res) => {
-        if(res.status === 200) {
-          if(mounted){
-            if(favorite !== res.data.likeStatus) {
-              setFavorite(res.data.likeStatus)
-            } else {}
+    if(state.isAuthenticated) {
+      let mounted = true;
+      getFavoriteStatus(state.token, props.keyItem)
+        .then((res) => {
+          if(res.status === 200) {
+            if(mounted){
+              if(favorite !== res.data.likeStatus) {
+                setFavorite(res.data.likeStatus)
+              } else {}
+            }
+          } else {
+            //return res.data.message
           }
-        } else {
-          //return res.data.message
-        }
-      })
-      .catch((err) => {
-        alert(err.response.data.message || err)
-      })
+        })
+        .catch((err) => {
+          alert('haha')
+          alert(err.response.data.message || err)
+        })
 
-    return () => mounted = false
+      return () => mounted = false
+    } else {}
   }, [])
 
   useEffect(() => {
@@ -64,23 +65,10 @@ const CourseDropDownButton = (props) => {
   }
 
   const onSelectDownload = () => {
-    let temp = {...user};
-    const pos = user.downloads.indexOf(props.keyItem);
-    if(pos !== -1) {
-      temp.downloads.splice(pos, 1);
-    } else {
-      temp.downloads.push(props.keyItem);
-    }
-    setUser(temp);
+
   }
 
-  const onSelectAddToChannel = () => {
-    setModalVisible(true)
-  }
 
-  const onPressClose = () => {
-    setModalVisible(false)
-  }
 
   return <View style={styles.container}>
     <Menu style={styles.dropdown}>
@@ -88,27 +76,23 @@ const CourseDropDownButton = (props) => {
         <View style={styles.trigger} />
       </MenuTrigger>
       <MenuOptions>
-        <MenuOption onSelect={() => onSelectFavorite()} >
+        <MenuOption onSelect={() => state.isAuthenticated ? onSelectFavorite() : alertSignIn()} >
           <Text>{favorite ? 'UnFavorite' : 'Favorite'}</Text>
         </MenuOption>
-        <MenuOption onSelect={() => onSelectAddToChannel()} text={'Add to channel'} />
-        <MenuOption onSelect={() => onSelectDownload()} text={user.downloads.indexOf(props.keyItem)!==-1 ? 'Downloaded' : 'Download'} />
+        <MenuOption onSelect={() => state.isAuthenticated ? onSelectDownload() : alertSignIn()} text={'Download'} />
       </MenuOptions>
     </Menu>
     <Icon name='ellipsis-v'
           size={props.iconSize}
           type='font-awesome-5'
     />
-    <AddToChannelDialog modalVisible={modalVisible} keyItem={props.keyItem} closeModel={() => onPressClose()}/>
   </View>
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flex: 1.1,
     justifyContent: 'center',
-    width: '100%',
-    height: '100%'
   },
   dropdown: {
     position: 'absolute',

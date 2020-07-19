@@ -1,36 +1,22 @@
 import React, {useContext} from 'react';
 import {View, Text, ScrollView, TouchableOpacity, StyleSheet} from 'react-native';
 import SectionCourseItems from "../SectionCourseItems/section-course-items";
-import PathItems from "../PathItems/path-items";
-import ChannelItems from "../ChanneItems/channel-items";
 import {ColorsContext} from "../../../../provider/colors-provider";
+import {alertSignIn} from "../../../../globles/alert";
+import {AuthenticationContext} from "../../../../provider/authentication-provider";
 
 const SectionCourses = (props) => {
   const {theme} = useContext(ColorsContext)
+  const {state} = useContext(AuthenticationContext);
 
   const onPressItemInListCourse = (id) => {
     props.navigation.navigate('CourseDetail', {id: id})
   }
 
-  // const onPressItemInListPath = (key, title) => {
-  //   props.navigation.navigate('PathDetail', {key: key, name: title})
-  // }
-  //
-  // const onPressItemInListChannel = (channel, title) => {
-  //   props.navigation.navigate('ChannelDetail', {channel: channel, name: title})
-  // }
-
   const renderListItems = () => {
-    return props.data.map( (item) => <SectionCourseItems key={item.id}  item={item} onPress={() => onPressItemInListCourse(item.id)} />);
+    return props.data.map( (item) =>
+      <SectionCourseItems key={item.id}  item={item} onPress={() => state.isAuthenticated ? onPressItemInListCourse(item.id) : alertSignIn()} />);
   }
-
-  // const renderPathItems = () => {
-  //   return props.data.map( (item) => <PathItems key={item.key} item={item} onPress={() => onPressItemInListPath(item.key, item.detail.title)} />);
-  // }
-  //
-  // const renderChannelItems = () => {
-  //   return props.data.map( (item) => <ChannelItems key={item.detail.title} item={item} onPress={() => onPressItemInListChannel(item, item.detail.title)} />);
-  // }
 
   return <View style={styles.container}>
     <View style={styles.title}>
@@ -43,8 +29,6 @@ const SectionCourses = (props) => {
     </View>
     <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
       {renderListItems()}
-      {/*{props.type==='Path' ? renderPathItems() : props.type==='Channel'*/}
-      {/*  ? renderChannelItems() : renderListItems()}*/}
     </ScrollView>
   </View>
 };

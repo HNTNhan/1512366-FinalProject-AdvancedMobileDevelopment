@@ -39,3 +39,24 @@ export const checkOwnCourse = (token, courseId) => {
 
   return axios.get('https://api.itedu.me/user/check-own-course/' + courseId, config)
 }
+
+export const apiUpdateFavoriteCategories = (token, categoryIds) => {
+  const body = {
+    categoryIds: categoryIds
+  }
+  const config = {
+    headers: { Authorization: `Bearer ${token}` }
+  }
+  return axios.put('https://api.itedu.me/user/update-favorite-categories', body, config)
+}
+
+export const apiSendFeedback = (token, feedback) => {
+  const body = {
+    subject: feedback.subject,
+    content: feedback.content
+  }
+  const config = {
+    headers: { Authorization: `Bearer ${token}` }
+  }
+  return axios.post('https://api.itedu.me/feedback/create', body, config)
+}

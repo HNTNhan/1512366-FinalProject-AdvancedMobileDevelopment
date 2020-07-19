@@ -47,7 +47,7 @@ const CategoryDetail = (props) => {
     {
       newCourses && trendingCourses ?
         <ScrollView>
-          {/*<Skills title={category.title + ' Skills'} skills={skills} interests={user.skills} navigation={props.navigation} route={props.route}/>*/}
+          {/*<FavoriteCategories title={category.title + ' FavoriteCategories'} skills={skills} interests={user.skills} navigation={props.navigation} route={props.route}/>*/}
           <SectionCourses title={'New in ' + category.name}
                           type='Course'
                           navigation={props.navigation}

@@ -2,12 +2,13 @@ import React, {useContext} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import {globalStyles} from "../../../globles/styles";
 import ListCourseItems from "../../Courses/ListCourseItems/list-course-items";
-import {findByKey} from "../../../testdata/find-data";
-import {coursesData} from "../../../testdata/courses-data";
 import {ColorsContext} from "../../../provider/colors-provider";
+import {AuthenticationContext} from "../../../provider/authentication-provider";
+import {alertSignIn} from "../../../globles/alert";
 
 const ItemsInAuthor = (props) => {
   const {theme} = useContext(ColorsContext)
+  const {state} = useContext(AuthenticationContext)
 
   const onPressCourseItem = (id) => {
     props.navigation.push('CourseDetail', {id: id});
@@ -16,7 +17,7 @@ const ItemsInAuthor = (props) => {
   return <View>
     <Text style={{...styles.text, color: theme.text}}>Course</Text>
     { props.courses.map((item) => <View key={item.id} style={globalStyles.borderSeparator}>
-        <ListCourseItems item={{...item, instructorName: props.name}} onPress={() => onPressCourseItem(item.id)}/>
+        <ListCourseItems item={{...item, instructorName: props.name}} onPress={() => state.isAuthenticated ? onPressCourseItem(item.id) : alertSignIn()}/>
       </View>
     ) }
   </View>

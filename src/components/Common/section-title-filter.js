@@ -65,9 +65,7 @@ const SectionTitleFilter = (props) => {
       <Text style={{...styles.titleText, color: theme.text}}>OK</Text>
     </TouchableOpacity>
 
-    <SelectFilterModal modalVisible={modalVisible}
-                       onPressClose={onPressClose}
-    />
+    <SelectFilterModal modalVisible={modalVisible} categorySelect={props.categorySelect} onPressClose={onPressClose}/>
 
   </View>
 };

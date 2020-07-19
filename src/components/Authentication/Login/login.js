@@ -21,10 +21,14 @@ const Login = (props) => {
   }
 
   useEffect(() => {
-    if(authContext.state.isAuthenticated){
-      const user = usersData.find((user) => user.email===authContext.state.userInfo.email)
-      setUser(user)
-      props.navigation.replace('Main')
+    if(authContext.state.isUpdatingProfile) {
+
+    } else {
+      if(authContext.state.isAuthenticated) {
+        const user = usersData.find((user) => user.email===authContext.state.userInfo.email)
+        setUser(user)
+        props.navigation.replace('Main')
+      } else {}
     }
   }, [authContext])
 
@@ -88,7 +92,10 @@ const Login = (props) => {
         <Button
           buttonStyle={styles.button}
           titleStyle={styles.buttonText}
-          onPress={() => props.navigation.replace('Main')}
+          onPress={() => {
+            console.log(123)
+            props.navigation.replace('Main')
+          }}
           title= 'JOIN AS GUEST' />
       </ScrollView>
     </View>

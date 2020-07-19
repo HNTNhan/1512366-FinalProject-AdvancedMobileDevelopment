@@ -1,33 +1,41 @@
-import React, {useContext} from 'react';
+import React, {useContext, useState} from 'react';
 import {TouchableOpacity, StyleSheet, View} from 'react-native';
 import {Menu, MenuOption, MenuOptions, MenuTrigger} from "react-native-popup-menu";
 import {Icon, Image, Text} from "react-native-elements";
 import {ColorsContext} from "../../../provider/colors-provider";
 import {AuthenticationContext} from "../../../provider/authentication-provider";
+import SendFeedback from "../../AccountManagement/SendFeedback/send-feedback";
 
 const MainScreenRightHeader = (props) => {
   const {theme} = useContext(ColorsContext)
-  const {state} = useContext(AuthenticationContext)
+  const authContext = useContext(AuthenticationContext)
 
   const onSelectProfile = () => {
-    console.log(123)
-    props.navigation.navigate('AccountManagement', {screen: 'Profile'})
+    props.navigation.navigate('Profile')
   }
 
   const onSelectSetting = () => {
     props.navigation.navigate('AccountManagement')
   }
 
+  const onSelectSendFeedBack = () => {
+    props.navigation.navigate('SendFeedback')
+  }
+
   const onSelectSignOut = () => {
-    props.navigation.navigate('Authentication', {signOut: true});
+    authContext.logout()
+    props.navigation.replace('Authentication');
+  }
+
+  const onSelectSignIn = () => {
+    props.navigation.replace('Authentication');
   }
 
   return <View style={styles.container}>
-
     <TouchableOpacity style={styles.avatarContainer} onPress={() => onSelectProfile()}>
       {
-        state.userInfo.avatar ? <Image source={{uri : state.userInfo.avatar}} style={{...styles.image}} />
-          : <Icon name={'user-circle'} type={"font-awesome-5"} size={40} color={theme.text} />
+        authContext.state.userInfo ? authContext.state.userInfo.avatar ? <Image source={{uri : authContext.state.userInfo.avatar}} style={{...styles.image}} />
+          : <Icon name={'user-circle'} type={"font-awesome-5"} size={40} color={theme.text} /> : <Icon name={'user-circle'} type={"font-awesome-5"} size={40} color={theme.text} />
       }
     </TouchableOpacity>
 
@@ -42,23 +50,30 @@ const MainScreenRightHeader = (props) => {
         </View>
       </MenuTrigger>
 
-      <MenuOptions customStyles={optionsStyles}>
-        <MenuOption onSelect={() => onSelectSetting()} >
-          <Text style={styles.menuOptionText}>Setting</Text>
-        </MenuOption>
-        <MenuOption onSelect={() => console.log('Send feedback')} >
-          <Text style={styles.menuOptionText}>Send feedback</Text>
-        </MenuOption>
-        <MenuOption onSelect={() => console.log('Contact support')} >
-          <Text style={styles.menuOptionText}>Contact support</Text>
-        </MenuOption>
-        <MenuOption onSelect={() => onSelectSignOut()} >
-          <Text style={styles.menuOptionText}>Sign Out</Text>
-        </MenuOption>
-      </MenuOptions>
+      {
+        authContext.state.isAuthenticated ?
+          <MenuOptions customStyles={optionsStyles}>
+            <MenuOption onSelect={() => onSelectSetting()}>
+              <Text style={styles.menuOptionText}>Setting</Text>
+            </MenuOption>
+            <MenuOption onSelect={() => onSelectSendFeedBack()}>
+              <Text style={styles.menuOptionText}>Send feedback</Text>
+            </MenuOption>
+            {/*<MenuOption onSelect={() => console.log('Contact support')}>*/}
+            {/*  <Text style={styles.menuOptionText}>Contact support</Text>*/}
+            {/*</MenuOption>*/}
+            <MenuOption onSelect={() => onSelectSignOut()}>
+              <Text style={styles.menuOptionText}>Sign Out</Text>
+            </MenuOption>
+          </MenuOptions> :
+
+          <MenuOptions customStyles={optionsStyles}>
+            <MenuOption onSelect={() => onSelectSignIn()}>
+              <Text style={styles.menuOptionText}>Sign In</Text>
+            </MenuOption>
+          </MenuOptions>
+      }
     </Menu>
-
-
   </View>
 };
 

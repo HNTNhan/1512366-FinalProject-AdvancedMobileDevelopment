@@ -1,6 +1,6 @@
 import React, {useContext, useEffect, useState} from 'react';
-import {TouchableOpacity, View, StyleSheet, ScrollView} from 'react-native';
-import {Button, Icon, Image, Text} from "react-native-elements";
+import {View, StyleSheet, ScrollView} from 'react-native';
+import {Button, Icon, Text} from "react-native-elements";
 import AuthorIconButton from "../../Common/author-icon-button";
 import IconButton from "../../Common/icon-button";
 import DescriptionOpenClose from "../../Common/description-open-close";
@@ -10,6 +10,7 @@ import AddToChannelDialog from "../../Common/add-to-channel-dialog";
 import RatingStart from "../../Common/rating-start";
 import {getFavoriteStatus, setFavoriteStatus} from "../../../core/services/user-services";
 import {UserContext} from "../../../provider/user-provider";
+import {convertDate, convertTime} from "../../Common/convert-data";
 
 const GeneralCourseDetail = (props) => {
   const {theme} = useContext(ColorsContext);
@@ -111,7 +112,7 @@ const GeneralCourseDetail = (props) => {
 
     <View style={styles.subInfo}>
       <Text style={{fontSize: 14, color: theme.text}}>
-        {`${monthNames[date.getMonth()]} ${date.getDate()} ${date.getFullYear()} . ${Math.floor(courseDetail.totalHours)}h ${Math.floor((courseDetail.totalHours-Math.floor(courseDetail.totalHours))*60)}m  `}
+        {convertDate(courseDetail.updatedAt, 1) + ' . ' + convertTime(courseDetail.totalHours)}
       </Text>
       <RatingStart rating={(courseDetail.formalityPoint + courseDetail.contentPoint + courseDetail.presentationPoint)/3.0} size={12}/>
     </View>

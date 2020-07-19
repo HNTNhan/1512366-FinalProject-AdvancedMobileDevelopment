@@ -35,14 +35,17 @@ const Download = (props) => {
     props.navigation.push('CourseDetail', {key: key});
   }
 
-  return <View style={[globalStyles.container, {backgroundColor: theme.background}]}>
-    <FlatList
-      data={findByKey(coursesData, user.downloads)}
-      keyExtractor={(item, index) => item.key}
-      renderItem={({item}) => <ListCourseItems item={item} onPress={() => onPress(item.key)}/>}
-      ItemSeparatorComponent= {renderSeparator}
-      ListHeaderComponent = {renderHeader}
-    />
+  // return <View style={[globalStyles.container, {backgroundColor: theme.background}]}>
+  //   <FlatList
+  //     data={findByKey(coursesData, user.downloads)}
+  //     keyExtractor={(item, index) => item.key}
+  //     renderItem={({item}) => <ListCourseItems item={item} onPress={() => onPress(item.key)}/>}
+  //     ItemSeparatorComponent= {renderSeparator}
+  //     ListHeaderComponent = {renderHeader}
+  //   />
+  // </View>
+  return <View style={{...styles.container, justifyContent:'center', alignItems: 'center',}}>
+    <Text>No Download</Text>
   </View>
 };
 
@@ -50,7 +53,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     marginHorizontal: 5,
-    backgroundColor: 'white',
   },
   header: {
     flex: 1,

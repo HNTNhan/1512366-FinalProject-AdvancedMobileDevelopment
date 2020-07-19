@@ -9,7 +9,7 @@ const ListKeyItems = (props) => {
   return <View>
     <TouchableOpacity style={styles.keyContainer} onPress={props.onPress}>
       <Icon name={'search'} type='font-awesome-5' color={theme.text} size={18} containerStyle={styles.image}/>
-      <Text style={{...styles.keyText, color: theme.text}}>{props.item}</Text>
+      <Text style={{...styles.keyText, color: theme.text}}>{props.item.name}</Text>
     </TouchableOpacity>
   </View>
 };

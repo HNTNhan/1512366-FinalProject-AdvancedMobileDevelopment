@@ -11,33 +11,39 @@ import CenterActivityIndicator from "../../Common/center-activity-indicator";
 
 const Search = (props) => {
   const {theme} = useContext(ColorsContext);
-  const {user, setUser, state} = useContext(AuthenticationContext);
+  const {state} = useContext(AuthenticationContext);
   const [searchKey, setSearchKey] = useState('');
+  const [categorySelect, setCategorySelect] = useState([]);
   const [showResult, setShowResult] = useState(false);
   const [favoriteCategories, setFavoriteCategories] = useState(null)
+  const [isLoading, setIsLoading] = useState(state.isAuthenticated)
 
-  useEffect(() => {
-    getAllCategory().then(res => {
-      if(res.status === 200) {
-        let favoriteCategories = [];
-        for(let i=0 ; i<state.userInfo.favoriteCategories.length; i++) {
-          favoriteCategories.push(res.data.payload.find((categoryId) => categoryId===state.userInfo.favoriteCategories[i].id))
-        }
-        setFavoriteCategories(favoriteCategories)
-      } else {}
-    }).catch(err => {
-      console.log(err.response.data.message || err)
-    })
-  }, [])
+  if(state.isAuthenticated) {
+    useEffect(() => {
+      getAllCategory().then(res => {
+        if(res.status === 200) {
+          let favoriteCategories = [];
+          for(let i=0 ; i<res.data.payload.length; i++) {
+            for(let j=0; j<state.userInfo.favoriteCategories.length; j++) {
+              if(res.data.payload[i].id===state.userInfo.favoriteCategories[j]) {
+                favoriteCategories.push(res.data.payload[i])
+              } else {}
+            }
+          }
+          setFavoriteCategories(favoriteCategories)
+          setIsLoading(false)
+        } else {}
+      }).catch(err => {
+        console.log(err.response.data.message || err)
+      })
+    }, [state.userInfo.favoriteCategories])
+  }
 
-  const onPressItem = (value) => {
-    // if(user.recentSearch.indexOf(value) === -1) {
-    //   let temp = {...user}
-    //   temp.recentSearch.unshift(value)
-    //   setUser(temp)
-    // } else {}
-    // setSearchKey(value);
-    // setShowResult(true);
+
+  const onPressItem = (category) => {
+    setCategorySelect([category.id]);
+    setSearchKey('');
+    setShowResult(true);
   }
 
   const onPressClear = () => {
@@ -50,7 +56,11 @@ const Search = (props) => {
     setShowResult(true)
   }
 
-  if(favoriteCategories) {
+  const getCategoriesSelected = (categories) => {
+    setCategorySelect(categories)
+  }
+
+  if(!isLoading) {
     return <View style={[globalStyles.container, {backgroundColor: theme.background}]}>
       <View style={styles.searchContainer}>
         <TextInput
@@ -59,16 +69,19 @@ const Search = (props) => {
           placeholderTextColor='darkgray'
           onChangeText={(text) => {
             setSearchKey(text)
+            //setCategorySelect([])
             setShowResult(false)
           }}
           value={searchKey}
           returnKeyType={"search"}
           onSubmitEditing={() => onSubmitEditing()}
         />
-        { searchKey!=='' ?
+
+        { searchKey!==''||showResult ?
           <TouchableOpacity
             onPress={() => {
               setSearchKey('')
+              setCategorySelect([])
               setShowResult(false)
             }}
             title='Cancel'
@@ -78,14 +91,17 @@ const Search = (props) => {
           : null
         }
       </View>
+
       {
-        showResult===false ? searchKey==='' ?  <BeforeSearch onPress={onPressItem} onPressClear={onPressClear} recentSearch={[]} favoriteCategories={favoriteCategories}/>
-        : null /*<WhileSearch searchKey={searchKey} keys={keysHelpSearch} onPress={onPressItem}/>*/
-          : <ResultSearch searchKey={searchKey} route={props.route} navigation={props.navigation}/>
+        showResult===false ? searchKey==='' ? state.isAuthenticated && favoriteCategories ?
+          <BeforeSearch onPress={onPressItem} onPressClear={onPressClear} recentSearch={[]} favoriteCategories={favoriteCategories}/>
+              : null
+            : null /*<WhileSearch searchKey={searchKey} keys={keysHelpSearch} onPress={onPressItem}/>*/
+          : <ResultSearch searchKey={searchKey} categorySelect={categorySelect} getCategoriesSelected={getCategoriesSelected} route={props.route} navigation={props.navigation}/>
       }
     </View>
   } else {
-     return <CenterActivityIndicator />
+    return <CenterActivityIndicator />
   }
 
 };

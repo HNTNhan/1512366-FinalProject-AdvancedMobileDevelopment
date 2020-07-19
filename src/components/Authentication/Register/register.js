@@ -106,7 +106,7 @@ const Register = (props) => {
   const onChangePhone = (phone) => {
     if(phone.length) {
       let temp = {...checkInput}
-      temp.phone = phone.length===10 || checkPhone(phone)
+      temp.phone = phone.length===10 && checkPhone(phone)
       setCheckInput(temp)
       setUserInfo({...userInfo, phone: phone})
     } else {

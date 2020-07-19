@@ -4,9 +4,13 @@ import ListCourseItems from "../ListCourseItems/list-course-items";
 import {globalStyles} from "../../../globles/styles";
 import {ColorsContext} from "../../../provider/colors-provider";
 import {getCoursesNewRelease, getCoursesTopSell, searchCourses} from "../../../core/services/course-services";
+import {AuthenticationContext} from "../../../provider/authentication-provider";
+import {alertSignIn} from "../../../globles/alert";
 
 const ListCoursesScrollLoad = (props) => {
   const {theme} = useContext(ColorsContext);
+  const {state} = useContext(AuthenticationContext);
+
   const [data, setData] = useState({nextPage: 0, courses: [], isLoading: true})
 
   const type = props.route.params.type;
@@ -47,8 +51,7 @@ const ListCoursesScrollLoad = (props) => {
           } else {}
         })
         .catch(err => {
-          console.log(err.response.data.message)
-          alert(err.response.data.message || err)
+          console.log(err.response.data.message||err)
         })
     }
   }
@@ -68,7 +71,7 @@ const ListCoursesScrollLoad = (props) => {
           showsVerticalScrollIndicator={false}
           data={data.courses}
           keyExtractor={(item) => item.id}
-          renderItem={({item}) => <ListCourseItems item={item} onPress={() => onPressItem(item.id)}/>}
+          renderItem={({item}) => <ListCourseItems item={item} onPress={() => state.isAuthenticated ? onPressItem(item.id) : alertSignIn()}/>}
           ItemSeparatorComponent= {() => <View style={globalStyles.separator} />}
           onEndReached={() => handleLoadMore()}
           onEndReachedThreshold={0}

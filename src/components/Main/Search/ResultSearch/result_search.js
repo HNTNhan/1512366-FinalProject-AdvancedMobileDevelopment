@@ -5,8 +5,13 @@ import ListCourseItems from "../../../Courses/ListCourseItems/list-course-items"
 import {globalStyles} from "../../../../globles/styles";
 import SectionTitleFilter from "../../../Common/section-title-filter";
 import CenterActivityIndicator from "../../../Common/center-activity-indicator";
+import NoResultPage from "../NoResultPage/no-result-page";
+import {AuthenticationContext} from "../../../../provider/authentication-provider";
+import {alertSignIn} from "../../../../globles/alert";
 
 const ResultSearch = (props) => {
+  const {state} = useContext(AuthenticationContext)
+
   const [data, setData] = useState({nextPage: 0, courses: [], isLoading: true})
   const [filter, setFilter] = useState({
     keyword: props.searchKey,
@@ -15,7 +20,7 @@ const ResultSearch = (props) => {
         attribute: "updatedAt",
         rule: "ASC"
       },
-      category: [],
+      category: props.categorySelect,
       time: [],
       price: []
     },
@@ -54,7 +59,6 @@ const ResultSearch = (props) => {
   }
 
   const handleLoadMore = () => {
-    console.log('handleLoadMore')
     getData(1)
   }
 
@@ -63,7 +67,6 @@ const ResultSearch = (props) => {
   }
 
   const onPressOK = () => {
-    console.log('onPressOK')
     getData(0)
   }
 
@@ -97,7 +100,6 @@ const ResultSearch = (props) => {
     }
 
     setFilter({...filter, opt: { ...filter.opt, sort: tempSort}})
-
   }
 
   const getFilter = (category, time, price) => {
@@ -125,22 +127,27 @@ const ResultSearch = (props) => {
       }
     }
 
+    props.getCategoriesSelected(tempCategory)
     setFilter({...filter, opt: { ...filter.opt, category: tempCategory, time: tempTime, price: tempPrice}})
   }
 
   if(!data.isLoading) {
-    return <FlatList
+    if(data.courses.length) {
+      return <FlatList
         showsVerticalScrollIndicator={false}
         data={data.courses}
         keyExtractor={(item) => item.id}
-        renderItem={({item}) => <ListCourseItems item={item} onPress={() => onPressItem(item.id)}/>}
+        renderItem={({item}) => <ListCourseItems item={item} onPress={() => state.isAuthenticated ? onPressItem(item.id) : alertSignIn()}/>}
         ItemSeparatorComponent= {() => <View style={globalStyles.separator} />}
         ListHeaderComponent = {
-          <SectionTitleFilter onSelectSortType={onSelectSortType} getFilter={getFilter} onPressOK={() => onPressOK()}/>
+          <SectionTitleFilter onSelectSortType={onSelectSortType} categorySelect={props.categorySelect} getFilter={getFilter} onPressOK={() => onPressOK()}/>
         }
         onEndReached={() => handleLoadMore()}
         onEndReachedThreshold={0}
       />
+    } else {
+      return <NoResultPage searchKey={props.searchKey} />
+    }
   } else {
     return <CenterActivityIndicator />
   }

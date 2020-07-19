@@ -29,7 +29,12 @@ const SelectFilterModal = (props) => {
       if(res.status === 200) {
         let categories = res.data.payload
         categories.forEach((item) => {
-          item.status = false;
+          if(props.categorySelect.find(category => category===item.id)) {
+            item.status = true;
+          }
+          else {
+            item.status = false;
+          }
         })
         setCategories(categories)
       } else {}

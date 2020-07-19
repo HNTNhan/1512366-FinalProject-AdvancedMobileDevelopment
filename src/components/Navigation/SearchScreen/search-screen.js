@@ -6,8 +6,6 @@ import ListPaths from "../../Courses/ListPaths/list-paths";
 import CourseDetail from "../../CourseDetail/course-detail";
 import PathDetail from "../../PathDetail/path-detail";
 import AuthorDetail from "../../AuthorDetail/author-detail";
-import CategoryDetail from "../../CategoryDetail/category-detail";
-import SkillDetail from "../../SkillDetail/skill-detai";
 import {createStackNavigator} from "@react-navigation/stack";
 import {objectsConstant} from "../../../globles/constants";
 import PathDetailRightHeader from "../../NavigationHeader/PathDetailHeader/PathDetailRightHeader";

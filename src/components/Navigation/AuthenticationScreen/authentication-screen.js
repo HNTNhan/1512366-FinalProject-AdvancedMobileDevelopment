@@ -5,6 +5,7 @@ import ForgotPassword from "../../Authentication/ForgotPassword/forgot-password"
 import Register from "../../Authentication/Register/register";
 import {objectsConstant} from "../../../globles/constants";
 import {ColorsContext} from "../../../provider/colors-provider";
+import SendFeedback from "../../AccountManagement/SendFeedback/send-feedback";
 
 const AuthenticationStack = createStackNavigator();
 const AuthenticationScreen = (props) => {

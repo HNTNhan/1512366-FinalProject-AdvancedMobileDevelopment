@@ -5,6 +5,7 @@ import Account from "../../AccountManagement/Account/account";
 import {createStackNavigator} from "@react-navigation/stack";
 import {objectsConstant} from "../../../globles/constants";
 import {ColorsContext} from "../../../provider/colors-provider";
+import SendFeedback from "../../AccountManagement/SendFeedback/send-feedback";
 
 const AccountManagementStack = createStackNavigator();
 const AccountManagementScreen = (props) => {
@@ -13,8 +14,8 @@ const AccountManagementScreen = (props) => {
   return <AccountManagementStack.Navigator
     screenOptions={{...objectsConstant.defaultCenterHeaderBar, headerStyle: {backgroundColor: theme.foreground1}, headerTintColor: theme.text}}>
     <AccountManagementStack.Screen name='AccountManagement' component={AccountManagement} />
-    <AccountManagementStack.Screen name='Profile' component={Profile} />
     <AccountManagementStack.Screen name='Account' component={Account} />
+    <AccountManagementStack.Screen name='SendFeedback' component={SendFeedback} options={{title: 'Feedback'}}/>
   </AccountManagementStack.Navigator>
 };
 
