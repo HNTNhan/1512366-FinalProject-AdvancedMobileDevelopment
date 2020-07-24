@@ -18,11 +18,13 @@ import ListCoursesScrollLoad from "../../Courses/ListCoursesScrollLoad/list-cour
 import {Icon} from "react-native-elements";
 import {TouchableOpacity} from 'react-native';
 import SendFeedback from "../../AccountManagement/SendFeedback/send-feedback";
+import {BottomTabBarContext} from "../../../provider/bottom-tab-bar-provider";
 
 const HomeStack = createStackNavigator();
 
 const HomeScreen = (props) => {
   const {theme} = useContext(ColorsContext)
+
 
   return <HomeStack.Navigator
     screenOptions={{...objectsConstant.defaultCenterHeaderBar, headerStyle: {backgroundColor: theme.foreground1}, headerTintColor: theme.text}}>

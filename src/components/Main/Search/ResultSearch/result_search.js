@@ -137,7 +137,7 @@ const ResultSearch = (props) => {
         showsVerticalScrollIndicator={false}
         data={data.courses}
         keyExtractor={(item) => item.id}
-        renderItem={({item}) => <ListCourseItems item={item} onPress={() => state.isAuthenticated ? onPressItem(item.id) : alertSignIn()}/>}
+        renderItem={({item}) => <ListCourseItems item={item} onPress={() => onPressItem(item.id)}/>}
         ItemSeparatorComponent= {() => <View style={globalStyles.separator} />}
         ListHeaderComponent = {
           <SectionTitleFilter onSelectSortType={onSelectSortType} categorySelect={props.categorySelect} getFilter={getFilter} onPressOK={() => onPressOK()}/>

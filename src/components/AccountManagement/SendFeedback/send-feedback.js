@@ -10,34 +10,37 @@ const SendFeedback = (props) => {
   const {theme} = useContext(ColorsContext);
   const {state} = useContext(AuthenticationContext)
 
-  const [feedback, setFeedback] = useState({subject: '', content: '', message: ''})
-  const [isLoading, setIsLoading] = useState({status: false, success: -1})
+  const [feedback, setFeedback] = useState({subject: '', content: ''})
+  const [isLoading, setIsLoading] = useState({status: false, success: -1, message: ''})
+  const [check, setCheck] = useState({subject: false, content: false, show: false})
 
   const onPressSend = () => {
-    setIsLoading({...isLoading, status: true})
-    apiSendFeedback(state.token, feedback).then(res => {
-      if(isLoading.status) {
+    if(feedback.subject.length && feedback.content.length) {
+      setIsLoading({...isLoading, status: true})
+      apiSendFeedback(state.token, feedback).then(res => {
         if(res.status===200) {
-          setIsLoading({...isLoading, status: false, success: 1})
+          setIsLoading({...isLoading, status: true, success: 1})
         } else {
-          setIsLoading({...isLoading, status: false, success: 0})
+          setIsLoading({...isLoading, status: true, success: 0})
         }
-      }
-    }).catch(err => {
-      setIsLoading({...isLoading, status: false, success: 0, message: err.response.data.message})
-    })
+      }).catch(err => {
+        setIsLoading({...isLoading, status: true, success: 0, message: err.response.data.message})
+      })
+    } else {
+      setCheck({...check, show: true, subject: feedback.subject.length>0, content: feedback.content.length>0})
+    }
   }
 
   if(isLoading.status) {
     if(isLoading.success===1) {
       return <View style={{...styles.centeredView, backgroundColor: theme.background}}>
-        <Text style={{...styles.textInput, color: theme.text}}>Success! Your feedback has been sent.</Text>
+        <Text style={{...styles.text, color: theme.text}}>Success! Your feedback has been sent.</Text>
         <Button containerStyle={styles.button} buttonStyle={{paddingHorizontal: 20, backgroundColor: 'gray'}} titleStyle={{fontSize: 18}}
-                title={'Cancel'} onPress={() => props.navigation.goBack()}/>
+                title={'OK'} onPress={() => props.navigation.goBack()}/>
       </View>
     } else if(isLoading.success===0) {
       return <View style={{...styles.centeredView, backgroundColor: theme.background}}>
-        <Text style={{...styles.subTitle, color: theme.text}}>Something went wrong! Please try again.</Text>
+        <Text style={{...styles.subTitle, color: theme.text}}>Something went wrong! Please try again. {isLoading.message}</Text>
       </View>
     } else {
       return <CenterActivityIndicator/>
@@ -47,9 +50,17 @@ const SendFeedback = (props) => {
       <Text style={{...styles.modalTitle, color: theme.text}}>Feedback</Text>
       <View>
         <Text style={{...styles.subTitle, color: theme.text}}>Subject</Text>
-        <TextInput style={{...styles.textInput, backgroundColor: theme.background, color: theme.text}} multiline={true} maxLength={200}/>
+        <TextInput style={{...styles.textInput, backgroundColor: theme.background, color: theme.text}}
+                   multiline={true} maxLength={200} onChangeText={(text) => setFeedback({...feedback, subject: text})}/>
+        {
+          !check.subject && check.show ? <Text style={{...styles.text, color: 'red'}}>Please write something!</Text> : null
+        }
         <Text style={{...styles.subTitle, color: theme.text}}>Content</Text>
-        <TextInput style={{...styles.textInput, backgroundColor: theme.background, color: theme.text}} multiline={true} maxLength={500}/>
+        <TextInput style={{...styles.textInput, backgroundColor: theme.background, color: theme.text}}
+                   multiline={true} maxLength={500} onChangeText={(text) => setFeedback({...feedback, content: text})}/>
+        {
+          !check.content && check.show ? <Text style={{...styles.text, color: 'red'}}>Please write something!</Text> : null
+        }
       </View>
       <Button containerStyle={styles.button} buttonStyle={{paddingHorizontal: 20, backgroundColor: '#19B5FE'}} titleStyle={{fontSize: 18}}
               title={'Send'} onPress={() => onPressSend()}/>
@@ -83,10 +94,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 2,
   },
+  text: {
+    fontSize: 16,
+    textAlign: 'center'
+  },
   button: {
     marginTop: 10,
     alignSelf: 'center',
     borderRadius: 5,
-  }
+  },
 })
 export default SendFeedback;

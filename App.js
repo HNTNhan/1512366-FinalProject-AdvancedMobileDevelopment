@@ -11,6 +11,7 @@ import {AuthenticationProvider} from "./src/provider/authentication-provider";
 import {ColorsProvider} from "./src/provider/colors-provider";
 import { MenuProvider } from 'react-native-popup-menu';
 import {UserProvider} from "./src/provider/user-provider";
+import {BottomTabBarProvider} from "./src/provider/bottom-tab-bar-provider";
 
 const Stack = createStackNavigator();
 
@@ -21,14 +22,16 @@ export default function App() {
         <UserProvider>
           <ColorsProvider>
             <MenuProvider>
-              <NavigationContainer>
-                <Stack.Navigator>
-                  <Stack.Screen name='SplashScreen' component={SplashScreen} options={{headerShown: false}}/>
-                  <Stack.Screen name='Authentication' component={AuthenticationScreen} options={{headerShown: false}}/>
-                  <Stack.Screen name='Main' component={MainScreen} options={{headerShown: false}}/>
-                  <Stack.Screen name='AccountManagement' component={AccountManagementScreen} options={{headerShown: false}}/>
-                </Stack.Navigator>
-              </NavigationContainer>
+              <BottomTabBarProvider>
+                <NavigationContainer>
+                  <Stack.Navigator>
+                    <Stack.Screen name='SplashScreen' component={SplashScreen} options={{headerShown: false}}/>
+                    <Stack.Screen name='Authentication' component={AuthenticationScreen} options={{headerShown: false}}/>
+                    <Stack.Screen name='Main' component={MainScreen} options={{headerShown: false}}/>
+                    <Stack.Screen name='AccountManagement' component={AccountManagementScreen} options={{headerShown: false}}/>
+                  </Stack.Navigator>
+                </NavigationContainer>
+              </BottomTabBarProvider>
             </MenuProvider>
           </ColorsProvider>
         </UserProvider>

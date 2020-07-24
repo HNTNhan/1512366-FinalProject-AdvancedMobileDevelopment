@@ -27,70 +27,84 @@ const CourseDetail = (props) => {
   const {theme} = useContext(ColorsContext)
   const {state} = useContext(AuthenticationContext)
   const [checkOwn, setCheckOwn] = useState(false)
-  const [detail, setDetail] = useState(null);
+  const [detail, setDetail] = useState({data: null});
+  const [tempDetail, setTempDetail] = useState()
   const [lesson, setLesson] = useState(null);
-  const [showInfoDialog, setShowInfoDialog] = useState(false)
-
+  const [showInfoDialog, setShowInfoDialog] = useState(false);
+  const [isLoading, setIsLoading] = useState(true)
+  const [videoLoading, setVideoLoading] = useState(false)
+  //console.log(props.route.params.id)
   //Lay thong tin khoa hoc
   useEffect(() => {
-    if(!detail) {
-      let mounted1 = true;
-      let mounted2 = true;
+    //Kiem tra nguoi dung da dang nhap
+    if(state.isAuthenticated) {
       //Kiem tra nguoi dung da mua khoa hoc
+
       checkOwnCourse(state.token, props.route.params.id)
         .then(res => {
           if(res.status === 200) {
-            if(mounted1) {
-              setCheckOwn(res.data.payload.isUserOwnCourse)
-            } else {}
-          } else {
-            //res.data.message
-          }
-        }).catch(err => {
-        console.log('check own course detail error')
-        console.log(err.response.data.message || err)
-      })
+            setCheckOwn(res.data.payload.isUserOwnCourse)
+            if(res.data.payload.isUserOwnCourse) {
+              getCourseAndLessonsDetail(props.route.params.id, state.token).then(res => {
+                if(res.status===200) {
+                  setDetail({data: res.data.payload})
+                  setLesson({videoUrl: res.data.payload.promoVidUrl || null})
+                  setIsLoading(false)
+                } else {
 
-      //Nguoi dung chua mua khoa hoc
-      getUserCourseDetail(props.route.params.id, state.userInfo.id)
-        .then(res => {
-          if(res.status === 200) {
-            if(mounted2) {
-              setDetail(res.data.payload)
-              setLesson(res.data.payload.section[0].lesson[0])
+                }
+              }).catch(err => {
+                console.log(err.response.data.message)
+              })
+              getUserCourseDetail(props.route.params.id, state.userInfo.id)
+                .then(res => {
+                  if(res.status===200) {
+                    setTempDetail(res.data.payload)
+                  } else {}
+                }).catch(err => {
+                console.log(err.response.data.message)
+              })
+            } else {
+              console.log(res.data.payload.isUserOwnCourse)
+              getUserCourseDetail(props.route.params.id, state.userInfo.id)
+                .then(res => {
+                  if(res.status===200) {
+                    setDetail({data: res.data.payload})
+                    setLesson({videoUrl: res.data.payload.promoVidUrl || null})
+                    setIsLoading(false)
+                  } else {
+
+                  }
+                }).catch(err => {
+                console.log(err.response.data.message)
+              })
             }
           } else {
             //res.data.message
           }
         }).catch(err => {
-          console.log('get course detail error')
-          console.log(err.response.data.message || err)
+        console.log('checkOwnCourse: ', err.response.data.message || err)
       })
-
-      // Nguoi dung da mua khoa hoc
-      // getCourseAndLessonsDetail(props.route.params.id, state.token)
-      //   .then((res) => {
-      //     setCourseDetail(res)
-      //   })
-
-      return () => {
-        mounted1 = false
-        mounted2 = false
-      }
-    } else {}
+    } else {
+      //Lay thong tin khoa hoc
+      getCourseInfo(props.route.params.id, state.token).then(res => {
+        if(res.status === 200) {
+          setDetail({data: res.data.payload})
+          setLesson({videoUrl: res.data.payload.promoVidUrl || null})
+          setIsLoading(false)
+        } else {
+          //res.data.message
+        }
+      }).catch(err => {
+        console.log('getCourse: ', err.response.data.message || err)
+      })
+    }
   }, [])
 
   const onPressLesson = (item) => {
     if(item!==lesson) {
-      if(!checkOwn && !item.promoVidUrl) {
-        if (item.isPreview) {
-          setLesson(item)
-        } else {
-          setShowInfoDialog(true)
-        }
-      } else {
-        setLesson(item)
-      }
+      setVideoLoading(false)
+      setLesson(item)
     } else {}
   }
 
@@ -104,19 +118,20 @@ const CourseDetail = (props) => {
   const renderScene = ({ route }) => {
     switch (route.key) {
       case 'first':
-         return <GeneralCourseDetail detail={detail} navigation={props.navigation} route={props.route}/>;
+        return <GeneralCourseDetail detail={detail.data} navigation={props.navigation} route={props.route}/>;
       case 'second':
-        return <ListLessons courseDetail={detail} onPressLesson={onPressLesson}/>;
+        return <ListLessons courseDetail={detail.data} courseId={props.route.params.id} onPressLesson={onPressLesson} showInfoDialog={() => setShowInfoDialog(true)}
+                            videoLoading={() => setVideoLoading(true)} isAuthenticated={state.isAuthenticated} checkOwn={checkOwn}/>;
       case 'third':
-        return <Transcript transcript={''}/>;
+        return <Transcript transcript={''} isAuthenticated={state.isAuthenticated} checkOwn={checkOwn}/>;
       default:
         return null;
     }
   };
 
-  if(detail) {
+  if(!isLoading) {
     return <View style={{...styles.container, backgroundColor: theme.background}}>
-      <VideoPlayer lesson={lesson}/>
+      <VideoPlayer lesson={lesson} videoLoading={videoLoading} navigation={props.navigation} route={props.route}/>
       <TabView
         renderTabBar={TabBarStyle}
         navigationState={{index, routes}}

@@ -17,15 +17,14 @@ const AuthorDetail = (props) => {
         .then(res => {
           if (mounted) {
             if (res.status === 200) {
-              console.log(res.data.payload)
               setAuthor(res.data.payload)
             } else {
-              alert(res.data.message)
+              console.log(res.data.message)
             }
           }
         })
         .catch(err => {
-          alert(err.response.data.message || err)
+          console.log('getInstructor: ', err.response.data.message || err)
         })
       return () => mounted = false
     } else {}

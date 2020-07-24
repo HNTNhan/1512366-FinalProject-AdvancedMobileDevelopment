@@ -17,7 +17,7 @@ const ItemsInAuthor = (props) => {
   return <View>
     <Text style={{...styles.text, color: theme.text}}>Course</Text>
     { props.courses.map((item) => <View key={item.id} style={globalStyles.borderSeparator}>
-        <ListCourseItems item={{...item, instructorName: props.name}} onPress={() => state.isAuthenticated ? onPressCourseItem(item.id) : alertSignIn()}/>
+        <ListCourseItems item={{...item, instructorName: props.name}} onPress={() => onPressCourseItem(item.id)}/>
       </View>
     ) }
   </View>

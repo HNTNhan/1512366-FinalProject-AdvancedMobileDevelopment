@@ -15,7 +15,7 @@ const SectionCourses = (props) => {
 
   const renderListItems = () => {
     return props.data.map( (item) =>
-      <SectionCourseItems key={item.id}  item={item} onPress={() => state.isAuthenticated ? onPressItemInListCourse(item.id) : alertSignIn()} />);
+      <SectionCourseItems key={item.id}  item={item} onPress={() => onPressItemInListCourse(item.id)} />);
   }
 
   return <View style={styles.container}>

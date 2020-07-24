@@ -11,6 +11,7 @@ import RatingStart from "../../Common/rating-start";
 import {getFavoriteStatus, setFavoriteStatus} from "../../../core/services/user-services";
 import {UserContext} from "../../../provider/user-provider";
 import {convertDate, convertTime} from "../../Common/convert-data";
+import {getInstructorInfo} from "../../../core/services/instructor-services";
 
 const GeneralCourseDetail = (props) => {
   const {theme} = useContext(ColorsContext);
@@ -20,30 +21,47 @@ const GeneralCourseDetail = (props) => {
   const [favorite, setFavorite] = useState(false)
 
   const courseDetail = props.detail;
-  const instructorInfo = props.detail.instructor;
+  const [instructorInfo, setInstructorInfo] = useState(props.detail.instructor || null);
   const keyItem = props.route.params.id;
-  const date = new Date(courseDetail.updatedAt);
-  const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
   useEffect(() => {
-    let mounted = true;
-    getFavoriteStatus(state.token, props.route.params.id)
-      .then((res) => {
-        if(res.status === 200) {
-          if(mounted){
-            if(favorite !== res.data.likeStatus) {
-              setFavorite(res.data.likeStatus)
-            } else {}
-          }
-        } else {
-          //return res.data.message
-        }
-      })
-      .catch((err) => {
-        alert(err.response.data.message || err)
-      })
+    let mounted1 = true;
+    let mounted2 = true;
 
-    return () => mounted = false
+    if(!instructorInfo) {
+      getInstructorInfo(courseDetail.instructorId).then(res => {
+        if(mounted2) {
+          if(res.status === 200) {
+            setInstructorInfo(res.data.payload)
+          } else {
+            console.log(res.data.message)
+          }
+        } else {}
+      }).catch(err => {
+        console.log('getInstructorInfo: ', err.response.data.message || err)
+      })
+    } else {
+      getFavoriteStatus(state.token, props.route.params.id)
+        .then((res) => {
+          if(res.status === 200) {
+            if(mounted1){
+              if(favorite !== res.data.likeStatus) {
+                setFavorite(res.data.likeStatus)
+              } else {}
+            }
+          } else {
+            //return res.data.message
+          }
+        })
+        .catch((err) => {
+          console.log('getFavorite: ', err.response.data.message || err)
+        })
+    }
+
+    return () => {
+      mounted1 = false
+      mounted2 = false
+    }
   }, [])
 
   useEffect(() => {
@@ -62,7 +80,6 @@ const GeneralCourseDetail = (props) => {
   const onPressAuthorItem = (key, name, author) => {
     props.navigation.push('AuthorDetail', {key: key, name: name, author: author})
   }
-
 
   const onPressFavortie = () => {
     let mounted = true;
@@ -101,12 +118,13 @@ const GeneralCourseDetail = (props) => {
     setModalVisible(false)
   }
 
-  return <ScrollView>
+
+  return <ScrollView showsVerticalScrollIndicator={false}>
     <Text style={{...styles.title, color: theme.text}}>{courseDetail.title}</Text>
 
     <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
       <View style={styles.author}>
-        {authorListItems(instructorInfo)}
+        {instructorInfo ? authorListItems(instructorInfo) : null}
       </View>
     </ScrollView>
 
@@ -120,16 +138,16 @@ const GeneralCourseDetail = (props) => {
     <View style={styles.activeContainer}>
       <IconButton name='bookmark-border' title={favorite ? 'UnFavorite' : 'Favorite'} onPress={() => onPressFavortie()}/>
       <IconButton name='cast-connected' title='Add to channel' onPress={() => onSelectAddToChannel()}/>
-      <IconButton name='get-app' title={user.downloads.indexOf(keyItem)!==-1 ? 'Downloaded' : 'Download'} onPress={() => onPressDownload()}/>
+      <IconButton name='get-app' title={'Download'} onPress={() => onPressDownload()}/>
     </View>
 
     <View style={{...styles.descriptionContainer}}>
       <Text style={{...styles.subTitle, color: theme.text}}>Description: </Text>
       <DescriptionOpenClose description={courseDetail.description} noLines={3} text={theme.text} foreground={theme.foreground1}/>
       <Text style={{...styles.subTitle, color: theme.text}}>{'Requirement: '}</Text>
-      <Text style={{...styles.text, color: theme.text}}>{courseDetail.requirement}</Text>
+      <Text style={{...styles.text, color: theme.text}}>{courseDetail.requirement.join(`\n`)}</Text>
       <Text style={{...styles.subTitle, color: theme.text}}>{'Learn what: '}</Text>
-      <Text style={{...styles.text, color: theme.text}}>{courseDetail.learnWhat}</Text>
+      <Text style={{...styles.text, color: theme.text}}>{courseDetail.learnWhat.join('\n')}</Text>
     </View>
 
 

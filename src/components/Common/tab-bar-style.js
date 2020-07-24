@@ -6,7 +6,7 @@ const TabBarStyle = (props) => {
   return <TabBar
     {...props}
     indicatorStyle={{ backgroundColor: objectsConstant.bottomTabOption.activeTintColor }}
-    style={{ backgroundColor: props.foreground}}
+    style={{ backgroundColor: props.foreground, marginTop: 0}}
     labelStyle={{fontWeight: 'bold'}}
     tabStyle={{padding: 0}}
     activeColor={objectsConstant.bottomTabOption.activeTintColor}
