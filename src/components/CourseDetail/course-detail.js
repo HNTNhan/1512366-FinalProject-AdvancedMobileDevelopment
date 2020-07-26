@@ -20,6 +20,7 @@ import {getCourseAndLessonsDetail, getCourseInfo, getUserCourseDetail} from "../
 import {AuthenticationContext} from "../../provider/authentication-provider";
 import {checkOwnCourse} from "../../core/services/user-services";
 import InfoDialog from "./InfoDialog/info-dialog";
+import ListLessonItems from "./ListLessonItems/list-lesson-items";
 
 const initialLayout = { width: Dimensions.get('window').width };
 
@@ -39,7 +40,6 @@ const CourseDetail = (props) => {
     //Kiem tra nguoi dung da dang nhap
     if(state.isAuthenticated) {
       //Kiem tra nguoi dung da mua khoa hoc
-
       checkOwnCourse(state.token, props.route.params.id)
         .then(res => {
           if(res.status === 200) {
@@ -103,8 +103,9 @@ const CourseDetail = (props) => {
 
   const onPressLesson = (item) => {
     if(item!==lesson) {
-      setVideoLoading(false)
+      console.log(item)
       setLesson(item)
+      setVideoLoading(false)
     } else {}
   }
 
@@ -131,7 +132,8 @@ const CourseDetail = (props) => {
 
   if(!isLoading) {
     return <View style={{...styles.container, backgroundColor: theme.background}}>
-      <VideoPlayer lesson={lesson} videoLoading={videoLoading} navigation={props.navigation} route={props.route}/>
+      <VideoPlayer lesson={lesson} videoLoading={videoLoading} checkOwn={checkOwn} courseId={detail.data.id} onPressLesson={onPressLesson}
+                   setVideoLoading={() => setVideoLoading(true)} navigation={props.navigation} route={props.route}/>
       <TabView
         renderTabBar={TabBarStyle}
         navigationState={{index, routes}}

@@ -38,9 +38,12 @@
     "react-native-tab-view": "^2.14.4",
     "react-native-textinput-effects": "^0.6.1",
     "react-native-vector-icons": "^6.6.0",
+    "react-native-video": "^4.4.5",
+    "react-native-video-controls": "^1.0.1",
     "react-native-web": "~0.11.7",
     "react-native-web-maps": "^0.2.0",
     "react-native-webview": "8.1.1",
+    "react-native-youtube-iframe": "^1.2.4",
     "react-select": "^3.1.0",
     "react-select-country-list": "^2.1.2"
   },

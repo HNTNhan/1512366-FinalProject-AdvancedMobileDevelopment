@@ -1,5 +1,5 @@
 import React, {useContext} from 'react';
-import {View} from 'react-native';
+import {TouchableOpacity, TouchableWithoutFeedback, View} from 'react-native';
 import {createBottomTabNavigator} from "@react-navigation/bottom-tabs";
 import {objectsConstant} from "../../../globles/constants";
 import HomeScreen from "../HomeScreen/home-screen";
@@ -47,14 +47,16 @@ const MainScreen = (props) => {
   const {show} = useContext(BottomTabBarContext)
 
   return <MainTab.Navigator
-    screenOptions={({route}) => ({
+    screenOptions={({route, navigation}) => ({
       tabBarIcon: ({focused}) => bottomTabIcons(route, focused),
-      tabBarVisible: show
-    })
-    }
+      tabBarVisible: show,
+      tabBarButton: (props) => {
+        return <TouchableOpacity {...props} onPress={props.onPress}/>
+      }
+    })}
     tabBarOptions={{...objectsConstant.bottomTabOption, style: {backgroundColor: theme.foreground1, paddingBottom: 0, paddingTop: 0, height: 60}}}
   >
-    <MainTab.Screen name="Home" component={HomeScreen} options={{tabBarVisible: show}} />
+    <MainTab.Screen name="Home" component={HomeScreen}/>
     <MainTab.Screen name='Download' component={DownloadScreen}/>
     <MainTab.Screen name='Browse' component={BrowseScreen}/>
     <MainTab.Screen name='Search' component={SearchScreen} options={{headerShown: false}}/>

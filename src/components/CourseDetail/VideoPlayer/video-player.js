@@ -1,13 +1,39 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {View, StyleSheet, Dimensions, Text, ActivityIndicator, TouchableOpacity, Slider} from 'react-native';
-import {Video} from 'expo-av';
-import WebView from "react-native-webview";
 import CenterActivityIndicator from "../../Common/center-activity-indicator";
-import {Button, Icon} from "react-native-elements";
+import Video from "expo-av/build/Video";
 import GoogleVideo from "./GoogleVideo/google-video";
+import YoutubeVideo from "./YoutubeVideo/youtube-video";
+import {AuthenticationContext} from "../../../provider/authentication-provider";
+import {getLessonDetail, getLessonSubtitle, getLessonUrlAndTime} from "../../../core/services/lesson-services";
 
 const VideoPlayer = (props) => {
-  //console.log(props.lesson)
+  const {state} = useContext(AuthenticationContext)
+
+  const onPress = (next) => {
+    props.setVideoLoading()
+    let temp = null;
+    let lessonId = '';
+    if(next) {
+      lessonId = props.lesson.nextLessonId;
+    } else {
+      lessonId = props.lesson.prevLessonId;
+    }
+    if(props.checkOwn && props.lesson.nextLessonId) {
+      Promise.all([
+        getLessonDetail(props.courseId, lessonId, state.token),
+        getLessonSubtitle(props.courseId, lessonId, state.token),
+        getLessonUrlAndTime(props.courseId, lessonId, state.token)
+      ])
+        .then(res => {
+          temp = {...res[0].data.payload, subtitle: res[1].data.payload, ...res[2].data.payload}
+          props.onPressLesson(temp)
+        }).catch(err => {
+          console.log('fail: ', err.response.data.message, err.response.status)
+        })
+    } else {}
+  }
+
   const uri = props.lesson.videoUrl || props.lesson.promoVidUrl;
   {
     if(props.videoLoading) {
@@ -23,23 +49,19 @@ const VideoPlayer = (props) => {
         </View>
       } else {
         if(uri.includes("https://youtube.com")) {
-          return <View style={{...styles.container}}>
-            <WebView
-              source={{uri: uri}}
-              style={{
-                backgroundColor: '#111111',
-                width: Dimensions.get('window').width,
-                height: Dimensions.get('window').width / 2
-              }}
-            />
-          </View>
+          return <YoutubeVideo uri={uri} id={props.lesson.id || null} token={state.token} pos={props.lesson.currentTime || 0}
+                               checkOwn={props.checkOwn} onPressNextBack={onPress}
+                               checkNext={props.lesson.nextLessonId} checkBack={props.lesson.prevLessonId}
+          />
         } else {
-          return <GoogleVideo uri={uri} navigation={props.navigation} route={props.route}/>
+          return <GoogleVideo uri={uri} id={props.lesson.id || null} token={state.token} pos={props.lesson.currentTime || 0}
+                              checkOwn={props.checkOwn} onPressNextBack={onPress}
+                              checkNext={props.lesson.nextLessonId} checkBack={props.lesson.prevLessonId}
+                              navigation={props.navigation} route={props.route}/>
         }
       }
     }
   }
-
 };
 
 const styles = StyleSheet.create({

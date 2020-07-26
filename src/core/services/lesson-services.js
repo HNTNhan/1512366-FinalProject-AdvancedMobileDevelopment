@@ -38,7 +38,7 @@ export const finishLesson = (lessonId, token) => {
 }
 
 export const updateVideoTime = (currentTime, lessonId, token) => {
-  const url = 'https://api.itedu.me​/lesson​/update-current-time-learn-video';
+  const url = 'https://api.itedu.me​/lesson/update-current-time-learn-video';
   const data = {
     lessonId: lessonId,
     currentTime: currentTime
@@ -46,5 +46,5 @@ export const updateVideoTime = (currentTime, lessonId, token) => {
   const config = {
     headers: { Authorization: `Bearer ${token}` }
   };
-  return axios.post(url, data, config)
+  return axios.put(url, data, config)
 }

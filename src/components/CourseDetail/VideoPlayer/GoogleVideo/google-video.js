@@ -1,19 +1,18 @@
 import React, {useContext, useState, useRef, useEffect} from 'react';
-import {Dimensions, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import {Video} from "expo-av";
+import {Dimensions, StyleSheet, Text, TouchableOpacity, View, Alert} from 'react-native';
+import Video from "expo-av/build/Video";
 import {Icon, Slider} from "react-native-elements";
 import * as ScreenOrientation from 'expo-screen-orientation';
 import {BottomTabBarContext} from "../../../../provider/bottom-tab-bar-provider";
-
 import {Menu, MenuOption, MenuOptions, MenuTrigger} from "react-native-popup-menu";
 import VolumeSlider from "../Components/volume-slider";
+import {finishLesson, updateVideoTime} from "../../../../core/services/lesson-services";
 
 const GoogleVideo = (props) => {
   const {setShow} = useContext(BottomTabBarContext)
-
   const [ref, setRef] = useState();
   const [showVolumeSlider, setShowVolumeSlider] = useState(false)
-  const [paused, setPaused] = useState(false)
+  const [paused, setPaused] = useState(true)
   const [fullScreen, setFullScreen] = useState(false)
   const [videoStatus, setVideoStatus] = useState({
     currentTime: 0,
@@ -22,18 +21,6 @@ const GoogleVideo = (props) => {
     rate: 1,
     volume: 1,
   })
-
-  // useEffect(() => {
-  //   if(ref) {
-  //     // ref.getStatusAsync().then(s => {
-  //     //   ref.unloadAsync().then(() => {
-  //     //     ref.loadAsync({uri: props.uri}, {}, false)
-  //     //     console.log(s)
-  //     //   })
-  //     // })
-  //     console.log(props.uri)
-  //   }
-  // }, [props.uri])
 
   const showVideoInFullscreen = async () => {
     if(fullScreen) {
@@ -83,8 +70,9 @@ const GoogleVideo = (props) => {
   const onSlide = (slide) => {
     ref.getStatusAsync().then((status) => {
       if(!status.isBuffering) {
-        ref.playFromPositionAsync(videoStatus.duration * slide)
-          .then(() => {paused ? ref.pauseAsync() : ref.playAsync()})
+        ref.playFromPositionAsync(videoStatus.duration * slide).then(() => {
+          paused ? ref.pauseAsync() : ref.playAsync()
+        })
       } else {
         onSlide(slide)
       }
@@ -92,11 +80,11 @@ const GoogleVideo = (props) => {
   }
 
   const next = () => {
-
+    props.onPressNextBack(true)
   }
 
   const back = () => {
-
+    props.onPressNextBack(false)
   }
 
   const changeRate = (rate) => {
@@ -105,76 +93,71 @@ const GoogleVideo = (props) => {
     })
   }
 
-  // let lastTap = null
-  // let countTap = 0
-  // const handleDoubleTap = (doubleTapCallback, singleTapCallback) => {
-  //   const now = new Date().getTime()
-  //   const DOUBLE_PRESS_DELAY = 200
-  //
-  //   if(lastTap && (now-lastTap) < DOUBLE_PRESS_DELAY) {
-  //     countTap = 0
-  //     doubleTapCallback()
-  //   } else {
-  //     lastTap = now
-  //     countTap = 1
-  //
-  //     setTimeout(() => {
-  //       if(countTap===1) singleTapCallback()
-  //     }, DOUBLE_PRESS_DELAY)
-  //   }
-  // }
-  //
-  // const seekLeft = () => {
-  //   handleDoubleTap(  () => {
-  //      ref.playFromPositionAsync(videoStatus.currentTime - 10000).then(r => {paused ? ref.pauseAsync() : ref.playAsync()})
-  //   }, () => {
-  //     setVideoStatus({...videoStatus, overlay: !videoStatus.overlay})
-  //   })
-  // }
-  //
-  // const seekRight = () => {
-  //    handleDoubleTap( () => {
-  //      ref.playFromPositionAsync(videoStatus.currentTime + 10000).then(r => {paused ? ref.pauseAsync() : ref.playAsync()})
-  //   }, () => {
-  //     setVideoStatus({...videoStatus, overlay: !videoStatus.overlay})
-  //   })
-  // }
-
   const onLoad = (status) => {
-    //console.log('load: ', status)
-    setVideoStatus({...videoStatus, duration: status.durationMillis})
+    if(props.pos) {
+      Alert.alert('', 'Continue your progress with this lesson?',
+        [
+          {
+            text: "Cancel",
+            onPress: () => setVideoStatus({...videoStatus, duration: status.durationMillis}),
+            style: "cancel"
+          },
+          { text: "OK", onPress: () => ref.setPositionAsync(props.pos*1000*60).then(() => {
+              setVideoStatus({...videoStatus, duration: status.durationMillis})
+            }) }
+        ],
+      )
+    } else {
+      setVideoStatus({...videoStatus, duration: status.durationMillis})
+    }
   }
 
   const onPlaybackStatusUpdate = (status) => {
-    if(videoStatus.duration!==0.1) {
-      setVideoStatus({...videoStatus, currentTime: status.positionMillis})
-    } else {}
+    if(status.didJustFinish) {
+      if(props.id) {
+        finishLesson(props.id, props.token).then((res) => {
+          console.log(res.data)
+        }).catch(err => {
+          console.log(err.response.data.message)
+        })
+      } else {}
+    } else {
+      if(videoStatus.duration!==0.1) {
+        setVideoStatus({...videoStatus, currentTime: status.positionMillis})
+        if(status.positionMillis%5000<500 && status.positionMillis>3000) {
+          if(props.id) {
+            updateVideoTime(status.positionMillis/1000/60, props.id, props.token).then((res) => {})
+          } else {}
+        } else {}
+      } else {}
+    }
   }
 
   return <View style={fullScreen ? styles.fullScreenContainer : styles.container}>
-    <Video
-      //pause={videoStatus.pause}
-      source={{uri: props.uri}}
-      rate={1.0}
-      volume={1.0}
-      isMuted={false}
-      resizeMode={"contain"}
-      shouldPlay={true}
-      isLooping={false}
-      inFullscreen={false}
-      positionMillis={5000}
-      useNativeControls={false}
-      progressUpdateIntervalMillis={500}
-      onLoad={(status) => onLoad(status)}
-      onError={(err) => console.log('error: ', err)}
-      onPlaybackStatusUpdate={(status) => onPlaybackStatusUpdate(status)}
-      ref={component => setRef(component)}
-      style={{
-        backgroundColor: '#111111',
-        width: Dimensions.get('window').width,
-        height: Dimensions.get('window').width / 1.9
-      }}
-    />
+      <Video
+        source={{uri: props.uri}}
+        rate={1.0}
+        volume={1.0}
+        isMuted={false}
+        resizeMode={"contain"}
+        shouldPlay={false}
+        isLooping={false}
+        inFullscreen={true}
+        //positionMillis={5000}
+        useNativeControls={false}
+        // showControlsOnLoad={true}
+        // progressUpdateIntervalMillis={500}
+        //onLoadStart={() => console.log('onLoadStart')}
+        onLoad={(status) => onLoad(status)}
+        onError={(err) => console.log('error: ', err)}
+        onPlaybackStatusUpdate={(status) => onPlaybackStatusUpdate(status)}
+        ref={component => setRef(component)}
+        style={{
+          backgroundColor: '#111111',
+          width: Dimensions.get('window').width,
+          height: Dimensions.get('window').width / 1.9
+        }}
+      />
     <View style={styles.subContainer}>
       {
         videoStatus.overlay ? <TouchableOpacity style={{...styles.overlay}} onPress={() => setVideoStatus({...videoStatus, overlay: false})}>
@@ -182,7 +165,11 @@ const GoogleVideo = (props) => {
           </View>
           <View style={{...styles.overlaySet}} >
             <View style={{...styles.iconContainer}}>
-              <Icon name={'step-backward'} containerStyle={{...styles.icon}} iconStyle={{padding: 10}} size={20} type={"font-awesome-5"} color='white' onPress={() => back()} />
+              {
+                props.checkOwn && props.checkBack ?
+                  <Icon name={'step-backward'} containerStyle={{...styles.icon}} iconStyle={{padding: 10}} size={20}
+                        type={"font-awesome-5"} color='white' onPress={() => back()}/> : <View/>
+              }
               <Icon name={'backward'} containerStyle={{...styles.icon}} iconStyle={{padding: 10}} size={20} type={"font-awesome-5"} color='white'
                     onPress={() => {
                       ref.pauseAsync().then(() => backward())
@@ -195,7 +182,11 @@ const GoogleVideo = (props) => {
                     onPress={() => {
                       ref.pauseAsync().then(() => forward())
                     }} />
-              <Icon name={'step-forward'} type={"font-awesome-5"} containerStyle={styles.icon} iconStyle={{padding: 10}} size={20} color='white' onPress={() => next()} />
+              {
+                props.checkOwn && props.checkNext ?
+                  <Icon name={'step-forward'} type={"font-awesome-5"} containerStyle={styles.icon}
+                        iconStyle={{padding: 10}} size={20} color='white' onPress={() => next()}/> : <View/>
+              }
             </View>
             <View style={styles.sliderContainer}>
               <View style={styles.timer}>
