@@ -14,6 +14,7 @@ import PathDetailRightHeader from "../../NavigationHeader/PathDetailHeader/PathD
 import {ColorsContext} from "../../../provider/colors-provider";
 import MainScreenRightHeader from "../../NavigationHeader/MainScreenRightHeader/main-screen-right-header";
 import ListCoursesScrollLoad from "../../Courses/ListCoursesScrollLoad/list-course-scroll-load";
+import Payment from "../../Others/Payment/payment";
 
 const BrowseStack = createStackNavigator();
 const BrowseScreen = (props) => {
@@ -43,6 +44,7 @@ const BrowseScreen = (props) => {
     <BrowseStack.Screen name='AuthorDetail' component={AuthorDetail} options={({ route }) => ({ title: route.params.name })}/>
     <BrowseStack.Screen name='CategoryDetail' component={CategoryDetail} options={({ route }) => ({ title: route.params.name })}/>
     <BrowseStack.Screen name='SkillDetail' component={SkillDetail} options={({ route }) => ({ title: route.params.name })}/>
+    <BrowseStack.Screen name='Payment' component={Payment}/>
   </BrowseStack.Navigator>
 };
 

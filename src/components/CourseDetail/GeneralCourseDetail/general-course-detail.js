@@ -122,18 +122,33 @@ const GeneralCourseDetail = (props) => {
   return <ScrollView showsVerticalScrollIndicator={false}>
     <Text style={{...styles.title, color: theme.text}}>{courseDetail.title}</Text>
 
-    <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-      <View style={styles.author}>
-        {instructorInfo ? authorListItems(instructorInfo) : null}
+    <View style={{...styles.courseContainer}}>
+      <View>
+        <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+          <View style={styles.author}>
+            {instructorInfo ? authorListItems(instructorInfo) : null}
+          </View>
+        </ScrollView>
+        <View style={{...styles.subInfo, alignItems: 'flex-start'}}>
+            <Text style={{fontSize: 14, color: theme.text}}>
+              {convertDate(courseDetail.updatedAt, 1) + ' . ' + convertTime(courseDetail.totalHours)}
+            </Text>
+            <RatingStart rating={(courseDetail.formalityPoint + courseDetail.contentPoint + courseDetail.presentationPoint)/3.0} size={12}/>
+        </View>
       </View>
-    </ScrollView>
-
-    <View style={styles.subInfo}>
-      <Text style={{fontSize: 14, color: theme.text}}>
-        {convertDate(courseDetail.updatedAt, 1) + ' . ' + convertTime(courseDetail.totalHours)}
-      </Text>
-      <RatingStart rating={(courseDetail.formalityPoint + courseDetail.contentPoint + courseDetail.presentationPoint)/3.0} size={12}/>
+      {
+        !props.checkOwn ?<View>
+          <Button title={'Payment'} type={'outline'} buttonStyle={styles.buttonStyle} titleStyle={styles.buttonTitle}
+                  icon={<Icon name={'shopping-cart'} type={"font-awesome-5"} size={18} color={'#19B5FE'}/>} iconRight
+                  onPress={() => {
+                    console.log(courseDetail.id)
+                    props.navigation.push('Payment', {id: courseDetail.id})
+                  }}/>
+        </View> : null
+      }
     </View>
+
+
 
     <View style={styles.activeContainer}>
       <IconButton name='bookmark-border' title={favorite ? 'UnFavorite' : 'Favorite'} onPress={() => onPressFavortie()}/>
@@ -179,6 +194,11 @@ const styles = StyleSheet.create({
   author: {
     flexDirection: 'row'
   },
+  courseContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center'
+  },
   activeContainer: {
     flexDirection: 'row',
     justifyContent: 'space-around',
@@ -196,5 +216,13 @@ const styles = StyleSheet.create({
     fontSize: 16,
     paddingLeft: 15
   },
+  buttonStyle: {
+    marginRight: 10,
+    borderColor: '#19B5FE'
+  },
+  buttonTitle: {
+    color: '#19B5FE',
+    fontSize: 18
+  }
 })
 export default GeneralCourseDetail;

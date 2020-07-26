@@ -13,14 +13,15 @@ import VideoPlayer from "./VideoPlayer/video-player";
 import GeneralCourseDetail from "./GeneralCourseDetail/general-course-detail";
 import ListLessons from "./ListLessons/list-lessons";
 import Transcript from "./Transcript/transcript";
-import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
+import { TabView} from 'react-native-tab-view';
 import TabBarStyle from "../Common/tab-bar-style";
 import {ColorsContext} from "../../provider/colors-provider";
 import {getCourseAndLessonsDetail, getCourseInfo, getUserCourseDetail} from "../../core/services/course-services";
 import {AuthenticationContext} from "../../provider/authentication-provider";
 import {checkOwnCourse} from "../../core/services/user-services";
 import InfoDialog from "./InfoDialog/info-dialog";
-import ListLessonItems from "./ListLessonItems/list-lesson-items";
+import {downloadSection} from "./DownloadCourse/download-course";
+import DownloadBar from "../Common/download-bar";
 
 const initialLayout = { width: Dimensions.get('window').width };
 
@@ -34,7 +35,8 @@ const CourseDetail = (props) => {
   const [showInfoDialog, setShowInfoDialog] = useState(false);
   const [isLoading, setIsLoading] = useState(true)
   const [videoLoading, setVideoLoading] = useState(false)
-  //console.log(props.route.params.id)
+  const [progress, setProgress] = useState(0)
+
   //Lay thong tin khoa hoc
   useEffect(() => {
     //Kiem tra nguoi dung da dang nhap
@@ -103,10 +105,29 @@ const CourseDetail = (props) => {
 
   const onPressLesson = (item) => {
     if(item!==lesson) {
-      console.log(item)
+      //console.log(item)
       setLesson(item)
       setVideoLoading(false)
     } else {}
+  }
+
+  const onPressDownloadSection = async (data, numberOrder) => {
+    let tempCourse = {...detail};
+    let tempData = [...data];
+    if(numberOrder===0) {
+      tempCourse.data.section[0].data = await downloadSection(tempData, numberOrder, props.route.params.id, state.token, setProgress)
+      console.log(tempCourse.data.section[0].data)
+      //console.log(tempCourse.data, data[0])
+    } else {
+      for(let i=0; i<tempCourse.data.section.length; i++) {
+        if(tempCourse.data.section[i].numberOrder === numberOrder) {
+          downloadSection(tempData, numberOrder, props.route.params.id, state.token).then(res => {
+            tempCourse.data.section[i].data = res
+          })
+          break;
+        } else {}
+      }
+    }
   }
 
   const [index, setIndex] = useState(0);
@@ -119,10 +140,11 @@ const CourseDetail = (props) => {
   const renderScene = ({ route }) => {
     switch (route.key) {
       case 'first':
-        return <GeneralCourseDetail detail={detail.data} navigation={props.navigation} route={props.route}/>;
+        return <GeneralCourseDetail detail={detail.data} navigation={props.navigation} route={props.route} checkOwn={checkOwn}/>;
       case 'second':
-        return <ListLessons courseDetail={detail.data} courseId={props.route.params.id} onPressLesson={onPressLesson} showInfoDialog={() => setShowInfoDialog(true)}
-                            videoLoading={() => setVideoLoading(true)} isAuthenticated={state.isAuthenticated} checkOwn={checkOwn}/>;
+        return <ListLessons courseDetail={detail.data} courseId={props.route.params.id} onPressLesson={onPressLesson}
+                            showInfoDialog={() => setShowInfoDialog(true)} videoLoading={() => setVideoLoading(true)}
+                            isAuthenticated={state.isAuthenticated} checkOwn={checkOwn} onPressDownloadSection={onPressDownloadSection}/>;
       case 'third':
         return <Transcript transcript={''} isAuthenticated={state.isAuthenticated} checkOwn={checkOwn}/>;
       default:
@@ -143,6 +165,7 @@ const CourseDetail = (props) => {
         sceneContainerStyle={{paddingHorizontal: 5, backgroundColor: theme.background}}
       />
       <InfoDialog modalVisible={showInfoDialog} closeModel={() => setShowInfoDialog(false)}/>
+      {/*//<DownloadBar progress={progress}/>*/}
     </View>
   } else {
     return <View style={styles.activityIndicatorContainer}>

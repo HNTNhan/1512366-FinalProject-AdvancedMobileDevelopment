@@ -1,5 +1,5 @@
 Arguments: 
-  C:\Program Files\nodejs\node.exe C:\Users\admin\AppData\Roaming\npm\node_modules\yarn\bin\yarn.js add react-native-orientation
+  C:\Program Files\nodejs\node.exe C:\Users\admin\AppData\Roaming\npm\node_modules\yarn\bin\yarn.js add expo-linking@~1.0.1
 
 PATH: 
   G:\Git\1512366-FinalProject-AdvancedMobileDevelopment\node_modules\.bin;G:\CT\AndroidStudioSDK\platform-tools;G:\CT\New folder (2)\;C:\Program Files\Dell\DW WLAN Card;C:\Program Files (x86)\Common Files\Intel\Shared Libraries\redist\intel64\compiler;C:\Program Files\PostgreSQL\9.6\bin;C:\Program Files\Java\jdk1.8.0_151;C:\ProgramData\Oracle\Java\javapath;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Program Files\Microsoft SQL Server\110\Tools\Binn\;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\Program Files (x86)\GtkSharp\2.12\bin;C:\Program Files\Microsoft SQL Server\120\Tools\Binn\;C:\Program Files\Microsoft SQL Server\Client SDK\ODBC\110\Tools\Binn\;C:\Program Files (x86)\Microsoft SQL Server\120\Tools\Binn\;C:\Program Files\Microsoft SQL Server\120\DTS\Binn\;C:\Program Files (x86)\Microsoft SQL Server\120\Tools\Binn\ManagementStudio\;C:\Program Files (x86)\Microsoft SQL Server\120\DTS\Binn\;C:\ProgramData\chocolatey\bin;C:\Users\admin\AppData\Local\Yarn\bin;C:\Users\admin\AppData\Roaming\npm;C:\Program Files\Java\jdk1.8.0_152\bin;C:\WINDOWS\System32\OpenSSH\;C:\Program Files (x86)\Yarn\bin\;C:\Program Files (x86)\GitExtensions\;C:\Program Files\Git\cmd;C:\Program Files\dotnet\;C:\PostgreSQL\pg11\bin;G:\Git\PHP\php;C:\Users\admin\AppData\Roaming\nvm;C:\Program Files\nodejs;G:\CT\watchman\windows\bin;G:\CT\AndroidStudioSDK\platforms;C:\Users\admin\AppData\Local\Microsoft\WindowsApps;C:\Program Files\Git\cmd;G:\CT\Python;C:\Program Files\Microsoft VS Code\bin;C:\Program Files\Java\jdk1.8.0_181\bin;C:\watchman;C:\Program Files\heroku\bin;C:\Program Files\PostgreSQL\9.6\bin;C:\Users\admin\AppData\Local\Yarn\bin;C:\Users\admin\AppData\Roaming\npm;C:\Users\admin\AppData\Local\GitHubDesktop\bin;G:\CT\watchman\windows\bin;C:\Users\admin\AppData\Local\Microsoft\WindowsApps;C:\Users\admin\AppData\Roaming\nvm;C:\Program Files\nodejs;
@@ -14,7 +14,7 @@ Platform:
   win32 x64
 
 Trace: 
-  Error: ENOENT: no such file or directory, lstat 'G:\Git\1512366-FinalProject-AdvancedMobileDevelopment\node_modules\react-native-orientation\index.js'
+  Error: EPERM: operation not permitted, unlink 'G:\Git\1512366-FinalProject-AdvancedMobileDevelopment\node_modules\expo-file-system\node_modules\.bin'
 
 npm manifest: 
   {
@@ -39,8 +39,12 @@ npm manifest:
       "expo": "~37.0.3",
       "expo-av": "~8.1.0",
       "expo-constants": "~9.0.0",
+      "expo-file-system": "~8.1.0",
       "expo-image-picker": "~8.1.0",
       "expo-location": "~8.1.0",
+      "expo-media-library": "~8.1.0",
+      "expo-permissions": "~8.1.0",
+      "expo-screen-orientation": "~1.0.0",
       "react": "16.11.0",
       "react-devtools": "^3.6.3",
       "react-dom": "~16.9.0",
@@ -56,9 +60,13 @@ npm manifest:
       "react-native-tab-view": "^2.14.4",
       "react-native-textinput-effects": "^0.6.1",
       "react-native-vector-icons": "^6.6.0",
+      "react-native-video": "^4.4.5",
+      "react-native-video-controls": "^1.0.1",
       "react-native-web": "~0.11.7",
       "react-native-web-maps": "^0.2.0",
       "react-native-webview": "8.1.1",
+      "react-native-youtube-iframe": "^1.2.4",
+      "react-native-ytdl": "^3.1.1",
       "react-select": "^3.1.0",
       "react-select-country-list": "^2.1.2"
     },
@@ -2841,6 +2849,11 @@ Lockfile:
     resolved "https://registry.yarnpkg.com/eventemitter3/-/eventemitter3-3.1.2.tgz#2d3d48f9c346698fce83a85d7d664e98535df6e7"
     integrity sha512-tvtQIeLVHjDkJYnzf2dgVMxfuSGJeM/7UCG17TT4EumTfNtF+0nebF/4zWOIkCreAbtNqhGEboB6BWrwqNaw4Q==
   
+  events@^3.0.0:
+    version "3.2.0"
+    resolved "https://registry.yarnpkg.com/events/-/events-3.2.0.tgz#93b87c18f8efcd4202a461aec4dfc0556b639379"
+    integrity sha512-/46HWwbfCX2xTawVfkKLGxMifJYQBWMwY1mjywRtb4c9x8l5NP3KoJtnIOiL1hfdRkIuYhETxQlo62IF8tcnlg==
+  
   exec-sh@^0.3.2:
     version "0.3.4"
     resolved "https://registry.yarnpkg.com/exec-sh/-/exec-sh-0.3.4.tgz#3a018ceb526cc6f6df2bb504b2bfe8e3a4934ec5"
@@ -2962,10 +2975,20 @@ Lockfile:
     dependencies:
       invariant "^2.2.4"
   
+  expo-media-library@~8.1.0:
+    version "8.1.0"
+    resolved "https://registry.yarnpkg.com/expo-media-library/-/expo-media-library-8.1.0.tgz#f5d4b24819aa518e69d971f92b55c12f60c85ba5"
+    integrity sha512-2oO6UtV4akgX9o5Ok9BRwLh5NZzDk43QBW5RP/EHVSzuVn2yn7IXstmr9wnTl1BpqkPoV8u6w3g9EeU1I2Jljw==
+  
   expo-permissions@~8.1.0:
     version "8.1.0"
     resolved "https://registry.yarnpkg.com/expo-permissions/-/expo-permissions-8.1.0.tgz#a7f2ee91ba76ce3a467e7b10adaa9ca5201b226f"
     integrity sha512-QBHD+1J9+sGFnhoEGzMRchPweeEE0OJ9ehG/0l1BMRBA7qsLS9vRC1FTJ55NwjI0Kr4RTha9r6ZX1kZHT09f/w==
+  
+  expo-screen-orientation@~1.0.0:
+    version "1.0.0"
+    resolved "https://registry.yarnpkg.com/expo-screen-orientation/-/expo-screen-orientation-1.0.0.tgz#a168b7493e7a7b45da2c80b1b0d4e89e1f8e7698"
+    integrity sha512-McYHWSA3KVgh3IeztKg0oxkHtSRzDfqGRSHg6GgIici5C93LOF4tGzO38tLNVGXIjbu8EdvBRB7pslKS73AXGg==
   
   expo-sqlite@~8.1.0:
     version "8.1.0"
@@ -3555,6 +3578,11 @@ Lockfile:
     version "2.8.8"
     resolved "https://registry.yarnpkg.com/hosted-git-info/-/hosted-git-info-2.8.8.tgz#7539bd4bc1e0e0a895815a2e0262420b12858488"
     integrity sha512-f/wzC2QaWBs7t9IYqB4T3sR1xviIViXJRJTWBlx2Gf3g0Xi5vI7Yy4koXQ1c9OYDGHN9sBy1DQ2AB8fqZBWhUg==
+  
+  html-entities@^1.2.1:
+    version "1.3.1"
+    resolved "https://registry.yarnpkg.com/html-entities/-/html-entities-1.3.1.tgz#fb9a1a4b5b14c5daba82d3e34c6ae4fe701a0e44"
+    integrity sha512-rhE/4Z3hIhzHAUKbW8jVcCyuT5oJCXXqhN/6mXXVCpzTmvJnoH2HL/bt3EZ6p55jbFJBeAe1ZNpL5BugLujxNA==
   
   http-errors@~1.7.2:
     version "1.7.3"
@@ -4257,6 +4285,11 @@ Lockfile:
     version "4.17.15"
     resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.15.tgz#b447f6670a0455bbfeedd11392eff330ea097548"
     integrity sha512-8xOcRHvCjnocdS5cpwXQXVzmmh5e5+saE2QGoeQmbKmRS6J3VQppPOIt0MnmE+4xlZoumy0GPG0D0MVIQbNA1A==
+  
+  lodash@^4.16.4:
+    version "4.17.19"
+    resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.19.tgz#e48ddedbe30b3321783c5b4301fbd353bc1e4a4b"
+    integrity sha512-JNvd8XER9GQX0v2qJgsaN/mzFCNA5BRe/j8JN9d+tWyGLSodKQHKFicdwNYzWwI3wjRnaKPsGj1XkBjx/F96DQ==
   
   log-symbols@^2.2.0:
     version "2.2.0"
@@ -5397,6 +5430,11 @@ Lockfile:
       end-of-stream "^1.1.0"
       once "^1.3.1"
   
+  punycode@1.3.2:
+    version "1.3.2"
+    resolved "https://registry.yarnpkg.com/punycode/-/punycode-1.3.2.tgz#9653a036fb7c1ee42342f2325cceefea3926c48d"
+    integrity sha1-llOgNvt8HuQjQvIyXM7v6jkmxI0=
+  
   punycode@^2.1.0, punycode@^2.1.1:
     version "2.1.1"
     resolved "https://registry.yarnpkg.com/punycode/-/punycode-2.1.1.tgz#b58b010ac40c22c5657616c8d2c2c02c7bf479ec"
@@ -5429,6 +5467,20 @@ Lockfile:
       decode-uri-component "^0.2.0"
       split-on-first "^1.0.0"
       strict-uri-encode "^2.0.0"
+  
+  query-string@^6.2.0:
+    version "6.13.1"
+    resolved "https://registry.yarnpkg.com/query-string/-/query-string-6.13.1.tgz#d913ccfce3b4b3a713989fe6d39466d92e71ccad"
+    integrity sha512-RfoButmcK+yCta1+FuU8REvisx1oEzhMKwhLUNcepQTPGcNMp1sIqjnfCtfnvGSQZQEhaBHvccujtWoUV3TTbA==
+    dependencies:
+      decode-uri-component "^0.2.0"
+      split-on-first "^1.0.0"
+      strict-uri-encode "^2.0.0"
+  
+  querystring@0.2.0:
+    version "0.2.0"
+    resolved "https://registry.yarnpkg.com/querystring/-/querystring-0.2.0.tgz#b209849203bb25df820da756e747005878521620"
+    integrity sha1-sgmEkgO7Jd+CDadW50cAWHhSFiA=
   
   querystringify@^2.1.1:
     version "2.1.1"
@@ -5608,6 +5660,13 @@ Lockfile:
       prop-types "^15.6.2"
       yargs "^13.2.2"
   
+  react-native-video-controls@^1.0.1:
+    version "1.5.1"
+    resolved "https://registry.yarnpkg.com/react-native-video-controls/-/react-native-video-controls-1.5.1.tgz#4bcb91f94883e5154a66cceb30048f82aee19f50"
+    integrity sha512-23e+vr9l03m4X7y7MOQpzmGu8wMygffHOko7XcN1H2qsQc42vpT7YlWnziDkjmi6ugw1HKpnR493VlXmHt8LNw==
+    dependencies:
+      lodash "^4.16.4"
+  
   react-native-video@^4.4.5:
     version "4.4.5"
     resolved "https://registry.yarnpkg.com/react-native-video/-/react-native-video-4.4.5.tgz#d0db799293f8622c7894dd0f8875cb41bfafbde8"
@@ -5652,6 +5711,23 @@ Lockfile:
     dependencies:
       escape-string-regexp "2.0.0"
       invariant "2.2.4"
+  
+  react-native-youtube-iframe@^1.2.4:
+    version "1.2.4"
+    resolved "https://registry.yarnpkg.com/react-native-youtube-iframe/-/react-native-youtube-iframe-1.2.4.tgz#80c6f99784f3a13b1c9deb7a93e91b84fdd66ebd"
+    integrity sha512-VP2pO+mMrfOqNKwcRExfl9/BOPxnu9UWQt8pUWW4FNAFeSPld9mUVFmdqoTGtbbe2mAf2dwPY+gKSHbviUWPrg==
+    dependencies:
+      events "^3.0.0"
+  
+  react-native-ytdl@^3.1.1:
+    version "3.1.1"
+    resolved "https://registry.yarnpkg.com/react-native-ytdl/-/react-native-ytdl-3.1.1.tgz#68d5ea30ed493d721dcf8bd38e00595f70d1a89d"
+    integrity sha512-Az8r4Lrjt6GMB3lr69HJeIKejQwsz3jiH2Xv8w0LjCcYIcRLmaMzTkUErO6JSBgur1WNTF56yQVUnDJnageJRg==
+    dependencies:
+      html-entities "^1.2.1"
+      query-string "^6.2.0"
+      react-xml-parser "^1.1.3"
+      url "~0.10.1"
   
   "react-native@https://github.com/expo/react-native/archive/sdk-37.0.1.tar.gz":
     version "0.61.4"
@@ -5725,6 +5801,11 @@ Lockfile:
       dom-helpers "^5.0.1"
       loose-envify "^1.4.0"
       prop-types "^15.6.2"
+  
+  react-xml-parser@^1.1.3:
+    version "1.1.6"
+    resolved "https://registry.yarnpkg.com/react-xml-parser/-/react-xml-parser-1.1.6.tgz#2ed5400000558b1c6004a686955f57ec3994e1a1"
+    integrity sha512-m/DU8CIXMJ3KvSAacgGhXYeTtfUKc8XCju/xAlncv3+uXTaOmuSpZI1z1ZTpV6PkDXre+1SJQRyRZY8N5MUp4g==
   
   react@16.11.0:
     version "16.11.0"
@@ -6895,6 +6976,14 @@ Lockfile:
     dependencies:
       querystringify "^2.1.1"
       requires-port "^1.0.0"
+  
+  url@~0.10.1:
+    version "0.10.3"
+    resolved "https://registry.yarnpkg.com/url/-/url-0.10.3.tgz#021e4d9c7705f21bbf37d03ceb58767402774c64"
+    integrity sha1-Ah5NnHcF8hu/N9A861h2dAJ3TGQ=
+    dependencies:
+      punycode "1.3.2"
+      querystring "0.2.0"
   
   use-subscription@^1.4.0:
     version "1.4.1"

@@ -1,10 +1,12 @@
-import React, {useContext} from 'react';
-import {View, StyleSheet} from 'react-native';
+import React, {useContext, useState} from 'react';
+import {View, StyleSheet, ActivityIndicator} from 'react-native';
 import {Button, Icon, Text} from "react-native-elements";
 import {ColorsContext} from "../../../provider/colors-provider";
+import {convertTime} from "../../Common/convert-data";
 
 const ListLessonTitle = (props) => {
   const {theme} = useContext(ColorsContext)
+  const [downloading, setDownloading] = useState(false)
 
   return <View style={styles.container}>
     <View style={styles.subContainer}>
@@ -13,15 +15,22 @@ const ListLessonTitle = (props) => {
         <Text style={{fontSize: 18, color: theme.text}}>{props.title}</Text>
         {
           props.totalDuration===0 ? null :
-          <Text style={{
-          fontSize: 16,
-          color: theme.text
-        }}>{`${Math.floor(props.totalDuration) ? Math.floor(props.totalDuration) + 'h ' : ''}${Math.floor((props.totalDuration - Math.floor(props.totalDuration)) * 60)}m`}</Text>
+            <Text style={{ fontSize: 16, color: theme.text}}>
+              {convertTime(props.totalDuration)}
+            </Text>
         }
       </View>
     </View>
 
-    <Button type='clear' icon={<Icon name='ellipsis-v' type='font-awesome-5' size={20} color={theme.text}/>}/>
+    {
+      !downloading ? <Button type='clear' containerStyle={{padding: 5}}
+             onPress={() => {
+               setDownloading(true)
+               props.onPressDownloadSection()
+             }}
+             icon={<Icon name={'download'} type='font-awesome-5' size={16} color={theme.text}/>}/> :
+      <ActivityIndicator style={{padding: 5}} size={'small'} color={theme.text} />
+    }
   </View>
 };
 

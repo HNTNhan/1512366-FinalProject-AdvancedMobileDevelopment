@@ -12,12 +12,15 @@ import {ColorsProvider} from "./src/provider/colors-provider";
 import { MenuProvider } from 'react-native-popup-menu';
 import {UserProvider} from "./src/provider/user-provider";
 import {BottomTabBarProvider} from "./src/provider/bottom-tab-bar-provider";
+import {DownloadProvider} from "./src/provider/download-provider";
+import DownloadBar from "./src/components/Common/download-bar";
 
 const Stack = createStackNavigator();
 
 export default function App() {
   return (
     <View style={styles.container}>
+      <DownloadProvider>
       <AuthenticationProvider>
         <UserProvider>
           <ColorsProvider>
@@ -36,6 +39,7 @@ export default function App() {
           </ColorsProvider>
         </UserProvider>
       </AuthenticationProvider>
+      </DownloadProvider>
     </View>
   );
 }

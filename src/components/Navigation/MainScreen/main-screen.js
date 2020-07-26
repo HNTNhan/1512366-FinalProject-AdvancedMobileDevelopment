@@ -50,9 +50,6 @@ const MainScreen = (props) => {
     screenOptions={({route, navigation}) => ({
       tabBarIcon: ({focused}) => bottomTabIcons(route, focused),
       tabBarVisible: show,
-      tabBarButton: (props) => {
-        return <TouchableOpacity {...props} onPress={props.onPress}/>
-      }
     })}
     tabBarOptions={{...objectsConstant.bottomTabOption, style: {backgroundColor: theme.foreground1, paddingBottom: 0, paddingTop: 0, height: 60}}}
   >

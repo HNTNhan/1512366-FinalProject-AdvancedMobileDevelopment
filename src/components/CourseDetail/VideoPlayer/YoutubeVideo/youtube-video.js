@@ -92,7 +92,7 @@ const YoutubeVideo = (props) => {
       ref={playerRef}
       height={Dimensions.get('window').width / 1.9}
       width={Dimensions.get('window').width}
-      videoId={props.uri.slice([props.uri.indexOf('embed')+6])}
+      videoId={props.uri.slice(props.uri.indexOf('embed')+6)}
       play={playing}
       onChangeState={event => onChangeState(event)}
       onReady={() => onReady()}

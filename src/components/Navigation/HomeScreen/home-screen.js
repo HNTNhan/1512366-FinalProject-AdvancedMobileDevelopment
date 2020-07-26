@@ -19,6 +19,7 @@ import {Icon} from "react-native-elements";
 import {TouchableOpacity} from 'react-native';
 import SendFeedback from "../../AccountManagement/SendFeedback/send-feedback";
 import {BottomTabBarContext} from "../../../provider/bottom-tab-bar-provider";
+import Payment from "../../Others/Payment/payment";
 
 const HomeStack = createStackNavigator();
 
@@ -61,6 +62,7 @@ const HomeScreen = (props) => {
     <HomeStack.Screen name='CategoryDetail' component={CategoryDetail} options={({ route }) => ({ title: route.params.name })}/>
     <HomeStack.Screen name='ListCoursesScrollLoad' component={ListCoursesScrollLoad} options={({ route }) => ({ title: route.params.name })}/>
     <HomeStack.Screen name='SendFeedback' component={SendFeedback} options={{title: 'Feedback'}}/>
+    <HomeStack.Screen name='Payment' component={Payment}/>
   </HomeStack.Navigator>
 };
 

@@ -10,6 +10,7 @@ const ListLessons = (props) => {
   const [loading, setLoading] = useState(true);
   const [section, setSection] = useState(props.courseDetail.section)
 
+
   if(props.isAuthenticated) {
     useEffect(() => {
       const overview = {
@@ -27,6 +28,7 @@ const ListLessons = (props) => {
 
       for(let i=0; i<section.length; i++) {
         section[i]['data'] = section[i]['lesson']
+        delete section[i]['lesson']
       }
       section.unshift(overview)
       setSection(section)
@@ -40,7 +42,8 @@ const ListLessons = (props) => {
           keyExtractor={(item, index) => item + index}
           renderItem={({item}) => <ListLessonItems item={item} checkOwn={props.checkOwn} courseId={props.courseId} videoLoading={props.videoLoading}
                                                    type={item.numberOrder!==0 ? 'lesson' : 'overview'} onPress={props.onPressLesson} showInfoDialog={props.showInfoDialog}/>}
-          renderSectionHeader={({section: {name, sumHours, numberOrder}}) => <ListLessonTitle index={numberOrder} title={name} totalDuration={sumHours}/>}
+          renderSectionHeader={({section: {name, sumHours, numberOrder, data}}) =>
+            <ListLessonTitle index={numberOrder} title={name} totalDuration={sumHours} onPressDownloadSection={() => props.onPressDownloadSection(data, numberOrder)}/>}
           SectionSeparatorComponent={() => <View style={globalStyles.separator} />}
         />
       </View>
