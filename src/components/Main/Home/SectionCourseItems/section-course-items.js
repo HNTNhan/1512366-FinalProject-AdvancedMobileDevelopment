@@ -11,7 +11,7 @@ const SectionCourseItems = (props) => {
     <Image source={{uri: props.item.courseImage || props.item.imageUrl}} style={styles.image}/>
     <SubCourseInfo item={props.item} section={true}/>
     <View style={styles.dropDownButton}>
-      <CourseDropDownButton keyItem={props.item.id} iconSize={22}/>
+      <CourseDropDownButton keyItem={props.item.id} courseDetail={props.item} iconSize={22}/>
     </View>
   </TouchableOpacity>
 };

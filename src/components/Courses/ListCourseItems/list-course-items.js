@@ -1,16 +1,18 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {View, Image, Text, StyleSheet, TouchableOpacity, Alert, Share} from 'react-native';
 import SubCourseInfo from "../../Common/sub-course-info";
 import CourseDropDownButton from "../../Common/course-drop-down-button";
+import {ColorsContext} from "../../../provider/colors-provider";
 
 const ListCourseItems = (props) => {
-
+  const {theme} = useContext(ColorsContext)
   return <View style={styles.container}>
     <TouchableOpacity style={styles.item} onPress={props.onPress} >
-      <Image style={styles.image} source={{uri: props.item.courseImage || props.item.imageUrl}} />
+      <Image style={{...styles.image, backgroundColor: theme.foreground1}} source={{uri: props.item.courseImage || props.item.imageUrl}} />
       <SubCourseInfo item={props.item} />
     </TouchableOpacity>
-    <CourseDropDownButton keyItem={props.item.id} iconSize={18}/>
+
+    <CourseDropDownButton keyItem={props.item.id} courseDetail={props.item} iconSize={18}/>
   </View>
 };
 

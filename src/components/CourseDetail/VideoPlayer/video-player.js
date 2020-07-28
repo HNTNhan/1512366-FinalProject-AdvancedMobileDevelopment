@@ -9,6 +9,11 @@ import {getLessonDetail, getLessonSubtitle, getLessonUrlAndTime} from "../../../
 
 const VideoPlayer = (props) => {
   const {state} = useContext(AuthenticationContext)
+  const [key, setKey] = useState(0)
+
+  useEffect(() => {
+    setKey(key+1)
+  }, [props.lesson])
 
   const onPress = (next) => {
     props.setVideoLoading()
@@ -49,13 +54,13 @@ const VideoPlayer = (props) => {
         </View>
       } else {
         if(uri.includes("https://youtube.com")) {
-          return <YoutubeVideo uri={uri} id={props.lesson.id || null} token={state.token} pos={props.lesson.currentTime || 0}
+          return <YoutubeVideo uri={uri} id={props.lesson.id || null} token={state.token} pos={props.lesson.currentTime || 0} key={key}
                                checkOwn={props.checkOwn} onPressNextBack={onPress}
                                checkNext={props.lesson.nextLessonId} checkBack={props.lesson.prevLessonId}
           />
         } else {
-          return <GoogleVideo uri={uri} id={props.lesson.id || null} token={state.token} pos={props.lesson.currentTime || 0}
-                              checkOwn={props.checkOwn} onPressNextBack={onPress}
+          return <GoogleVideo uri={uri} id={props.lesson.id || null} token={state.token} pos={props.lesson.currentTime || 0} key={key}
+                              checkOwn={props.checkOwn} onPressNextBack={onPress} local={props.lesson.local || null}
                               checkNext={props.lesson.nextLessonId} checkBack={props.lesson.prevLessonId}
                               navigation={props.navigation} route={props.route}/>
         }

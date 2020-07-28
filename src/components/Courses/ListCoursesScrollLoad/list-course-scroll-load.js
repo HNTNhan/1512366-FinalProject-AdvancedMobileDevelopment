@@ -6,6 +6,7 @@ import {ColorsContext} from "../../../provider/colors-provider";
 import {getCoursesNewRelease, getCoursesTopSell, searchCourses} from "../../../core/services/course-services";
 import {AuthenticationContext} from "../../../provider/authentication-provider";
 import {alertSignIn} from "../../../globles/alert";
+import CenterActivityIndicator from "../../Common/center-activity-indicator";
 
 const ListCoursesScrollLoad = (props) => {
   const {theme} = useContext(ColorsContext);
@@ -66,7 +67,7 @@ const ListCoursesScrollLoad = (props) => {
 
   return <View style={{...globalStyles.container, backgroundColor: theme.background}}>
     {
-      data.isLoading ? <ActivityIndicator size={'large'} color={'blue'}/> :
+      data.isLoading ? <CenterActivityIndicator /> :
         <FlatList
           showsVerticalScrollIndicator={false}
           data={data.courses}

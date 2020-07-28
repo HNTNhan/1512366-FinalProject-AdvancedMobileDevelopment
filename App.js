@@ -34,6 +34,7 @@ export default function App() {
                     <Stack.Screen name='AccountManagement' component={AccountManagementScreen} options={{headerShown: false}}/>
                   </Stack.Navigator>
                 </NavigationContainer>
+                <DownloadBar />
               </BottomTabBarProvider>
             </MenuProvider>
           </ColorsProvider>

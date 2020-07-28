@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useContext, useEffect, useReducer, useState} from 'react';
 import {View, StyleSheet, ScrollView} from 'react-native';
 import {Button, Icon, Text} from "react-native-elements";
 import AuthorIconButton from "../../Common/author-icon-button";
@@ -12,17 +12,35 @@ import {getFavoriteStatus, setFavoriteStatus} from "../../../core/services/user-
 import {UserContext} from "../../../provider/user-provider";
 import {convertDate, convertTime} from "../../Common/convert-data";
 import {getInstructorInfo} from "../../../core/services/instructor-services";
+import RatingCourse from "../../Common/rating-course";
+import {DownloadContext} from "../../../provider/download-provider";
 
 const GeneralCourseDetail = (props) => {
   const {theme} = useContext(ColorsContext);
-  const {user, setUser, state} = useContext(AuthenticationContext);
+  const {state} = useContext(AuthenticationContext);
+  const {isDownloading} = useContext(DownloadContext)
   const userContext = useContext(UserContext);
   const [modalVisible, setModalVisible] = useState(false);
   const [favorite, setFavorite] = useState(false)
+  const [rating, setRating] = useState(false)
+  const [downloadAll, setDownloadAll] = useState(false)
 
   const courseDetail = props.detail;
   const [instructorInfo, setInstructorInfo] = useState(props.detail.instructor || null);
-  const keyItem = props.route.params.id;
+  // const keyItem = props.route.params.id;
+
+  useEffect(() => {
+    if(props.courseDownload){
+      for(let i=0; i<props.courseDownload.section.length; i++) {
+        if(props.courseDownload.section[i].downloaded) {
+
+        } else {
+          return
+        }
+      }
+      setDownloadAll(true)
+    } else {}
+  }, [])
 
   useEffect(() => {
     let mounted1 = true;
@@ -99,25 +117,9 @@ const GeneralCourseDetail = (props) => {
     return () => mounted = false
   }
 
-  const onPressDownload = () => {
-    let temp = {...user};
-    const pos = user.downloads.indexOf(keyItem);
-    if(pos !== -1) {
-      temp.downloads.splice(pos, 1);
-    } else {
-      temp.downloads.push(keyItem);
-    }
-    setUser(temp);
-  }
-
   const onSelectAddToChannel = () => {
     setModalVisible(true)
   }
-
-  const onPressClose = () => {
-    setModalVisible(false)
-  }
-
 
   return <ScrollView showsVerticalScrollIndicator={false}>
     <Text style={{...styles.title, color: theme.text}}>{courseDetail.title}</Text>
@@ -153,7 +155,7 @@ const GeneralCourseDetail = (props) => {
     <View style={styles.activeContainer}>
       <IconButton name='bookmark-border' title={favorite ? 'UnFavorite' : 'Favorite'} onPress={() => onPressFavortie()}/>
       <IconButton name='cast-connected' title='Add to channel' onPress={() => onSelectAddToChannel()}/>
-      <IconButton name='get-app' title={'Download'} onPress={() => onPressDownload()}/>
+      <IconButton downloadAll={downloadAll} isDownloading={isDownloading} name='get-app' title={'Download'} onPress={async () => await props.onPressDownload()}/>
     </View>
 
     <View style={{...styles.descriptionContainer}}>
@@ -165,7 +167,15 @@ const GeneralCourseDetail = (props) => {
       <Text style={{...styles.text, color: theme.text}}>{courseDetail.learnWhat.join('\n')}</Text>
     </View>
 
-
+    <Button
+      title='Rating course'
+      type='outline'
+      icon={
+        <Icon name='star' type='font-awesome-5' color='#19B5FE' iconStyle={{marginHorizontal: 8}}/>
+      }
+      onPress={() => setRating(!rating)}
+      containerStyle={{marginVertical: 5}}
+    />
     <Button
       title='Take a learning check'
       type='outline'
@@ -182,7 +192,9 @@ const GeneralCourseDetail = (props) => {
       }
       containerStyle={{marginVertical: 5}}
     />
-    {/*<AddToChannelDialog modalVisible={modalVisible} keyItem={keyItem} closeModel={() => onPressClose()}/>*/}
+    {rating ? <RatingCourse modalVisible={rating} token={props.token} courseId={props.detail.id}
+                            onPressClose={() => setRating(false)}/> : null}
+    <AddToChannelDialog modalVisible={modalVisible} courseDetail={props.detail} closeModel={() => setModalVisible(false)}/>
   </ScrollView>
 };
 

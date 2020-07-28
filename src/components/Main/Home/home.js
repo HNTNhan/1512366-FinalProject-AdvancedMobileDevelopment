@@ -7,18 +7,43 @@ import {ColorsContext} from "../../../provider/colors-provider";
 import {UserContext} from "../../../provider/user-provider";
 import {Button, Icon} from "react-native-elements";
 import CenterActivityIndicator from "../../Common/center-activity-indicator";
+import {getChannel} from "../../../core/local_storage/channel-storage";
 
 const Home = (props) => {
-  const {theme} = useContext(ColorsContext)
+  const {theme} = useContext(ColorsContext);
   const {state} = useContext(AuthenticationContext);
-  const userContext = useContext(UserContext)
+  const userContext = useContext(UserContext);
+  const [channels, setChannels] = useState([])
+
+  const fetchChannel = () => {
+    getChannel().then(res =>{
+      if(res.status===200) {
+        if(res.data.length) {
+          for(let i=0; i<res.data.length; i++) {
+            if(res.data[i].id === state.userInfo.id) {
+              setChannels(res.data[i].channels)
+              return
+            }
+          }
+          setChannels([])
+        } else {
+          setChannels([])
+        }
+      } else {}
+    }).catch(err => {
+      alert(err.response.data.message || err)
+    })
+  }
+
+  useEffect(() => {
+    fetchChannel()
+  }, [])
 
   useEffect(() =>{
     if(state.isAuthenticated) {
       if (!userContext.state.continueCouresRequest) {
         userContext.fetchContinueCourses(state.token)
       } else {}
-
       if (!userContext.state.favoriteCoursesRequest) {
         userContext.fetchFavoriteCourses(state.token)
       } else {}
@@ -39,19 +64,19 @@ const Home = (props) => {
   return <View style={[globalStyles.container, {backgroundColor: theme.background}]}>
     {
       state.isAuthenticated ?
-        !userContext.state.favoriteCoursesRequest || !userContext.state.continueCouresRequest ?
+        !userContext.state.favoriteCoursesRequest && !userContext.state.continueCouresRequest ?
           <ScrollView showsVerticalScrollIndicator={false}>
-              <SectionCourses title='Continue learning'
-                             type='Course'
-                             navigation={props.navigation}
-                             route={props.route}
-                             data={userContext.state.continueCoures}
-                             pressSeeAll={() => props.navigation.navigate('ListCourses', {
-                               data: userContext.state.continueCoures,
-                               title: false,
-                               name: 'Continue learning'
-                             })}/>
-              <SectionCourses title='Favorite courses'
+            <SectionCourses title='Continue learning'
+                           type='Course'
+                           navigation={props.navigation}
+                           route={props.route}
+                           data={userContext.state.continueCoures}
+                           pressSeeAll={() => props.navigation.navigate('ListCourses', {
+                             data: userContext.state.continueCoures,
+                             title: false,
+                             name: 'Continue learning'
+                           })}/>
+            <SectionCourses title='Favorite courses'
                              type='Course'
                              navigation={props.navigation}
                              route={props.route}
@@ -61,6 +86,18 @@ const Home = (props) => {
                                title: false,
                                name: 'Favorite courses'
                              })}/>
+            {
+              <SectionCourses title='Channels'
+                             type='Channel'
+                             navigation={props.navigation}
+                             route={props.route}
+                             data={channels}
+                              fetchChannel={() => fetchChannel()}
+                             pressSeeAll={() => props.navigation.navigate('ListChannels', {
+                             data: channels,
+                             title: false
+                             })}/>
+            }
           </ScrollView>
         : <CenterActivityIndicator /> :
         <View style={{...styles.container}}>
@@ -81,31 +118,6 @@ const Home = (props) => {
         </View>
     }
   </View>
-    {/*<SectionCourses title='Continue learning'*/}
-    {/*                type='Course'*/}
-    {/*                navigation={props.navigation}*/}
-    {/*                route={props.route}*/}
-    {/*                data={courses}*/}
-    {/*                pressSeeAll={() => props.navigation.navigate('ListCourses', {data: courses, title: false, name: 'Continue learning'})}/>*/}
-    {/*<SectionCourses title='Paths'*/}
-    {/*                type='Path'*/}
-    {/*                navigation={props.navigation}*/}
-    {/*                route={props.route}*/}
-    {/*                data={paths}*/}
-    {/*                pressSeeAll={() => props.navigation.navigate('ListPaths', {data: paths, title: false})}/>*/}
-    {/*<SectionCourses title='Channels'*/}
-    {/*                type='Channel'*/}
-    {/*                navigation={props.navigation}*/}
-    {/*                route={props.route}*/}
-    {/*                data={channels}*/}
-    {/*                pressSeeAll={() => props.navigation.navigate('ListChannels', {data: channels, title: false})}/>*/}
-    {/*<SectionCourses title='Bookmarks'*/}
-    {/*                type='Course'*/}
-    {/*                navigation={props.navigation}*/}
-    {/*                route={props.route}*/}
-    {/*                data={bookmarks}*/}
-    {/*                pressSeeAll={() => props.navigation.navigate('ListCourses', {data: bookmarks, title: false, name: 'Bookmarks'})}/>*/}
-
 };
 
 const styles = StyleSheet.create({

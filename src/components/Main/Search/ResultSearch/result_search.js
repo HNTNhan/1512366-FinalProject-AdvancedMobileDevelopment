@@ -146,7 +146,12 @@ const ResultSearch = (props) => {
         onEndReachedThreshold={0}
       />
     } else {
-      return <NoResultPage searchKey={props.searchKey} />
+      return <View style={{flex: 1}}>
+        <View style={{position: 'absolute', zIndex: 1, width: '100%', justifyContent: 'space-around'}}>
+          <SectionTitleFilter onSelectSortType={onSelectSortType} categorySelect={props.categorySelect} getFilter={getFilter} onPressOK={() => onPressOK()}/>
+        </View>
+        <NoResultPage searchKey={props.searchKey} />
+      </View>
     }
   } else {
     return <CenterActivityIndicator />

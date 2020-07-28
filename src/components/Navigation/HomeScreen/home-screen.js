@@ -54,8 +54,8 @@ const HomeScreen = (props) => {
                       component={Profile}
                       options={({route, navigation}) => ({
                         headerLeft: () => (
-                          <TouchableOpacity onPress={() => navigation.navigate('Home')}>
-                            <Icon name={'arrow-left'} type={"font-awesome-5"} size={18} containerStyle={{paddingLeft: 20}}/>
+                          <TouchableOpacity onPress={() => navigation.navigate('Home')} style={{marginLeft: 10, padding: 10}}>
+                            <Icon name={'arrow-left'} type={"font-awesome-5"} size={18}/>
                           </TouchableOpacity>
                         ),
                       })}/>

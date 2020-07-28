@@ -13,29 +13,36 @@ const ListLessonItems = (props) => {
 
   const onPress = () => {
     props.videoLoading()
-    let temp = null;
-    if(props.checkOwn || lesson.isPreview) {
-      Promise.all([getLessonDetail(props.courseId, lesson.id, state.token), getLessonSubtitle(props.courseId, lesson.id, state.token), getLessonUrlAndTime(props.courseId, lesson.id, state.token)])
-      .then(res => {
-        temp = {...res[0].data.payload, subtitle: res[1].data.payload, ...res[2].data.payload}
-        props.onPress(temp)
-      }).catch(err => {
-        if(err.response.status===400) {
-          const data = {
-            videoUrl: lesson.videoUrl,
-            currentTime: null,
-            isFinish: null
-          }
-          //temp = {...temp, data}
-          props.onPress(data)
-        }
-        else {
-          console.log('fail1: ', err.response.data.message, err.response.status)
-        }
-      })
+    if(props.downloaded) {
+      const data = {
+        videoUrl: lesson.videoUrl,
+      }
+      props.onPress(data)
     } else {
-      props.showInfoDialog()
-      console.log(props.checkOwn, lesson.isPreview)
+      let temp = null;
+      if(props.checkOwn || lesson.isPreview) {
+        Promise.all([getLessonDetail(props.courseId, lesson.id, state.token), getLessonSubtitle(props.courseId, lesson.id, state.token), getLessonUrlAndTime(props.courseId, lesson.id, state.token)])
+          .then(res => {
+            temp = {...res[0].data.payload, subtitle: res[1].data.payload, ...res[2].data.payload}
+            props.onPress(temp)
+          }).catch(err => {
+          if(err.response && err.response.status===400) {
+            const data = {
+              videoUrl: lesson.videoUrl,
+              currentTime: null,
+              isFinish: null
+            }
+            //temp = {...temp, data}
+            props.onPress(data)
+          }
+          else {
+            console.log('fail1: ', err.response.data.message, err.response.status)
+          }
+        })
+      } else {
+        props.showInfoDialog()
+        console.log(props.checkOwn, lesson.isPreview)
+      }
     }
   }
 

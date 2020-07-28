@@ -5,6 +5,7 @@ import {globalStyles} from "../../globles/styles";
 import ItemsInAuthor from "./ItemsInAuthor/items-in-author";
 import {ColorsContext} from "../../provider/colors-provider";
 import {getInstructorInfo} from "../../core/services/instructor-services";
+import CenterActivityIndicator from "../Common/center-activity-indicator";
 
 const AuthorDetail = (props) => {
   const {theme} = useContext(ColorsContext)
@@ -36,7 +37,7 @@ const AuthorDetail = (props) => {
       <ItemsInAuthor courses={author.courses} name={author.name} navigation={props.navigation} route={props.route}/>
     </ScrollView>
   } else {
-    return <ActivityIndicator size={'large'} color={'blue'}/>
+    return <CenterActivityIndicator />
   }
 
 };

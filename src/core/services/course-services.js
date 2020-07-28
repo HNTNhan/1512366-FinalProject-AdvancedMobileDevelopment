@@ -56,4 +56,28 @@ export const getUserCourseDetail = (courseId, userId) => {
   return axios.get(url)
 }
 
+export const getRating = (courseId, token) => {
+  const uri = 'https://api.itedu.me/course/get-rating/' + courseId;
 
+  const config = {
+    headers: { Authorization: `Bearer ${token}` }
+  };
+
+  return axios.get(uri, config)
+}
+
+export const ratingCourse = (courseId, formalityPoint, contentPoint, presentationPoint, content, token) => {
+  const data = {
+    courseId: courseId,
+    formalityPoint: formalityPoint,
+    contentPoint: contentPoint,
+    presentationPoint: presentationPoint,
+    content: content
+  }
+
+  const config = {
+    headers: { Authorization: `Bearer ${token}` }
+  };
+
+  return axios.post("https://api.itedu.me/course/rating-course", data, config)
+}

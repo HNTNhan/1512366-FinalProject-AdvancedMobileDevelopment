@@ -2,11 +2,14 @@ import React, {useContext} from 'react';
 import {TouchableOpacity, StyleSheet} from 'react-native';
 import {Icon, Text} from 'react-native-elements'
 import {ColorsContext} from "../../provider/colors-provider";
+import {DownloadContext} from "../../provider/download-provider";
 
 const IconButton = (props) => {
   const {theme} = useContext(ColorsContext)
-  return <TouchableOpacity style={styles.container} onPress={props.onPress}>
-    <Icon name={props.name} size={30} style={styles.icon} color={theme.text}/>
+
+
+  return <TouchableOpacity style={styles.container} onPress={props.onPress} disabled={props.isDownloading || props.downloadAll}>
+    <Icon name={props.name} size={30} style={styles.icon} color={props.downloadAll ? 'gray' : theme.text}/>
     <Text style={{color: theme.text, fontSize: 16}}>{props.title}</Text>
   </TouchableOpacity>
 };

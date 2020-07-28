@@ -17,13 +17,16 @@ export const downloadCourse = (data) => {
 
 }
 
-export const downloadSection = async (data, numberOrder, courseId, token, setProgress) => {
+export const downloadSection = async (data, numberOrder, courseId, token, setDownloadInfo, setIsDownloading) => {
   if(numberOrder===0) {
+    setIsDownloading(true)
     const callback = downloadProgress => {
       const progress = downloadProgress.totalBytesWritten / downloadProgress.totalBytesExpectedToWrite * 100;
-      setProgress(progress.toFixed(2))
-      //setDownloadInfo({lessonName: 'Overview', progress: progress.toFixed(2)})
       console.log(progress.toFixed(2) + '%')
+      const now = new Date()
+      if(now.getTime()%2000<=100 || downloadProgress.totalBytesWritten === downloadProgress.totalBytesExpectedToWrite) {
+        setDownloadInfo({lessonName: 'Overview', progress: progress.toFixed(2)})
+      } else {}
     };
 
     if(data[0].videoUrl.includes("https://youtube.com")) {
@@ -35,12 +38,22 @@ export const downloadSection = async (data, numberOrder, courseId, token, setPro
         callback
       );
 
-      //setIsDownloading(true)
-      const { uri } = await downloadResumable.downloadAsync()
-      data[0].videoUrl = uri
-      //setIsDownloading(false)
+      try {
+        const {uri} = await downloadResumable.downloadAsync()
+        data[0].videoUrl = uri
+        setTimeout(() => {
+          setIsDownloading(false)
+          setDownloadInfo({lessonName: 'Overview', progress: 0})
+
+        }, 5000)
+        return data
+      } catch (e) {
+        console.log(e)
+        setIsDownloading(false)
+        setDownloadInfo({lessonName: 'Overview', progress: 0})
+      }
       //await saveFile(uri)
-      return data
+
     }
     else {
       const downloadResumable = FileSystem.createDownloadResumable(
@@ -50,20 +63,32 @@ export const downloadSection = async (data, numberOrder, courseId, token, setPro
         callback
       );
 
-      //setIsDownloading(true)
-      const { uri } = await downloadResumable.downloadAsync()
-      data[0].videoUrl = uri
-      //setIsDownloading(false)
-      //await saveFile(uri)
-      return data
+      try {
+        const {uri} = await downloadResumable.downloadAsync()
+        data[0].videoUrl = uri
+        setIsDownloading(false)
+        setDownloadInfo({lessonName: '', progress: 0})
+        //await saveFile(uri)
+        return data
+      } catch (e) {
+        setTimeout(() => {
+          setIsDownloading(false)
+          setDownloadInfo({lessonName: '', progress: 0})
+        }, 5000)
+      }
+
     }
   } else {
     let temp = [...data];
-    for(let i=0; i<2; i++) {
+    for(let i=0; i<temp.length; i++) {
+      setIsDownloading(true)
       const callback = (downloadProgress) => {
         const progress = downloadProgress.totalBytesWritten / downloadProgress.totalBytesExpectedToWrite * 100;
-        // setDownloadInfo({lessonName: temp[i].name, progress: progress.toFixed(2)})
         console.log(progress.toFixed(2) + '%')
+        const now = new Date()
+        if(now.getTime()%2000<=100 || downloadProgress.totalBytesWritten === downloadProgress.totalBytesExpectedToWrite) {
+          setDownloadInfo({lessonName: temp[i].name, progress: progress.toFixed(2)})
+        } else {}
       };
 
       try {
@@ -77,12 +102,15 @@ export const downloadSection = async (data, numberOrder, courseId, token, setPro
             {},
             callback
           );
-          // setIsDownloading(true)
-          const { uri } = await downloadResumable.downloadAsync();
-          temp[i].videoUrl = uri
-          // setIsDownloading(false)
+
+          try {
+            const { uri } = await downloadResumable.downloadAsync();
+            temp[i].videoUrl = uri
+          } catch (e) {
+
+          }
+
           //await saveFile(uri)
-          console.log(uri)
         }
         else {
           const downloadResumable = FileSystem.createDownloadResumable(
@@ -92,15 +120,21 @@ export const downloadSection = async (data, numberOrder, courseId, token, setPro
             callback
           );
 
-          // setIsDownloading(true)
-          const { uri } = await downloadResumable.downloadAsync();
-          temp[i].videoUrl = uri
-          // setIsDownloading(false)
-          //await saveFile(uri)
-          console.log(uri)
+          try {
+            const { uri } = await downloadResumable.downloadAsync();
+            temp[i].videoUrl = uri
+            //await saveFile(uri)
+          } catch (e) {
+
+          }
+
         }
       } catch (e) { console.log(e) }
     }
+
+    setIsDownloading(false)
+    setDownloadInfo({lessonName: '', progress: 0})
+
     return temp
   }
 }

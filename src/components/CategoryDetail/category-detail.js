@@ -2,15 +2,9 @@ import React, {useContext, useEffect, useState} from 'react';
 import {ScrollView, View, ActivityIndicator} from 'react-native';
 import SectionCourses from "../Main/Home/SectionCourses/section-courses";
 import {globalStyles} from "../../globles/styles";
-import TopAuthors from "../Main/Browse/TopAuthors/top-authors";
-import {AuthenticationContext} from "../../provider/authentication-provider";
-import {findByKey, findSkillByName} from "../../testdata/find-data";
-import {skillsData} from "../../testdata/skills-data";
-import {pathsData} from "../../testdata/paths-data";
-import {coursesData} from "../../testdata/courses-data";
-import {authorsData} from "../../testdata/authors-data";
 import {ColorsContext} from "../../provider/colors-provider";
 import {searchCourses} from "../../core/services/course-services";
+import CenterActivityIndicator from "../Common/center-activity-indicator";
 
 const CategoryDetail = (props) => {
   const {theme} = useContext(ColorsContext);
@@ -64,7 +58,7 @@ const CategoryDetail = (props) => {
           />
           {/*<TopAuthors title={'Top authors in Software Development'} authors={authors} navigation={props.navigation} route={props.route}/>*/}
         </ScrollView> :
-        <ActivityIndicator size={"large"} color={"blue"}/>
+        <CenterActivityIndicator />
     }
 
   </View>

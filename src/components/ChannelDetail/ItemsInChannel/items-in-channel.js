@@ -1,32 +1,33 @@
-import React from 'react';
-import {View} from 'react-native';
-import ListPathItems from "../../Courses/ListPathItems/list-path-items";
+import React, {useContext} from 'react';
+import {Text, View, StyleSheet} from 'react-native';
 import ListCourseItems from "../../Courses/ListCourseItems/list-course-items";
 import {globalStyles} from "../../../globles/styles";
-import {coursesData} from "../../../testdata/courses-data";
-import {findByKey} from "../../../testdata/find-data";
-import {pathsData} from "../../../testdata/paths-data";
+import {ColorsContext} from "../../../provider/colors-provider";
 
 const ItemsInChannel = (props) => {
+  const {theme} = useContext(ColorsContext)
 
-
-  const onPressPathItem = (key) => {
-    props.navigation.navigate('PathDetail', {key: key});
-  }
-
-  const onPressCourseItem = (key) => {
-    props.navigation.navigate('CourseDetail', {key: key});
+  const onPressCourseItem = (id) => {
+    props.navigation.navigate('CourseDetail', {id: id});
   }
   return <View>
-    { props.items.map((item, index) => item.data.length!==0 ? item.typeItem==='path' ?
-      <View key={index} style={globalStyles.borderSeparator}>
-        <ListPathItems item={findByKey(pathsData, item.data)[0]} onPress={() => onPressPathItem(item.data[0])}/>
-      </View>:
-      <View key={index} style={globalStyles.borderSeparator}>
-        <ListCourseItems key={index} item={findByKey(coursesData, item.data)[0]} onPress={() => onPressCourseItem(item.data[0])}/>
-      </View> : null
-    ) }
+    <View>
+      <Text style={{...styles.title, color: theme.text}}>Courses in channel</Text>
+    </View>
+    {
+      props.items.map((item, index) => {
+        return <View key={index} style={globalStyles.borderSeparator}>
+          <ListCourseItems item={item} onPress={() => onPressCourseItem(item.id)}/>
+        </View>
+      })
+    }
   </View>
 };
 
+const styles = StyleSheet.create({
+  title: {
+    fontSize: 18,
+    marginTop: 10
+  }
+})
 export default ItemsInChannel;

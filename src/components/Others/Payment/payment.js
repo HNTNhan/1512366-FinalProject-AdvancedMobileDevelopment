@@ -54,7 +54,7 @@ const Payment = (props) => {
       return <View style={{...styles.container, backgroundColor: theme.background, alignItems: 'center', justifyContent: 'center'}}>
         <Icon name={'check-circle'} type={"font-awesome-5"} color={'green'} size={50}/>
         <Text style={styles.mainTitle}>Payment Success</Text>
-        <Text style={styles.title}>Thank you for using our services</Text>
+        <Text style={styles.title}>Thank you for using our services!</Text>
         <View style={{flexDirection: 'row'}}>
           <Button buttonStyle={{marginHorizontal: 5, borderColor: theme.text}} titleStyle={{color: theme.text}} title={'Home'}
                   type={"outline"} icon={<Icon name={'home'} type={"font-awesome-5"} size={18} color={theme.text} />}
@@ -81,7 +81,7 @@ const Payment = (props) => {
               <Text style={{...styles.text, color: theme.text}}>
                 <Text>{paymentInfo.payload.title} {'\n'}</Text>
                 <Text>{paymentInfo.payload.instructorName} {'\n'}</Text>
-                <Text>{paymentInfo.payload.price ? <Text>{paymentInfo.payload.price}đ</Text> : <Text style={{color: 'red'}}>Free</Text> } {'\n'}</Text>
+                <Text style={{fontSize: 18, color: 'red'}}>{paymentInfo.payload.price ? <Text>{paymentInfo.payload.price}đ</Text> : <Text>Free</Text> } {'\n'}</Text>
               </Text>
             </View>
           </View>

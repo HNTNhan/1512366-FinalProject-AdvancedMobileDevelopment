@@ -1,12 +1,12 @@
 import React, {useState, useReducer} from 'react';
 import {reducer} from "../reducer/authentication-reducer";
 import {
-  changeEmail, changeLogoutStatus, changePassword,
+  changeEmail, changeOnlineStatus, changePassword,
   forgotPassword,
   forgotPasswordEnd,
   login, logout,
   register,
-  registerEnd,
+  registerEnd, setUserInfoFromStorage,
   updateFavoriteCategories, updateProfile
 } from "../action/authentication-action";
 
@@ -20,6 +20,7 @@ export const initialState = {
   isForgotPassword: null,
   isForgettingPassword: false,
   isUpdatingProfile: false,
+  isOnline: false,
   message: null,
   userInfo: null,
   token: null,
@@ -32,6 +33,7 @@ const AuthenticationProvider = (props) => {
   return <AuthenticationContext.Provider
     value={{user: user, setUser: setUser,
       state, login: login(dispatch), logout: logout(dispatch),
+      changeOnlineStatus: changeOnlineStatus(dispatch), setUserInfoFromStorage: setUserInfoFromStorage(dispatch),
       register: register(dispatch), registerEnd: registerEnd(dispatch),
       forgotPassword: forgotPassword(dispatch), forgotPasswordEnd: forgotPasswordEnd(dispatch),
       updateFavoriteCategories: updateFavoriteCategories(dispatch),

@@ -9,12 +9,6 @@ import {ColorsContext} from "../../../provider/colors-provider";
 const ListChannels = (props) => {
   const {theme} = useContext(ColorsContext)
 
-  const renderSeparator = () => {
-    return (
-      <View style={globalStyles.separator} />
-    );
-  };
-
   const onPressItem = (channel, title) => {
     props.navigation.navigate('ChannelDetail', {channel: channel, name: title})
   }
@@ -24,8 +18,7 @@ const ListChannels = (props) => {
       data={props.route.params.data}
       keyExtractor={(item, index) => item + index}
       renderItem={({item}) => <ListChannelItems item={item} onPress={() => onPressItem(item, item.detail.title)}/>}
-      ItemSeparatorComponent= {renderSeparator}
-      //ListHeaderComponent = {() => <SectionTitle title={'8 Result'} button={'Filter'}/>}
+      ItemSeparatorComponent= {() => <View style={globalStyles.separator} />}
     />
   </View>
 };

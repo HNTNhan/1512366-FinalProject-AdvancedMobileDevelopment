@@ -1,6 +1,6 @@
 import {
   CHANGE_EMAIL_FAIL,
-  CHANGE_EMAIL_SUCCESS, CHANGE_LOGOUT_STATUS, CHANGE_PASSWORD_FAIL, CHANGE_PASSWORD_SUCCESS,
+  CHANGE_EMAIL_SUCCESS, CHANGE_LOGOUT_STATUS, CHANGE_ONLINE_STATUS, CHANGE_PASSWORD_FAIL, CHANGE_PASSWORD_SUCCESS,
   FORGOT_PASSWORD_END,
   FORGOT_PASSWORD_FAIL,
   FORGOT_PASSWORD_REQUEST,
@@ -12,7 +12,7 @@ import {
   REGISTER_END,
   REGISTER_FAIL,
   REGISTER_REQUEST,
-  REGISTER_SUCCESS,
+  REGISTER_SUCCESS, SET_USER_INFO_FROM_STORAGE,
   UPDATE_FAVORITE_CATEGORIES_FAIL,
   UPDATE_FAVORITE_CATEGORIES_SUCCESS, UPDATE_PROFILE_FAIL,
   UPDATE_PROFILE_REQUEST,
@@ -81,6 +81,10 @@ export const reducer = (prevState, action) => {
       return {...prevState, isUpdatingProfile: false}
     case CHANGE_PASSWORD_FAIL:
       return {...prevState, isUpdatingProfile: false, message: action.message}
+    case CHANGE_ONLINE_STATUS:
+      return {...prevState, isOnline: action.data,}
+    case SET_USER_INFO_FROM_STORAGE:
+      return {...prevState, userInfo: action.data}
     default:
       throw new Error();
   }

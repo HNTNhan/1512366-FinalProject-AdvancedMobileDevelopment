@@ -30,6 +30,8 @@ export const CHANGE_EMAIL_FAIL = 'CHANGE_EMAIL_FAIL';
 // export const CHANGE_PASSWORD_REQUEST = 'CHANGE_PASSWORD_REQUEST';
 export const CHANGE_PASSWORD_SUCCESS = 'CHANGE_PASSWORD_SUCCESS';
 export const CHANGE_PASSWORD_FAIL = 'CHANGE_PASSWORD_FAIL';
+export const CHANGE_ONLINE_STATUS = 'CHANGE_ONLINE_STATUS';
+export const SET_USER_INFO_FROM_STORAGE = 'SET_USER_INFO_FROM_STORAGE';
 
 
 ///////////////////////////////////////////////////////////////////
@@ -230,4 +232,12 @@ export const changePassword = (dispatch) => (token, id, password) => {
   }).catch(err => {
     dispatch(changePasswordFail(err.response.data.message || err))
   })
+}
+
+export const changeOnlineStatus = (dispatch) => (status) => {
+  dispatch({type: CHANGE_ONLINE_STATUS, data: status})
+}
+
+export const setUserInfoFromStorage = (dispatch) => (userInfo) => {
+  dispatch({type: SET_USER_INFO_FROM_STORAGE, data: userInfo})
 }

@@ -29,7 +29,7 @@ const BeforeSearch = (props) => {
       showsVerticalScrollIndicator={false}
       sections={keys}
       keyExtractor={(item, index) => item + index}
-      renderItem={({item}) => <ListKeyItems item={item} onPress={() => props.onPress(item)}/>}
+      renderItem={({item, section: {title}}) => <ListKeyItems type={title==='Recent searches'? 0 : 1} item={item} onPress={() => props.onPress(item)}/>}
       renderSectionHeader={({section: {title}}) => <View style={styles.title}>
           <Text style={{...styles.titleText, color: theme.text}}>{title}</Text>
             {title!== 'Your Favorite Categories' ? <TouchableOpacity style={styles.button}

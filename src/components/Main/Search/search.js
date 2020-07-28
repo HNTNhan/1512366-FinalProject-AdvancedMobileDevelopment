@@ -8,15 +8,31 @@ import {ColorsContext} from "../../../provider/colors-provider";
 import {AuthenticationContext} from "../../../provider/authentication-provider";
 import {getAllCategory} from "../../../core/services/category-service";
 import CenterActivityIndicator from "../../Common/center-activity-indicator";
+import {getRecentSearch, storeRecentSearch} from "../../../core/local_storage/search-storage";
 
 const Search = (props) => {
   const {theme} = useContext(ColorsContext);
   const {state} = useContext(AuthenticationContext);
   const [searchKey, setSearchKey] = useState('');
+  const [recentSearch, setRecentSearch] = useState([])
   const [categorySelect, setCategorySelect] = useState([]);
   const [showResult, setShowResult] = useState(false);
   const [favoriteCategories, setFavoriteCategories] = useState(null)
   const [isLoading, setIsLoading] = useState(state.isAuthenticated)
+
+  useEffect(() => {
+    getRecentSearch().then(res => {
+      if(res.status===200) {
+        if(res.data) {
+          setRecentSearch(res.data)
+        } else {
+          setRecentSearch([])
+        }
+      } else {
+        setRecentSearch([])
+      }
+    })
+  }, [])
 
   if(state.isAuthenticated) {
     useEffect(() => {
@@ -52,7 +68,27 @@ const Search = (props) => {
     // setUser(temp);
   }
 
-  const onSubmitEditing = () => {
+  const checkRecentSearch = (value) => {
+    for (let i = 0; i < recentSearch.length; i++) {
+      if (recentSearch[i] === value) {
+        return true
+      }
+    }
+    return false
+  }
+
+  const onSubmitEditing = async () => {
+    if(!checkRecentSearch(searchKey)) {
+      let temp = [...recentSearch]
+      temp.unshift(searchKey)
+      if(recentSearch.length > 5) {
+        setRecentSearch(temp.slice(0, 5))
+        await storeRecentSearch(temp.slice(0, 5))
+      } else {
+        setRecentSearch(temp)
+        await storeRecentSearch(temp)
+      }
+    }
     setShowResult(true)
   }
 
@@ -94,7 +130,7 @@ const Search = (props) => {
 
       {
         showResult===false ? searchKey==='' ? state.isAuthenticated && favoriteCategories ?
-          <BeforeSearch onPress={onPressItem} onPressClear={onPressClear} recentSearch={[]} favoriteCategories={favoriteCategories}/>
+          <BeforeSearch onPress={onPressItem} onPressClear={onPressClear} recentSearch={recentSearch} favoriteCategories={favoriteCategories}/>
               : null
             : null /*<WhileSearch searchKey={searchKey} keys={keysHelpSearch} onPress={onPressItem}/>*/
           : <ResultSearch searchKey={searchKey} categorySelect={categorySelect} getCategoriesSelected={getCategoriesSelected} route={props.route} navigation={props.navigation}/>
