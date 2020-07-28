@@ -37,26 +37,31 @@ const ListLessons = (props) => {
         //   delete section[i]['lesson']
         // }
         // section.unshift(overview)
+
         setSection(props.courseDetail.section)
         setLoading(false)
       }
     }, [])
 
-    return !loading ?
-      <View>
-        <SectionList
-          sections={section}
-          keyExtractor={(item, index) => item + index}
-          renderItem={({item, section: {downloaded}}) =>
-            <ListLessonItems item={item} checkOwn={props.checkOwn} courseId={props.courseId} videoLoading={props.videoLoading} downloaded={downloaded}
-                             type={item.numberOrder!==0 ? 'lesson' : 'overview'} onPress={props.onPressLesson} showInfoDialog={props.showInfoDialog}/>}
-          renderSectionHeader={({section: {name, sumHours, numberOrder, data, downloaded, id}}) =>
-            <ListLessonTitle index={numberOrder} title={name} totalDuration={sumHours} downloaded={downloaded} id={id} checkOwn={props.checkOwn}
-                             onPressDownloadSection={() => props.onPressDownloadSection(data, numberOrder)}/>}
-          SectionSeparatorComponent={() => <View style={globalStyles.separator} />}
-        />
-      </View>
-      : null
+    if(loading) {
+      console.log(0)
+      return null
+    } else {
+      console.log(1)
+      return <View>
+          <SectionList
+            sections={section}
+            keyExtractor={(item, index) => item + index}
+            renderItem={({item, section: {downloaded}}) =>
+              <ListLessonItems item={item} checkOwn={props.checkOwn} courseId={props.courseId} videoLoading={props.videoLoading} downloaded={downloaded}
+                               type={item.numberOrder!==0 ? 'lesson' : 'overview'} onPress={props.onPressLesson} showInfoDialog={props.showInfoDialog}/>}
+            renderSectionHeader={({section: {name, sumHours, numberOrder, data, downloaded, id}}) =>
+              <ListLessonTitle index={numberOrder} title={name} totalDuration={sumHours} downloaded={downloaded} id={id} checkOwn={props.checkOwn}
+                               onPressDownloadSection={() => props.onPressDownloadSection(data, numberOrder)}/>}
+            SectionSeparatorComponent={() => <View style={globalStyles.separator} />}
+          />
+        </View>
+    }
   } else {
      return <View style={styles.container}>
        <Text style={{fontSize: 16, color: theme.text}}>Please sign in to see this context!</Text>

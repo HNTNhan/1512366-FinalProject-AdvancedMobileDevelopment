@@ -22,7 +22,7 @@ const AddToChannelDialog = (props) => {
   const [courseDetail, setCourseDetail] = useState()
   //const courseDetail = !props.courseDetail ? props.route.params.courseDetail : props.courseDetail;
   useEffect(() => {
-    let temp = !props.courseDetail ? props.route.params.courseDetail : props.courseDetail
+    let temp = {...props.courseDetail}
     delete temp['section']
     setCourseDetail(temp)
   }, [])

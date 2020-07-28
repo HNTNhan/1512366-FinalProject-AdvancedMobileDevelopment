@@ -15,38 +15,38 @@ const Login = (props) => {
   const [pressedSignIn, setPressedSignIn] = useState(false);
   const authContext = useContext(AuthenticationContext)
 
-  useEffect(() => {
-    NetInfo.fetch().then(state => {
-      authContext.changeOnlineStatus(state.isConnected)
-      if(!state.isConnected) {
-        getStoreUserInfo().then((res) => {
-          if(res.status===200) {
-            if(res.data) {
-              const now = new Date()
-              if((now - (new Date(res.data.currentDate)))/1000/60/60/24 > 7) {
-                setStoreUserInfo(null).then(() => authContext.setUserInfoFromStorage(null))
-              } else {
-                authContext.setUserInfoFromStorage(res.data)
-              }
-            } else {
-              authContext.setUserInfoFromStorage(null)
-            }
-          } else {
-            authContext.setUserInfoFromStorage(null)
-          }
-        })
-      } else {}
-    });
-  }, [])
+  // useEffect(() => {
+  //   NetInfo.fetch().then(state => {
+  //     authContext.changeOnlineStatus(state.isConnected)
+  //     if(!state.isConnected) {
+  //       getStoreUserInfo().then((res) => {
+  //         if(res.status===200) {
+  //           if(res.data) {
+  //             const now = new Date()
+  //             if((now - (new Date(res.data.currentDate)))/1000/60/60/24 > 7) {
+  //               setStoreUserInfo(null).then(() => authContext.setUserInfoFromStorage(null))
+  //             } else {
+  //               authContext.setUserInfoFromStorage(res.data)
+  //             }
+  //           } else {
+  //             authContext.setUserInfoFromStorage(null)
+  //           }
+  //         } else {
+  //           authContext.setUserInfoFromStorage(null)
+  //         }
+  //       })
+  //     } else {}
+  //   });
+  // }, [])
 
   useEffect(() => {
     if(authContext.state.isUpdatingProfile) {
 
     } else {
       if(authContext.state.isAuthenticated) {
-        const currentDate = new Date();
-        const userInfo = {...authContext.state.userInfo, currentDate: currentDate, password: password}
-        setStoreUserInfo(userInfo).then(r => console.log(r))
+        // const currentDate = new Date();
+        // const userInfo = {...authContext.state.userInfo, currentDate: currentDate, password: password}
+        // setStoreUserInfo(userInfo).then(r => console.log(r))
         props.navigation.replace('Main')
       } else {}
     }
@@ -77,7 +77,7 @@ const Login = (props) => {
   }
 
   const onPressSignIn = () => {
-    if(authContext.state.isOnline) {
+    //if(authContext.state.isOnline) {
       authContext.login(email, password);
 
       if(!pressedSignIn) {
@@ -86,13 +86,14 @@ const Login = (props) => {
       else {
 
       }
-    } else {
-      if(authContext.state.userInfo) {
-        props.navigation.replace('Main')
-      } else {
-        console.log('sadasd')
-      }
-    }
+    //}
+    // else {
+    //   if(authContext.state.userInfo) {
+    //     props.navigation.replace('Main')
+    //   } else {
+    //     console.log('sadasd')
+    //   }
+    // }
   }
 
   return <View style={{...styles.container, backgroundColor: theme.background}}>

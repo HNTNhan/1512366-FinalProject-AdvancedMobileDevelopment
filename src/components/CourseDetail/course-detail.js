@@ -80,6 +80,7 @@ const CourseDetail = (props) => {
           if(res.status === 200) {
             setCheckOwn(res.data.payload.isUserOwnCourse)
             if(res.data.payload.isUserOwnCourse) {
+              console.log('own')
               getCourseAndLessonsDetail(props.route.params.id, state.token).then(res => {
                 if(res.status===200) {
                   console.log('begin')
@@ -119,6 +120,7 @@ const CourseDetail = (props) => {
                 console.log(err.response.data.message || err)
               })
             } else {
+              console.log('notown')
               getUserCourseDetail(props.route.params.id, state.userInfo.id)
                 .then(res => {
                   if(res.status===200) {
@@ -157,6 +159,7 @@ const CourseDetail = (props) => {
       })
     } else {
       //Lay thong tin khoa hoc
+      console.log('review')
       getCourseInfo(props.route.params.id, state.token).then(res => {
         if(res.status === 200) {
           setDetail({data: res.data.payload})
