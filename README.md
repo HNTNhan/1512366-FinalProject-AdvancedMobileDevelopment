@@ -15,5 +15,5 @@ Deadline 2: Xây dựng ứng dụng offline cho toàn bộ ứng dụng
 
 Deadline 3: Xây dựng đồ án cuối kì đầy đủ các luồng chạy online (dữ liệu trong ứng dụng gọi lên server itedu.me)
   - Commit ID: 8189332
-  - Video demo: https://drive.google.com/file/d/1-ScDd1XGW338kdBGidJuFJdSrdMLqIK2/view?usp=sharing
+  - Video demo: https://drive.google.com/file/d/13mvrL-JzQIVSnyOfqdBWr_keObKmStDJ/view?usp=sharing
 ------------------------------------------------
