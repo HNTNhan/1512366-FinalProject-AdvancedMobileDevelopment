@@ -16,12 +16,13 @@ const styles = StyleSheet.create({
   imageButton: {
     margin: 5,
     height: 100,
-    minWidth: 150,
+    width: '100%',
   },
   touch: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    paddingHorizontal: 5,
   },
   title: {
     fontSize: 20,

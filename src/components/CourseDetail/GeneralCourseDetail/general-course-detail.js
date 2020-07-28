@@ -1,6 +1,6 @@
-import React, {useContext, useState} from 'react';
-import {TouchableOpacity, View, StyleSheet, ScrollView} from 'react-native';
-import {Button, Icon, Image, Text} from "react-native-elements";
+import React, {useContext, useEffect, useReducer, useState} from 'react';
+import {View, StyleSheet, ScrollView} from 'react-native';
+import {Button, Icon, Text} from "react-native-elements";
 import AuthorIconButton from "../../Common/author-icon-button";
 import IconButton from "../../Common/icon-button";
 import DescriptionOpenClose from "../../Common/description-open-close";
@@ -8,89 +8,174 @@ import {ColorsContext} from "../../../provider/colors-provider";
 import {AuthenticationContext} from "../../../provider/authentication-provider";
 import AddToChannelDialog from "../../Common/add-to-channel-dialog";
 import RatingStart from "../../Common/rating-start";
+import {getFavoriteStatus, setFavoriteStatus} from "../../../core/services/user-services";
+import {UserContext} from "../../../provider/user-provider";
+import {convertDate, convertTime} from "../../Common/convert-data";
+import {getInstructorInfo} from "../../../core/services/instructor-services";
+import RatingCourse from "../../Common/rating-course";
+import {DownloadContext} from "../../../provider/download-provider";
 
 const GeneralCourseDetail = (props) => {
   const {theme} = useContext(ColorsContext);
-  const {user, setUser} = useContext(AuthenticationContext);
+  const {state} = useContext(AuthenticationContext);
+  const {isDownloading} = useContext(DownloadContext)
+  const userContext = useContext(UserContext);
   const [modalVisible, setModalVisible] = useState(false);
+  const [favorite, setFavorite] = useState(false)
+  const [rating, setRating] = useState(false)
+  const [downloadAll, setDownloadAll] = useState(false)
 
-  const courseDetail = props.detail.courseDetail;
-  const instructorInfo = props.detail.instructorInfo;
-  const keyItem = props.route.params.key;
-  const date = new Date(courseDetail.updatedAt);
-  const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  const courseDetail = props.detail;
+  const [instructorInfo, setInstructorInfo] = useState(props.detail.instructor || null);
+  // const keyItem = props.route.params.id;
+
+  useEffect(() => {
+    if(props.courseDownload){
+      for(let i=0; i<props.courseDownload.section.length; i++) {
+        if(props.courseDownload.section[i].downloaded) {
+
+        } else {
+          return
+        }
+      }
+      setDownloadAll(true)
+    } else {}
+  }, [])
+
+  useEffect(() => {
+    let mounted1 = true;
+    let mounted2 = true;
+
+    if(!instructorInfo) {
+      getInstructorInfo(courseDetail.instructorId).then(res => {
+        if(mounted2) {
+          if(res.status === 200) {
+            setInstructorInfo(res.data.payload)
+          } else {
+            console.log(res.data.message)
+          }
+        } else {}
+      }).catch(err => {
+        console.log('getInstructorInfo: ', err.response.data.message || err)
+      })
+    } else {
+      getFavoriteStatus(state.token, props.route.params.id)
+        .then((res) => {
+          if(res.status === 200) {
+            if(mounted1){
+              if(favorite !== res.data.likeStatus) {
+                setFavorite(res.data.likeStatus)
+              } else {}
+            }
+          } else {
+            //return res.data.message
+          }
+        })
+        .catch((err) => {
+          console.log('getFavorite: ', err.response.data.message || err)
+        })
+    }
+
+    return () => {
+      mounted1 = false
+      mounted2 = false
+    }
+  }, [])
+
+  useEffect(() => {
+    if(userContext.state.favoriteCoursesChange === props.route.params.id) {
+      setFavorite(!favorite);
+    } else {
+
+    }
+  }, [userContext.state.favoriteCoursesChange])
 
   const authorListItems = (instructorInfo) => {
     return <AuthorIconButton key={instructorInfo.id} instructorInfo={instructorInfo} text={theme.text}
-                             onPress={() => onPressAuthorItem(instructorInfo.id, instructorInfo.name)}/>
+                             onPress={() => onPressAuthorItem(instructorInfo.id, instructorInfo.name, instructorInfo)}/>
   }
 
-  const onPressAuthorItem = (key, name) => {
-    props.navigation.navigate('AuthorDetail', {key: key, name: name})
+  const onPressAuthorItem = (key, name, author) => {
+    props.navigation.push('AuthorDetail', {key: key, name: name, author: author})
   }
 
-  const onPressBookmark = () => {
-    let temp = {...user};
-    const pos = user.bookmarks.indexOf(keyItem);
-    if(pos !== -1) {
-      temp.bookmarks.splice(pos, 1);
-    } else {
-      temp.bookmarks.push(keyItem);
-    }
-    setUser(temp);
-  }
-
-  const onPressDownload = () => {
-    let temp = {...user};
-    const pos = user.downloads.indexOf(keyItem);
-    if(pos !== -1) {
-      temp.downloads.splice(pos, 1);
-    } else {
-      temp.downloads.push(keyItem);
-    }
-    setUser(temp);
+  const onPressFavortie = () => {
+    let mounted = true;
+    setFavoriteStatus(state.token, props.route.params.id)
+      .then((res) => {
+        if(res.status === 200) {
+          if(mounted) {
+            userContext.favoriteCoursesChange(props.route.params.id)
+          }
+        } else {
+          //return res.data.message
+        }
+      })
+      .catch((err) => {
+        alert(err.response.data.message || err)
+      })
+    return () => mounted = false
   }
 
   const onSelectAddToChannel = () => {
     setModalVisible(true)
   }
 
-  const onPressClose = () => {
-    setModalVisible(false)
-  }
-
-  return <ScrollView>
+  return <ScrollView showsVerticalScrollIndicator={false}>
     <Text style={{...styles.title, color: theme.text}}>{courseDetail.title}</Text>
 
-    <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-      <View style={styles.author}>
-        {authorListItems(instructorInfo)}
+    <View style={{...styles.courseContainer}}>
+      <View>
+        <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+          <View style={styles.author}>
+            {instructorInfo ? authorListItems(instructorInfo) : null}
+          </View>
+        </ScrollView>
+        <View style={{...styles.subInfo, alignItems: 'flex-start'}}>
+            <Text style={{fontSize: 14, color: theme.text}}>
+              {convertDate(courseDetail.updatedAt, 1) + ' . ' + convertTime(courseDetail.totalHours)}
+            </Text>
+            <RatingStart rating={(courseDetail.formalityPoint + courseDetail.contentPoint + courseDetail.presentationPoint)/3.0} size={12}/>
+        </View>
       </View>
-    </ScrollView>
-
-    <View style={styles.subInfo}>
-      <Text style={{fontSize: 14, color: theme.text}}>
-        {`${monthNames[date.getMonth()]} ${date.getDate()} ${date.getFullYear()} . ${Math.floor(courseDetail.totalHours)}h ${Math.floor((courseDetail.totalHours-Math.floor(courseDetail.totalHours))*60)}m  `}
-      </Text>
-      <RatingStart rating={(courseDetail.formalityPoint + courseDetail.contentPoint + courseDetail.presentationPoint)/3.0} size={12}/>
+      {
+        !props.checkOwn ?<View>
+          <Button title={'Payment'} type={'outline'} buttonStyle={styles.buttonStyle} titleStyle={styles.buttonTitle}
+                  icon={<Icon name={'shopping-cart'} type={"font-awesome-5"} size={18} color={'#19B5FE'}/>} iconRight
+                  onPress={() => {
+                    console.log(courseDetail.id)
+                    props.navigation.push('Payment', {id: courseDetail.id})
+                  }}/>
+        </View> : null
+      }
     </View>
 
+
+
     <View style={styles.activeContainer}>
-      <IconButton name='bookmark-border' title={user.bookmarks.indexOf(keyItem)!==-1 ? 'UnBookmark' : 'Bookmark'} onPress={() => onPressBookmark()}/>
+      <IconButton name='bookmark-border' title={favorite ? 'UnFavorite' : 'Favorite'} onPress={() => onPressFavortie()}/>
       <IconButton name='cast-connected' title='Add to channel' onPress={() => onSelectAddToChannel()}/>
-      <IconButton name='get-app' title={user.downloads.indexOf(keyItem)!==-1 ? 'Downloaded' : 'Download'} onPress={() => onPressDownload()}/>
+      <IconButton downloadAll={downloadAll} isDownloading={isDownloading} name='get-app' title={'Download'} onPress={async () => await props.onPressDownload()}/>
     </View>
 
     <View style={{...styles.descriptionContainer}}>
       <Text style={{...styles.subTitle, color: theme.text}}>Description: </Text>
       <DescriptionOpenClose description={courseDetail.description} noLines={3} text={theme.text} foreground={theme.foreground1}/>
       <Text style={{...styles.subTitle, color: theme.text}}>{'Requirement: '}</Text>
-      <Text style={{...styles.text, color: theme.text}}>{courseDetail.requirement}</Text>
+      <Text style={{...styles.text, color: theme.text}}>{courseDetail.requirement.join(`\n`)}</Text>
       <Text style={{...styles.subTitle, color: theme.text}}>{'Learn what: '}</Text>
-      <Text style={{...styles.text, color: theme.text}}>{courseDetail.learnWhat}</Text>
+      <Text style={{...styles.text, color: theme.text}}>{courseDetail.learnWhat.join('\n')}</Text>
     </View>
 
-
+    <Button
+      title='Rating course'
+      type='outline'
+      icon={
+        <Icon name='star' type='font-awesome-5' color='#19B5FE' iconStyle={{marginHorizontal: 8}}/>
+      }
+      onPress={() => setRating(!rating)}
+      containerStyle={{marginVertical: 5}}
+    />
     <Button
       title='Take a learning check'
       type='outline'
@@ -107,7 +192,9 @@ const GeneralCourseDetail = (props) => {
       }
       containerStyle={{marginVertical: 5}}
     />
-    {/*<AddToChannelDialog modalVisible={modalVisible} keyItem={keyItem} closeModel={() => onPressClose()}/>*/}
+    {rating ? <RatingCourse modalVisible={rating} token={props.token} courseId={props.detail.id}
+                            onPressClose={() => setRating(false)}/> : null}
+    <AddToChannelDialog modalVisible={modalVisible} courseDetail={props.detail} closeModel={() => setModalVisible(false)}/>
   </ScrollView>
 };
 
@@ -118,6 +205,11 @@ const styles = StyleSheet.create({
   },
   author: {
     flexDirection: 'row'
+  },
+  courseContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center'
   },
   activeContainer: {
     flexDirection: 'row',
@@ -136,5 +228,13 @@ const styles = StyleSheet.create({
     fontSize: 16,
     paddingLeft: 15
   },
+  buttonStyle: {
+    marginRight: 10,
+    borderColor: '#19B5FE'
+  },
+  buttonTitle: {
+    color: '#19B5FE',
+    fontSize: 18
+  }
 })
 export default GeneralCourseDetail;

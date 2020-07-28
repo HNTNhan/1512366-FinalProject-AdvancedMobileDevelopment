@@ -1,9 +1,8 @@
 import React, {useContext} from 'react';
-import {SectionList, StyleSheet, Text, View, Image, TouchableOpacity, ScrollView} from 'react-native';
+import {SectionList, StyleSheet, Text, View, TouchableOpacity} from 'react-native';
 import ListKeyItems from "../ListKeyItems/list-key-items";
 import {globalStyles} from "../../../../globles/styles";
 import {ColorsContext} from "../../../../provider/colors-provider";
-import {AuthenticationContext} from "../../../../provider/authentication-provider";
 
 const BeforeSearch = (props) => {
   const {theme} = useContext(ColorsContext);
@@ -14,8 +13,8 @@ const BeforeSearch = (props) => {
       data: props.recentSearch,
     },
     {
-      title: 'Your interests',
-      data: props.skills,
+      title: 'Your Favorite Categories',
+      data: props.favoriteCategories,
     },
   ]
 
@@ -30,10 +29,10 @@ const BeforeSearch = (props) => {
       showsVerticalScrollIndicator={false}
       sections={keys}
       keyExtractor={(item, index) => item + index}
-      renderItem={({item}) => <ListKeyItems item={item} onPress={() => props.onPress(item)}/>}
+      renderItem={({item, section: {title}}) => <ListKeyItems type={title==='Recent searches'? 0 : 1} item={item} onPress={() => props.onPress(item)}/>}
       renderSectionHeader={({section: {title}}) => <View style={styles.title}>
           <Text style={{...styles.titleText, color: theme.text}}>{title}</Text>
-            {title!== 'Your interests' ? <TouchableOpacity style={styles.button}
+            {title!== 'Your Favorite Categories' ? <TouchableOpacity style={styles.button}
                               onPress={props.onPressClear}>
             <Text style={styles.buttonText}> Clear </Text>
             </TouchableOpacity> : null}

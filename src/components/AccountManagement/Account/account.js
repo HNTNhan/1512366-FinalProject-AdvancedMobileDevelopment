@@ -1,34 +1,128 @@
-import React, {useContext} from 'react';
-import {StyleSheet, View, Text, TouchableOpacity, TextInput, ScrollView} from 'react-native';
+import React, {useContext, useEffect, useState} from 'react';
+import {StyleSheet, View, Text, TouchableOpacity, TextInput, ScrollView, ActivityIndicator, Alert} from 'react-native';
 import {ColorsContext} from "../../../provider/colors-provider";
 import {AuthenticationContext} from "../../../provider/authentication-provider";
+import {Button, Icon, Image} from "react-native-elements";
+import ModalActivityIndicator from "../../Common/modal-activity-indicator";
+import {checkEmail, checkName, checkPhone} from "../../../core/services/authentication-services";
+// import * as ImagePicker from 'expo-image-picker';
+
 const Account = (props) => {
   const {theme} = useContext(ColorsContext);
-  const {user} = useContext(AuthenticationContext);
+  const {state} = useContext(AuthenticationContext);
+  const authContext = useContext(AuthenticationContext);
 
-  const emails = [
-    {
-      id: 1,
-      email: '456@gmail.com'
-    },
-    {
-      id: 2,
-      email: '789@gmail.com'
+  const initialStateAccount = {
+    fullName: '',
+    phone: '',
+    avatar: '',
+    checkFullName: false,
+    checkPhone: false,
+    showCheck: false,
+  };
+
+  const initialStatePassword = {
+    currentPassword: '',
+    newPassword: '',
+    confirmPassword: '',
+    checkCurrentPassword: false,
+    checkNewPassword: false,
+    checkConfirmPassword: false,
+    showCheck: false,
+  };
+
+  const [account, setAccount] = useState(initialStateAccount);
+  const [email, setEmail] = useState({email: '', checkEmail: true})
+  const [password, setPassword] = useState(initialStatePassword)
+  const [showPassword, setShowPassword] = useState({showCurrentPassword: false, showNewPassword: false, showConfirmPassword: false})
+
+  useEffect(() => {
+    setAccount({...account, fullName: state.userInfo.name, avatar: state.userInfo.avatar, phone: state.userInfo.phone})
+    setEmail({...email, email: state.userInfo.email})
+  }, [])
+
+  const onPressUpdateAccount = () => {
+    if(checkName(account.fullName) && (account.phone.length===10 && checkPhone(account.phone))) {
+      authContext.updateProfile(state.token, account)
+      setAccount({...account, checkFullName: checkName(account.fullName), checkPhone: (account.phone.length===10 && checkPhone(account.phone))})
+    } else {
+      setAccount({...account, checkFullName: checkName(account.fullName), checkPhone: (account.phone.length===10 && checkPhone(account.phone)), showCheck: true})
     }
-  ]
+  }
+
+  const onPressChangeEmail = async () => {
+    if(checkEmail(email.email)) {
+      console.log('check email success')
+      await authContext.changeEmail(state.token, email.email)
+      if(!authContext.isUpdatingProfile) {
+        Alert.alert('', 'Change email success!', [{}], { cancelable: true })
+        props.navigation.reset({
+          index: 0,
+          routes: [{ name: 'Authentication'}],
+        })
+      }
+    } else {
+      console.log('check email fail')
+      setEmail({...email, checkEmail: false})
+    }
+  }
+
+  const onPressChangePassword = async () => {
+    const checkCurrentPassword = password.currentPassword.length>=8 && password.currentPassword.length<=20;
+    const checkNewPassword = password.newPassword.length>=8 && password.newPassword.length<=20;
+    const checkConfirmPassword = password.confirmPassword.length>=8 && password.confirmPassword.length<=20;
+
+    if(checkCurrentPassword && checkNewPassword && password.currentPassword!==password.newPassword
+      && checkConfirmPassword && password.confirmPassword===password.newPassword) {
+      authContext.changePassword(state.token, state.userInfo.id, password)
+      setPassword(initialStatePassword)
+    } else {
+      setPassword({...password, checkConfirmPassword: checkConfirmPassword, checkNewPassword: checkNewPassword, checkCurrentPassword: checkCurrentPassword, showCheck: true})
+    }
+  }
 
   return <ScrollView style={{...styles.container, backgroundColor: theme.background}} showsVerticalScrollIndicator={false}>
     <View style={styles.sectionContainer}>
       <View style={styles.titleContainer}>
-        <Text style={{...styles.title, color: theme.text}}>Username</Text>
-        <Text style={{...styles.text, color: theme.text}}>You can change your username, which impacts how you sign in.
-          It also shows up as part of your profile URL (if you choose to share it).</Text>
+        <Text style={{...styles.title, color: theme.text}}>Your Account</Text>
       </View>
       <View>
-        <Text style={{...styles.subTitle, color: theme.text}}>Username</Text>
-        <TextInput placeholder={user.name} style={{...styles.textInput, backgroundColor: theme.foreground1}}/>
-        <TouchableOpacity style={{...styles.button, backgroundColor: theme.foreground1}}>
-          <Text style={{...styles.buttonText, color: theme.text}}>Update</Text>
+        <View style={styles.imageContainer}>
+          {
+            account.avatar ?
+              <Image style={styles.image} source={{uri: account.avatar}} PlaceholderContent={<ActivityIndicator />}/> :
+              <Icon name={'user-circle'} size={100} type={"font-awesome-5"}/>
+          }
+        </View>
+        <Text style={{...styles.subTitle, color: theme.text}}>Avatar link</Text>
+        <TextInput value={account.avatar}
+                   multiline={true}
+                   style={{...styles.textInput, backgroundColor: theme.background, color: theme.text}}
+                   onChangeText={(text) => setAccount({...account, avatar: text})}
+                   numberOfLines={1}
+        />
+
+        <Text style={{...styles.subTitle, color: theme.text}}>Full name</Text>
+        <TextInput value={account.fullName}
+                   style={{...styles.textInput, backgroundColor: theme.background, color: theme.text}}
+                   onChangeText={(text) => setAccount({...account, fullName: text})}/>
+        {
+          account.showCheck ? !account.checkFullName ?
+            <Text style={{...styles.checkText}}>Name cannot contain numbers or special characters like #,%, $,
+              ...!</Text> : null : null
+        }
+
+        <Text style={{...styles.subTitle, color: theme.text}}>Phone</Text>
+        <TextInput value={account.phone}
+                   style={{...styles.textInput, backgroundColor: theme.background, color: theme.text}}
+                   onChangeText={(text) => setAccount({...account, phone: text})}/>
+        {
+          account.showCheck ? !account.checkPhone ?
+            <Text style={{...styles.checkText}}>Please enter a valid phone number!</Text> : null : null
+        }
+
+        <TouchableOpacity style={{...styles.button, backgroundColor: theme.foreground1}} onPress={() => onPressUpdateAccount()}>
+          <Text style={{...styles.buttonText, color: theme.text}}>Update Account</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -36,24 +130,22 @@ const Account = (props) => {
     <View style={styles.sectionContainer}>
       <View style={styles.titleContainer}>
         <Text style={{...styles.title, color: theme.text}}>Email address</Text>
-        <Text style={{...styles.text, color: theme.text}}>We send account updates, billing and newsletters to the primary email.
-          You can login with any verified email address so you never lose access to your account.</Text>
+        <Text style={{...styles.text, color: theme.text}}>If you change your email, your account will be logged out and deactivated until you confirm new email.</Text>
+        <Text style={{...styles.text, color: theme.text}}>Other account information such as courses you like, payment history, course history, etc. will remain the same.</Text>
       </View>
+
       <View>
-        <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
-          <Text style={{...styles.subTitle, color: theme.text}}>Primary email:</Text>
-          <Text style={{...styles.text, color: theme.text}}> {user.email}</Text>
+        <View>
+          <Text style={{...styles.subTitle, color: theme.text}}>Email:</Text>
+          <TextInput value={email.email}
+                     style={{...styles.textInput, backgroundColor: theme.background, color: theme.text}}
+                     onChangeText={(text) => setEmail({...email, email: text})}/>
+          {
+            !email.checkEmail ? <Text style={{...styles.checkText}}>Invalid email!</Text> : null
+          }
         </View>
-        {
-          user.additionEmail.length ?user.additionEmail.map( item =>
-            <View key={item.id} style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
-              <Text style={{...styles.subTitle, color: theme.text}}>Additional email:</Text>
-              <Text style={{...styles.text, color: theme.text}}> {item.email}</Text>
-            </View>
-          ) : null
-        }
-        <TouchableOpacity style={{...styles.button, backgroundColor: theme.foreground1}}>
-          <Text style={{...styles.buttonText, color: theme.text}}>Add email</Text>
+        <TouchableOpacity style={{...styles.button, backgroundColor: theme.foreground1}} onPress={() => onPressChangeEmail()}>
+          <Text style={{...styles.buttonText, color: theme.text}}>Change Email</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -64,54 +156,80 @@ const Account = (props) => {
       </View>
       <View>
         <Text style={{...styles.subTitle, color: theme.text}}>Current password</Text>
-        <TextInput style={{...styles.textInput, color: theme.text, backgroundColor: theme.foreground1}}/>
-        <TouchableOpacity>
-          <Text style={styles.linkText}>Forgot password?</Text>
-        </TouchableOpacity>
+        <View>
+          <TextInput secureTextEntry={!showPassword.showCurrentPassword}
+                     value={password.currentPassword}
+                     style={{...styles.textInput, backgroundColor: theme.background, color: theme.text}}
+                     onChangeText={(text) => setPassword({...password, currentPassword: text})}/>
+          {
+            password.showCheck ? !password.checkCurrentPassword ?
+              <Text style={{...styles.checkText}}>Password must be between 8 and 20 characters!</Text> : null : null
+          }
+          {
+            password.currentPassword.length ?
+            <Icon name={showPassword.showCurrentPassword ? 'eye' : 'eye-slash'} type={"font-awesome-5"} size={16}
+                 solid={false} containerStyle={styles.showButton}
+                 onPress={() => setShowPassword({
+                   ...showPassword,
+                   showCurrentPassword: !showPassword.showCurrentPassword
+                 })}/> : null
+          }
+        </View>
+
         <Text style={{...styles.subTitle, color: theme.text}} >New password</Text>
-        <TextInput style={{...styles.textInput, color: theme.text, backgroundColor: theme.foreground1}}/>
+        <View>
+          <TextInput secureTextEntry={!showPassword.showNewPassword}
+                     value={password.newPassword}
+                     style={{...styles.textInput, backgroundColor: theme.background, color: theme.text}}
+                     onChangeText={(text) => setPassword({...password, newPassword: text})}/>
+          {
+            password.showCheck ? !password.checkCurrentPassword ?
+              <Text style={{...styles.checkText}}>Password must be between 8 and 20 characters!</Text> :
+              password.currentPassword===password.newPassword ?
+                <Text style={{...styles.checkText}}>Your new password cannot be the same as your current password</Text> : null : null
+          }
+          {
+            password.newPassword.length ?
+            <Icon name={showPassword.showNewPassword ? 'eye' : 'eye-slash'} type={"font-awesome-5"} size={16}
+                 solid={false} containerStyle={styles.showButton}
+                 onPress={() => setShowPassword({...showPassword, showNewPassword: !showPassword.showNewPassword})}/> : null
+          }
+        </View>
+
         <Text style={{...styles.subTitle, color: theme.text}} >Confirm password</Text>
-        <TextInput style={{...styles.textInput, color: theme.text, backgroundColor: theme.foreground1}}/>
-        <TouchableOpacity style={{...styles.button, backgroundColor: theme.foreground1}}>
+        <View>
+          <TextInput secureTextEntry={!showPassword.showConfirmPassword}
+                     value={password.confirmPassword}
+                     style={{...styles.textInput, backgroundColor: theme.background, color: theme.text}}
+                     onChangeText={(text) => setPassword({...password, confirmPassword: text})}/>
+          {
+            password.showCheck ? !password.checkConfirmPassword ?
+              <Text style={{...styles.checkText}}>Password must be between 8 and 20 characters!</Text> :
+              password.newPassword!==password.confirmPassword ?
+                <Text style={{...styles.checkText}}>Password and Confirm Password do not match!</Text> : null : null
+          }
+          {
+            password.confirmPassword.length ?
+            <Icon name={showPassword.showConfirmPassword ? 'eye' : 'eye-slash'} type={"font-awesome-5"} size={16}
+                 solid={false} containerStyle={styles.showButton}
+                 onPress={() => setShowPassword({
+                   ...showPassword,
+                   showConfirmPassword: !showPassword.showConfirmPassword
+                 })}/> : null
+          }
+        </View>
+
+
+        <TouchableOpacity style={{...styles.button, backgroundColor: theme.foreground1}} onPress={() => onPressChangePassword()}>
           <Text style={{...styles.buttonText, color: theme.text}}>Update</Text>
         </TouchableOpacity>
       </View>
     </View>
 
-    <View style={styles.sectionContainer}>
-      <View style={styles.titleContainer}>
-        <Text style={{...styles.title, color: theme.text}}>Multi-Factor Authentication: Disabled</Text>
-      </View>
-      <TouchableOpacity style={{...styles.button, backgroundColor: theme.foreground1}}>
-        <Text style={{...styles.buttonText, color: theme.text}}>Enable</Text>
-      </TouchableOpacity>
-    </View>
+    {
+      state.isUpdatingProfile ? <ModalActivityIndicator modalVisible={true} /> : null
+    }
 
-    <View style={styles.sectionContainer}>
-      <View style={styles.titleContainer}>
-        <Text style={{...styles.title, color: theme.text}}>Name</Text>
-      </View>
-      <View>
-        <Text style={{...styles.subTitle, color: theme.text}}>First name</Text>
-        <TextInput style={{...styles.textInput, color: theme.text, backgroundColor: theme.foreground1}}/>
-        <Text style={{...styles.subTitle, color: theme.text}}>Last name</Text>
-        <TextInput style={{...styles.textInput, color: theme.text, backgroundColor: theme.foreground1}}/>
-        <TouchableOpacity style={{...styles.button, backgroundColor: theme.foreground1}}>
-          <Text style={{...styles.buttonText, color: theme.text}}>Update</Text>
-        </TouchableOpacity>
-      </View>
-    </View>
-
-    <View style={styles.sectionContainer}>
-      <View style={styles.titleContainer}>
-        <Text style={{...styles.title, color: theme.text}}>Manage Account</Text>
-      </View>
-      <View>
-        <TouchableOpacity>
-          <Text style={{...styles.linkText}}>I would like to Delete My Personal Data</Text>
-        </TouchableOpacity>
-      </View>
-    </View>
   </ScrollView>
 };
 
@@ -124,6 +242,15 @@ const styles = StyleSheet.create({
   sectionContainer: {
     marginBottom: 40,
   },
+  imageContainer: {
+    alignItems: 'center',
+  },
+  image: {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    marginVertical: 10,
+  },
   titleContainer: {
     borderBottomWidth: 2,
     borderColor: 'lightgray',
@@ -131,15 +258,16 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   title: {
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: 'bold',
+    marginTop: 5,
   },
   text: {
     fontSize: 16,
   },
   subTitle: {
-    fontSize: 16,
-    fontWeight: '500',
+    fontSize: 18,
+    fontWeight: 'bold',
     marginBottom: 5,
   },
   textInput: {
@@ -150,20 +278,36 @@ const styles = StyleSheet.create({
     paddingVertical: 2,
   },
   button: {
-    backgroundColor: 'lightgray',
     alignItems: 'center',
-    padding: 7,
+    paddingVertical: 5,
+    paddingHorizontal: 20,
     marginTop: 10,
     borderRadius: 5,
-    alignSelf: 'flex-start',
+    alignSelf: 'center',
   },
   buttonText: {
     fontSize: 16,
-    fontWeight: '500'
   },
-  linkText: {
+  changeButton: {
+    borderRadius: 50,
+    paddingHorizontal: 10,
+    borderColor: '#19B5FE'
+  },
+  changeButtonText: {
+    fontSize: 18,
+    color: '#19B5FE',
+    marginLeft: 5
+  },
+  checkText: {
     fontSize: 16,
-    color: 'blue',
+    color: 'red',
+  },
+  showButton: {
+    position: 'absolute',
+    right: 5,
+    justifyContent: 'center',
+    height: '100%',
+    padding: 5
   }
 })
 

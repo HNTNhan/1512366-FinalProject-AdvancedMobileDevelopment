@@ -3,28 +3,52 @@ import {View, Text, StyleSheet, ScrollView, ActivityIndicator} from 'react-nativ
 import {Button} from "react-native-elements";
 import InputTextSae from "../../Common/input-text-sae";
 import {AuthenticationContext} from "../../../provider/authentication-provider";
-import {usersData} from "../../../testdata/users-data"
 import {ColorsContext} from "../../../provider/colors-provider";
+import NetInfo from "@react-native-community/netinfo";
+import {getStoreUserInfo, setStoreUserInfo} from "../../../core/local_storage/authentication-storage";
+
 
 const Login = (props) => {
-  const {setUser} = useContext(AuthenticationContext);
   const {theme} = useContext(ColorsContext)
-  const [email, setEmail] = useState(''/*'hnmfrv@gmail.com'*/);
-  const [password, setPassword] = useState(''/*'123456789'*/);
+  const [email, setEmail] = useState('hnmfrv@gmail.com');
+  const [password, setPassword] = useState('12345678');
   const [pressedSignIn, setPressedSignIn] = useState(false);
   const authContext = useContext(AuthenticationContext)
 
-  if(props.route.params) {
-    props.route.params.signOut ? setUser({}) : null;
-  } else {
-
-  }
+  useEffect(() => {
+    NetInfo.fetch().then(state => {
+      authContext.changeOnlineStatus(state.isConnected)
+      if(!state.isConnected) {
+        getStoreUserInfo().then((res) => {
+          if(res.status===200) {
+            if(res.data) {
+              const now = new Date()
+              if((now - (new Date(res.data.currentDate)))/1000/60/60/24 > 7) {
+                setStoreUserInfo(null).then(() => authContext.setUserInfoFromStorage(null))
+              } else {
+                authContext.setUserInfoFromStorage(res.data)
+              }
+            } else {
+              authContext.setUserInfoFromStorage(null)
+            }
+          } else {
+            authContext.setUserInfoFromStorage(null)
+          }
+        })
+      } else {}
+    });
+  }, [])
 
   useEffect(() => {
-    if(authContext.state.isAuthenticated){
-      const user = usersData.find((user) => user.email===authContext.state.userInfo.email)
-      setUser(user)
-      props.navigation.replace('Main')
+    if(authContext.state.isUpdatingProfile) {
+
+    } else {
+      if(authContext.state.isAuthenticated) {
+        const currentDate = new Date();
+        const userInfo = {...authContext.state.userInfo, currentDate: currentDate, password: password}
+        setStoreUserInfo(userInfo).then(r => console.log(r))
+        props.navigation.replace('Main')
+      } else {}
     }
   }, [authContext])
 
@@ -53,13 +77,21 @@ const Login = (props) => {
   }
 
   const onPressSignIn = () => {
-    authContext.login(email, password);
+    if(authContext.state.isOnline) {
+      authContext.login(email, password);
 
-    if(!pressedSignIn) {
-      setPressedSignIn(true)
-    }
-    else {
+      if(!pressedSignIn) {
+        setPressedSignIn(true)
+      }
+      else {
 
+      }
+    } else {
+      if(authContext.state.userInfo) {
+        props.navigation.replace('Main')
+      } else {
+        console.log('sadasd')
+      }
     }
   }
 
@@ -85,6 +117,14 @@ const Login = (props) => {
           titleStyle={styles.buttonText}
           onPress={() => props.navigation.navigate('Sign Up')}
           title= 'SIGN UP FREE' />
+        <Button
+          buttonStyle={styles.button}
+          titleStyle={styles.buttonText}
+          onPress={() => {
+            console.log(123)
+            props.navigation.replace('Main')
+          }}
+          title= 'JOIN AS GUEST' />
       </ScrollView>
     </View>
 };

@@ -1,59 +1,62 @@
 const axios = require('axios');
 
-export const getContinueCourses = async (token) => {
+export const apiFetchContinueCourses = (token) => {
   const config = {
     headers: { Authorization: `Bearer ${token}` }
   };
-
-  return await axios.get('https://api.itedu.me/user/get-process-courses', config)
-    .then((res) => {
-      return res.data.payload
-    })
-    .catch((err) => {
-      return err
-    })
+  return axios.get('https://api.itedu.me/user/get-process-courses', config)
 }
 
-export const getFavoriteCourses = async (token) => {
+export const apiFetchFavoriteCourses = (token) => {
   const config = {
     headers: { Authorization: `Bearer ${token}` }
   };
-
-  return await axios.get('https://api.itedu.me/user/get-favorite-courses', config)
-    .then((res) => {
-      return res.data.payload
-    })
-    .catch((err) => {
-      return err
-    })
+  return axios.get('https://api.itedu.me/user/get-favorite-courses', config)
 }
 
-export const getFavoriteStatus = async (token, courseId) => {
+export const getFavoriteStatus = (token, courseId) => {
   const config = {
     headers: { Authorization: `Bearer ${token}` }
   };
 
   const url = 'https://api.itedu.me/user/get-course-like-status/' + courseId;
 
-  return await axios.get(url, config)
-    .then((res) => {
-      return res.data.likeStatus
-    })
-    .catch((err) => {
-      return err
-    })
+  return axios.get(url, config)
 }
 
-export const setFavoriteStatus = async (token, courseId) => {
+export const setFavoriteStatus = (token, courseId) => {
   const config = {
     headers: { Authorization: `Bearer ${token}` }
   };
 
-  return await axios.post('https://api.itedu.me/user/like-course', {courseId: courseId}, config)
-    .then((res) => {
-      return res.data.likeStatus
-    })
-    .catch((err) => {
-      return err
-    })
+  return axios.post('https://api.itedu.me/user/like-course', {courseId: courseId}, config)
+}
+
+export const checkOwnCourse = (token, courseId) => {
+  const config = {
+    headers: { Authorization: `Bearer ${token}` }
+  };
+
+  return axios.get('https://api.itedu.me/user/check-own-course/' + courseId, config)
+}
+
+export const apiUpdateFavoriteCategories = (token, categoryIds) => {
+  const body = {
+    categoryIds: categoryIds
+  }
+  const config = {
+    headers: { Authorization: `Bearer ${token}` }
+  }
+  return axios.put('https://api.itedu.me/user/update-favorite-categories', body, config)
+}
+
+export const apiSendFeedback = (token, feedback) => {
+  const body = {
+    subject: feedback.subject,
+    content: feedback.content
+  }
+  const config = {
+    headers: { Authorization: `Bearer ${token}` }
+  }
+  return axios.post('https://api.itedu.me/feedback/create', body, config)
 }

@@ -1,5 +1,5 @@
 import React, {useContext, useEffect, useState} from 'react';
-import {ActivityIndicator, ScrollView, StyleSheet, TouchableOpacity, View} from 'react-native';
+import {ActivityIndicator, ScrollView, StyleSheet, TouchableOpacity, View, BackHandler, Alert} from 'react-native';
 import {Button, Icon, Text} from "react-native-elements";
 import InputTextSae from "../../Common/input-text-sae";
 import {ColorsContext} from "../../../provider/colors-provider";
@@ -24,11 +24,39 @@ const Register = (props) => {
     phone: ""
   };
 
+  const initialStateCheckInput = {
+    fullName: false,
+    email: false,
+    password: false,
+    confirmPassword: false,
+    phone: false,
+    checkBox: false
+  };
+
   const [userInfo, setUserInfo] = useState(initialStateUserInfo);
-  const [checkBox, setCheckBox] = useState(false);
-  const [checkInput, setCheckInput] = useState({email: false, fullName: false, phone: false, password: false, confirmPassword: false});
+  const [checkInput, setCheckInput] = useState(initialStateCheckInput);
   const [pressCreateFail, setPressCreateFail] = useState(false)
   const [showTermsOfUse, setShowTermsOfUse]  = useState(false)
+
+  useEffect(() => {
+    const backAction = () => {
+      if(authContext.state.isRegistered !== null) {
+        authContext.registerEnd()
+      } else {
+
+      }
+      props.navigation.goBack()
+
+      return true;
+    };
+
+    const backHandler = BackHandler.addEventListener(
+      "hardwareBackPress",
+      backAction
+    );
+
+    return () => backHandler.remove();
+  }, [authContext])
 
   const onChangeEmail = (email) => {
     if(email.length) {
@@ -78,7 +106,7 @@ const Register = (props) => {
   const onChangePhone = (phone) => {
     if(phone.length) {
       let temp = {...checkInput}
-      temp.phone = phone.length===10 || checkPhone(phone)
+      temp.phone = phone.length===10 && checkPhone(phone)
       setCheckInput(temp)
       setUserInfo({...userInfo, phone: phone})
     } else {
@@ -87,7 +115,7 @@ const Register = (props) => {
   }
 
   const onPressCreateAccount = () => {
-    if(checkInput.email && checkInput.phone && checkInput.password && checkInput.confirmPassword && checkInput.fullName && checkBox){
+    if(checkInput.email && checkInput.phone && checkInput.password && checkInput.confirmPassword && checkInput.fullName && checkInput.checkBox){
       authContext.register(userInfo.fullName, userInfo.email, userInfo.phone, userInfo.password)
     } else {
       setPressCreateFail(true)
@@ -133,10 +161,10 @@ const Register = (props) => {
         }
 
         <Text style={{...styles.text, color: theme.text}}>* Required field</Text>
-        <TouchableOpacity onPress={() => setCheckBox(!checkBox)}>
+        <TouchableOpacity onPress={() => setCheckInput({...checkInput, checkBox: !checkInput.checkBox})}>
           <View style={{...styles.checkBoxContainer}}>
-            <Icon name={!checkBox ? 'square' : 'check-square'} type={"font-awesome-5"} size={18}
-                  color={!checkBox ? theme.color : '#03A9F4'}/>
+            <Icon name={!checkInput.checkBox ? 'square' : 'check-square'} type={"font-awesome-5"} size={18}
+                  color={!checkInput.checkBox ? theme.color : '#03A9F4'}/>
             <Text style={{...styles.checkBoxText, color: theme.text}}>
               {'By checking here and continuing, I agree to the '}
               <Text style={{...styles.termsOfUse}} onPress={() => setShowTermsOfUse(true)}>Terms of Use.</Text>
@@ -144,7 +172,7 @@ const Register = (props) => {
           </View>
         </TouchableOpacity>
         {
-          !checkBox && pressCreateFail ? <Text style={{...styles.checkText}}>Please check Terms of Use!</Text> : null
+          !checkInput.checkBox && pressCreateFail ? <Text style={{...styles.checkText}}>Please check Terms of Use!</Text> : null
         }
 
         <TermsOfUseDialog modalVisible={showTermsOfUse} closeModel={() => setShowTermsOfUse(false)}/>
@@ -158,7 +186,14 @@ const Register = (props) => {
         <Button
           buttonStyle={[styles.button, {backgroundColor: '#9E9E9E'}]}
           titleStyle={styles.buttonText}
-          onPress={() => props.navigation.goBack()}
+          onPress={() => {
+            if(authContext.state.isRegistered !== null) {
+              authContext.registerEnd()
+            } else {
+
+            }
+            props.navigation.goBack()
+          }}
           title='Cancel'/>
       </ScrollView>
     </View>
@@ -171,8 +206,14 @@ const Register = (props) => {
         buttonStyle={{...styles.button, width: 80}}
         titleStyle={styles.buttonText}
         onPress={() => {
-          authContext.registerEnd()
-          props.navigation.goBack()
+          if(authContext.state.isRegistered !== null) {
+            authContext.registerEnd()
+          } else {
+
+          }
+          setUserInfo(initialStateUserInfo)
+          setCheckInput(initialStateCheckInput)
+          //props.navigation.goBack()
         }}
         title='OK'/>
     </View>

@@ -1,31 +1,46 @@
 import React, {useContext} from 'react';
-import {View, TouchableOpacity, Text, Image, StyleSheet, Switch, ScrollView} from 'react-native';
-import ButtonSetting from "./ButtonSetting/button-setting";
-import ButtonSwitch from "./ButtonSwitch/button-switch";
-import {ColorsContext} from "../../provider/colors-provider";
+import {
+  View,
+  TouchableOpacity,
+  Text,
+  Image,
+  StyleSheet,
+  Switch,
+  ScrollView,
+} from 'react-native';
+import ButtonSetting from "./ButtonSetting/button-setting";import {ColorsContext} from "../../provider/colors-provider";
 import {defaultColors} from "../../globles/constants";
 import {Icon} from "react-native-elements";
+import {AuthenticationContext} from "../../provider/authentication-provider";
 
 const AccountManagement = (props) => {
   const {theme, setTheme} = useContext(ColorsContext);
+  const authContext = useContext(AuthenticationContext)
 
   const onPressSignOut = () => {
-    props.navigation.navigate('Authentication', {signOut: true})
+    authContext.logout()
+    props.navigation.reset({
+      index: 0,
+      routes: [{ name: 'Authentication'}],
+    })
   }
 
   const onPressProfile = () => {
-    props.navigation.navigate('Profile',)
+    props.navigation.navigate('Main', {screen: 'Home', params: {screen: 'Profile'}})
   }
 
   const onPressAccount = () => {
     props.navigation.navigate('Account')
   }
 
+  const onPressSendFeedback = () => {
+    props.navigation.navigate('SendFeedback')
+  }
+
   return <ScrollView style={{...styles.container, backgroundColor: theme.background}} showsVerticalScrollIndicator={false}>
     <ButtonSetting title={'Profile'} onPress={() => onPressProfile()}/>
     <ButtonSetting title={'Account'} onPress={() => onPressAccount()}/>
-    <ButtonSetting title={'Subscription'} />
-    <ButtonSetting title={'Communication Preferences'} />
+    {/*<ButtonSetting title={'Subscription'} />*/}
 
     <TouchableOpacity style={styles.itemContainer}
                       onPress={() => theme===defaultColors.themes.light ? setTheme(defaultColors.themes.dark) : setTheme(defaultColors.themes.light)}>
@@ -38,15 +53,15 @@ const AccountManagement = (props) => {
       </View>
     </TouchableOpacity>
 
-    <ButtonSwitch title={'Require Wi-Fi for streaming'}/>
-    <ButtonSwitch title={'Require Wi-Fi for downloading'}/>
+    {/*<ButtonSwitch title={'Require Wi-Fi for streaming'}/>*/}
+    {/*<ButtonSwitch title={'Require Wi-Fi for downloading'}/>*/}
 
-    <ButtonSetting title={'Send feedback'} />
-    <ButtonSetting title={'Contact support'} />
+    <ButtonSetting title={'Send feedback'} onPress={() => onPressSendFeedback()} />
+    {/*<ButtonSetting title={'Contact support'} />*/}
 
-    <TouchableOpacity style={styles.itemContainer}>
+    <TouchableOpacity disabled={true} style={styles.itemContainer}>
       <Text style={{...styles.text, color: theme.text}}>App Version</Text>
-      <Text style={{...styles.text, color: theme.text}}>2.77.2568</Text>
+      <Text style={{...styles.text, color: theme.text}}>1.00.0000</Text>
     </TouchableOpacity>
 
     <TouchableOpacity onPress={() => onPressSignOut()} style={styles.signOutButton}>
@@ -76,6 +91,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: '500',
   },
+
   signOutButton: {
     alignItems: 'center',
     borderWidth: 2,

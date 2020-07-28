@@ -10,26 +10,37 @@ import AccountManagementScreen from "./src/components/Navigation/AccountManageme
 import {AuthenticationProvider} from "./src/provider/authentication-provider";
 import {ColorsProvider} from "./src/provider/colors-provider";
 import { MenuProvider } from 'react-native-popup-menu';
+import {UserProvider} from "./src/provider/user-provider";
+import {BottomTabBarProvider} from "./src/provider/bottom-tab-bar-provider";
+import {DownloadProvider} from "./src/provider/download-provider";
+import DownloadBar from "./src/components/Common/download-bar";
 
 const Stack = createStackNavigator();
 
 export default function App() {
   return (
     <View style={styles.container}>
+      <DownloadProvider>
       <AuthenticationProvider>
-        <ColorsProvider>
-          <MenuProvider>
-            <NavigationContainer>
-              <Stack.Navigator>
-                <Stack.Screen name='SplashScreen' component={SplashScreen} options={{headerShown: false}}/>
-                <Stack.Screen name='Authentication' component={AuthenticationScreen} options={{headerShown: false}}/>
-                <Stack.Screen name='Main' component={MainScreen} options={{headerShown: false}}/>
-                <Stack.Screen name='AccountManagement' component={AccountManagementScreen} options={{headerShown: false}}/>
-              </Stack.Navigator>
-            </NavigationContainer>
-          </MenuProvider>
-        </ColorsProvider>
+        <UserProvider>
+          <ColorsProvider>
+            <MenuProvider>
+              <BottomTabBarProvider>
+                <NavigationContainer>
+                  <Stack.Navigator>
+                    <Stack.Screen name='SplashScreen' component={SplashScreen} options={{headerShown: false}}/>
+                    <Stack.Screen name='Authentication' component={AuthenticationScreen} options={{headerShown: false}}/>
+                    <Stack.Screen name='Main' component={MainScreen} options={{headerShown: false}}/>
+                    <Stack.Screen name='AccountManagement' component={AccountManagementScreen} options={{headerShown: false}}/>
+                  </Stack.Navigator>
+                </NavigationContainer>
+                <DownloadBar />
+              </BottomTabBarProvider>
+            </MenuProvider>
+          </ColorsProvider>
+        </UserProvider>
       </AuthenticationProvider>
+      </DownloadProvider>
     </View>
   );
 }

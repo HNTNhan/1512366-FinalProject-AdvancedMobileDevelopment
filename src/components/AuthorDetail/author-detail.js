@@ -1,20 +1,45 @@
-import React, {useContext} from 'react';
-import {ScrollView, View} from 'react-native';
+import React, {useContext, useEffect, useState} from 'react';
+import {ScrollView, ActivityIndicator} from 'react-native';
 import GeneralAuthorDetail from "./GeneralAuthorDetail/general-author-detail";
 import {globalStyles} from "../../globles/styles";
 import ItemsInAuthor from "./ItemsInAuthor/items-in-author";
-import {findByKey} from "../../testdata/find-data";
-import {authorsData} from "../../testdata/authors-data";
 import {ColorsContext} from "../../provider/colors-provider";
+import {getInstructorInfo} from "../../core/services/instructor-services";
+import CenterActivityIndicator from "../Common/center-activity-indicator";
 
 const AuthorDetail = (props) => {
-  const author = findByKey(authorsData, [props.route.params.key])[0]
   const {theme} = useContext(ColorsContext)
+  const [author, setAuthor] = useState(props.route.params.author)
 
-  return <ScrollView style={{...globalStyles.container, backgroundColor: theme.background}} showsVerticalScrollIndicator={false}>
-    <GeneralAuthorDetail detail={author.detail}/>
-    <ItemsInAuthor courses={author.courses} navigation={props.navigation} route={props.route}/>
-  </ScrollView>
+  useEffect(() => {
+    if(!author) {
+      let mounted = true
+      getInstructorInfo(props.route.params.key)
+        .then(res => {
+          if (mounted) {
+            if (res.status === 200) {
+              setAuthor(res.data.payload)
+            } else {
+              console.log(res.data.message)
+            }
+          }
+        })
+        .catch(err => {
+          console.log('getInstructor: ', err.response.data.message || err)
+        })
+      return () => mounted = false
+    } else {}
+  }, [])
+
+  if(author) {
+    return <ScrollView style={{...globalStyles.container, backgroundColor: theme.background}} showsVerticalScrollIndicator={false}>
+      <GeneralAuthorDetail detail={author}/>
+      <ItemsInAuthor courses={author.courses} name={author.name} navigation={props.navigation} route={props.route}/>
+    </ScrollView>
+  } else {
+    return <CenterActivityIndicator />
+  }
+
 };
 
 export default AuthorDetail;

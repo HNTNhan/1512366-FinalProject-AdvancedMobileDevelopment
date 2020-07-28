@@ -1,30 +1,60 @@
 import React, {useContext, useEffect, useState} from 'react';
-import {View, FlatList} from 'react-native';
+import {View, FlatList, ActivityIndicator} from 'react-native';
 import ListCourseItems from "../ListCourseItems/list-course-items";
 import {globalStyles} from "../../../globles/styles";
 import {ColorsContext} from "../../../provider/colors-provider";
-import {getCoursesTopSell} from "../../../core/services/course-services";
-const axios = require('axios');
-
+import {getCoursesNewRelease, getCoursesTopSell, searchCourses} from "../../../core/services/course-services";
+import {AuthenticationContext} from "../../../provider/authentication-provider";
+import {alertSignIn} from "../../../globles/alert";
+import CenterActivityIndicator from "../../Common/center-activity-indicator";
 
 const ListCoursesScrollLoad = (props) => {
   const {theme} = useContext(ColorsContext);
-  const [data, setData] = useState({nextPage: 1, courses: []});
+  const {state} = useContext(AuthenticationContext);
+
+  const [data, setData] = useState({nextPage: 0, courses: [], isLoading: true})
+
+  const type = props.route.params.type;
 
   useEffect(() => {
     getData()
   }, [])
 
   const getData = () => {
-    const url = props.route.params.url;
-    getCoursesTopSell(data.nextPage)
-      .then(res => {
-        let temp = {...data}
-        temp.nextPage += 1
-        temp.courses = temp.courses.concat(res.data.payload)
-        setData(temp)
-      })
-    //axios.post(url, {limit: 20, page: data.nextPage})
+    if(type === 'New Releases') {
+      getCoursesNewRelease(data.nextPage)
+        .then(res => {
+          let temp = {...data}
+          temp.nextPage += 1
+          temp.isLoading = false
+          temp.courses = temp.courses.concat(res.data.payload)
+          setData(temp)
+        })
+    } else if(type === "Recommended") {
+      getCoursesTopSell(data.nextPage)
+        .then(res => {
+          let temp = {...data}
+          temp.nextPage += 1
+          temp.isLoading = false
+          temp.courses = temp.courses.concat(res.data.payload)
+          setData(temp)
+        })
+    } else {
+      const paramSearch = props.route.params.paramSearch;
+      searchCourses("", paramSearch.attribute, paramSearch.rule,paramSearch.category,undefined,undefined,20, data.nextPage*20)
+        .then(res => {
+          if(res.status === 200) {
+            let temp = {...data}
+            temp.nextPage += 1
+            temp.isLoading = false
+            temp.courses = temp.courses.concat(res.data.payload.rows)
+            setData(temp)
+          } else {}
+        })
+        .catch(err => {
+          console.log(err.response.data.message||err)
+        })
+    }
   }
 
   const handleLoadMore = () => {
@@ -36,15 +66,18 @@ const ListCoursesScrollLoad = (props) => {
   }
 
   return <View style={{...globalStyles.container, backgroundColor: theme.background}}>
-    <FlatList
-      showsVerticalScrollIndicator={false}
-      data={data.courses}
-      keyExtractor={(item, index) => item.id}
-      renderItem={({item}) => <ListCourseItems item={item} onPress={() => onPressItem(item.id)}/>}
-      onEndReached={() => handleLoadMore()}
-      onEndReachedThreshold={0}
-      ItemSeparatorComponent= {() => <View style={globalStyles.separator} />}
-    />
+    {
+      data.isLoading ? <CenterActivityIndicator /> :
+        <FlatList
+          showsVerticalScrollIndicator={false}
+          data={data.courses}
+          keyExtractor={(item) => item.id}
+          renderItem={({item}) => <ListCourseItems item={item} onPress={() =>  onPressItem(item.id) }/>}
+          ItemSeparatorComponent= {() => <View style={globalStyles.separator} />}
+          onEndReached={() => handleLoadMore()}
+          onEndReachedThreshold={0}
+        />
+    }
   </View>
 };
 

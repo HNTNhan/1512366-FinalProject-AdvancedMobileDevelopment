@@ -14,6 +14,8 @@ import PathDetailRightHeader from "../../NavigationHeader/PathDetailHeader/PathD
 import {ColorsContext} from "../../../provider/colors-provider";
 import MainScreenRightHeader from "../../NavigationHeader/MainScreenRightHeader/main-screen-right-header";
 import ListCoursesScrollLoad from "../../Courses/ListCoursesScrollLoad/list-course-scroll-load";
+import Payment from "../../Others/Payment/payment";
+import SendFeedback from "../../AccountManagement/SendFeedback/send-feedback";
 
 const BrowseStack = createStackNavigator();
 const BrowseScreen = (props) => {
@@ -25,8 +27,7 @@ const BrowseScreen = (props) => {
                         options={({route, navigation}) => (
                           {headerRight: () => {
                               return <MainScreenRightHeader route={route} navigation={navigation}/>
-                            }}
-                        )}
+                        }})}
     />
     <BrowseStack.Screen name='ListCourses' component={ListCourses} options={({ route }) => ({ title: route.params.name })}/>
     <BrowseStack.Screen name='ListCoursesScrollLoad' component={ListCoursesScrollLoad} options={({ route }) => ({ title: route.params.name })}/>
@@ -44,6 +45,8 @@ const BrowseScreen = (props) => {
     <BrowseStack.Screen name='AuthorDetail' component={AuthorDetail} options={({ route }) => ({ title: route.params.name })}/>
     <BrowseStack.Screen name='CategoryDetail' component={CategoryDetail} options={({ route }) => ({ title: route.params.name })}/>
     <BrowseStack.Screen name='SkillDetail' component={SkillDetail} options={({ route }) => ({ title: route.params.name })}/>
+    <BrowseStack.Screen name='Payment' component={Payment}/>
+    <BrowseStack.Screen name='SendFeedback' component={SendFeedback} options={{title: 'Feedback'}}/>
   </BrowseStack.Navigator>
 };
 

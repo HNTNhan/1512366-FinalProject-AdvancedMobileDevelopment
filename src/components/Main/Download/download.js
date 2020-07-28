@@ -2,55 +2,94 @@ import React, {useContext, useEffect, useState} from 'react';
 import {View, FlatList, StyleSheet, Text, TouchableOpacity} from 'react-native';
 import ListCourseItems from "../../Courses/ListCourseItems/list-course-items";
 import {AuthenticationContext} from "../../../provider/authentication-provider";
-import {findByKey} from "../../../testdata/find-data";
-import {coursesData} from "../../../testdata/courses-data";
 import {globalStyles} from "../../../globles/styles";
 import {ColorsContext} from "../../../provider/colors-provider";
+import {getCoursesDownload} from "../../../core/local_storage/courses-download-storage";
+import CenterActivityIndicator from "../../Common/center-activity-indicator";
 
 const Download = (props) => {
   const {theme} = useContext(ColorsContext)
-  const {user, setUser} = useContext(AuthenticationContext);
+  const {state} = useContext(AuthenticationContext);
+  const [coursesDownload, setCoursesDownload] = useState([])
+  const [isLoading, setIsLoading] = useState(true)
 
-  const renderSeparator = () => {
-    return (
-      <View style={styles.separator} />
-    );
-  };
+  const fetchData = () => {
+    getCoursesDownload().then(res => {
+      //console.log(res)
+      if(res.status===200) {
+        if(res.data && res.data.length) {
+          console.log(res.data.length)
+          setCoursesDownload(res.data)
+        } else {
+          setCoursesDownload([])
+        }
+        setIsLoading(false)
+      } else {
+        setCoursesDownload([])
+        setIsLoading(false)
+        console.log(res.error)
+      }
+    })
+  }
+
+  useEffect(() => {
+    fetchData()
+  }, [])
 
   const renderHeader = () => {
     return <View style={styles.header}>
       <Text style={{...styles.headerText, color: theme.text}}>Download</Text>
       <TouchableOpacity style={styles.button}
-                        onPress={() => {
-                          let temp={...user};
-                          temp.downloads=[];
-                          setUser(temp);
-                        }}>
+                        onPress={() => fetchData()}>
+        <Text style={styles.buttonText}> Refresh </Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.button}
+                        onPress={() => {console.log('Remove all')}}>
         <Text style={styles.buttonText}> Remove all </Text>
       </TouchableOpacity>
     </View>
   }
 
-  const onPress = (key) => {
-    props.navigation.push('CourseDetail', {key: key});
+  const onPressItem = (id) => {
+    props.navigation.push('CourseDetail', {id: id});
   }
 
-  return <View style={[globalStyles.container, {backgroundColor: theme.background}]}>
-    <FlatList
-      data={findByKey(coursesData, user.downloads)}
-      keyExtractor={(item, index) => item.key}
-      renderItem={({item}) => <ListCourseItems item={item} onPress={() => onPress(item.key)}/>}
-      ItemSeparatorComponent= {renderSeparator}
-      ListHeaderComponent = {renderHeader}
-    />
-  </View>
+  if(isLoading) {
+    return <CenterActivityIndicator />
+  } else {
+    if(coursesDownload.length===0) {
+      return <View style={{...styles.containerEmpty, backgroundColor: theme.background}}>
+        <Text style={{fontSize: 20, color: theme.text}}>No Download</Text>
+        <TouchableOpacity style={styles.button}
+                          onPress={() => fetchData()}>
+          <Text style={{...styles.buttonText, fontSize: 20}}> Refresh </Text>
+        </TouchableOpacity>
+      </View>
+    } else {
+      return <View style={[globalStyles.container, {backgroundColor: theme.background}]}>
+        <FlatList
+          data={coursesDownload}
+          keyExtractor={(item, index) => item.id}
+          renderItem={({item}) => <ListCourseItems item={item} onPress={() => onPressItem(item.id)}/>}
+          ItemSeparatorComponent={() => <View style={styles.separator}/>}
+          ListHeaderComponent = {renderHeader}
+        />
+      </View>
+    }
+  }
+
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginHorizontal: 5,
-    backgroundColor: 'white',
+    padding: 5,
+  },
+  containerEmpty: {
+    flex: 1,
+    padding: 5,
+    justifyContent:'center',
+    alignItems: 'center',
   },
   header: {
     flex: 1,

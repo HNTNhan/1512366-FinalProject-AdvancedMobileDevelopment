@@ -2,22 +2,22 @@ import React, {useContext} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import {globalStyles} from "../../../globles/styles";
 import ListCourseItems from "../../Courses/ListCourseItems/list-course-items";
-import {findByKey} from "../../../testdata/find-data";
-import {coursesData} from "../../../testdata/courses-data";
 import {ColorsContext} from "../../../provider/colors-provider";
+import {AuthenticationContext} from "../../../provider/authentication-provider";
+import {alertSignIn} from "../../../globles/alert";
 
 const ItemsInAuthor = (props) => {
   const {theme} = useContext(ColorsContext)
-  const courses = findByKey(coursesData, props.courses);
+  const {state} = useContext(AuthenticationContext)
 
-  const onPressCourseItem = (key) => {
-    props.navigation.push('CourseDetail', {key: key});
+  const onPressCourseItem = (id) => {
+    props.navigation.push('CourseDetail', {id: id});
   }
 
   return <View>
     <Text style={{...styles.text, color: theme.text}}>Course</Text>
-    { courses.map((item) => <View key={item.key} style={globalStyles.borderSeparator}>
-        <ListCourseItems item={item} onPress={() => onPressCourseItem(item.key)}/>
+    { props.courses.map((item) => <View key={item.id} style={globalStyles.borderSeparator}>
+        <ListCourseItems item={{...item, instructorName: props.name}} onPress={() => onPressCourseItem(item.id)}/>
       </View>
     ) }
   </View>

@@ -11,7 +11,7 @@ const ChannelDetail = (props) => {
 
   return <ScrollView style={{...globalStyles.container, backgroundColor: theme.background}}>
     <GeneralChannelDetail detail={props.route.params.channel.detail}/>
-    <ChannelProgress progress={props.route.params.channel.progress}/>
+    {/*<ChannelProgress progress={props.route.params.channel.progress}/>*/}
     <ItemsInChannel items={props.route.params.channel.items} navigation={props.navigation} route={props.route}/>
   </ScrollView>
 };

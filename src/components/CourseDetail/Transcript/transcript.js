@@ -12,15 +12,30 @@ const Transcript = (props) => {
       <Text style={{...styles.content, color: theme.text}}>{props.item.content}</Text>
     </View>
   }
-  return props.transcript==='' ? <Text style={{...styles.message, color: theme.text}}>This course don't have transcript</Text> :
-    <SectionList
-      sections={props.transcript}
-      keyExtractor={(item, index) => item + index}
-      renderItem={({item}) =>
-        <SubTranScript item={item}/>
-      }
-      renderSectionHeader={({section: {title}}) => <Text h3 style={{color: theme.text}}>{title}</Text>}
-    />;
+
+  if(props.isAuthenticated) {
+    if(props.checkOwn) {
+      return props.transcript==='' ? <View style={styles.messageContainer}>
+          <Text style={{fontSize: 16, color: theme.text}}>This course don't have transcript</Text>
+        </View> :
+        <SectionList
+          sections={props.transcript}
+          keyExtractor={(item, index) => item + index}
+          renderItem={({item}) =>
+            <SubTranScript item={item}/>
+          }
+          renderSectionHeader={({section: {title}}) => <Text h3 style={{color: theme.text}}>{title}</Text>}
+        />;
+    } else {
+      return <View style={styles.messageContainer}>
+        <Text style={{fontSize: 16, color: theme.text}}>Please buy this course to see this context!</Text>
+      </View>
+    }
+  } else {
+    return <View style={styles.messageContainer}>
+      <Text style={{fontSize: 16, color: theme.text}}>Please sign in to see this context!</Text>
+    </View>
+  }
 };
 
 const styles = StyleSheet.create({
@@ -31,11 +46,10 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginVertical: 10,
   },
-  message: {
-    marginTop: '40%',
-    textAlign: 'center',
-    color: 'gray',
-    fontSize: 16,
+  messageContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   }
 })
 export default Transcript;

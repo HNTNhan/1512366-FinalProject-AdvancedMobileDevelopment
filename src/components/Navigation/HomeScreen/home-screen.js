@@ -12,12 +12,20 @@ import {objectsConstant} from "../../../globles/constants";
 import PathDetailRightHeader from "../../NavigationHeader/PathDetailHeader/PathDetailRightHeader";
 import {ColorsContext} from "../../../provider/colors-provider";
 import MainScreenRightHeader from "../../NavigationHeader/MainScreenRightHeader/main-screen-right-header";
-
+import Profile from "../../AccountManagement/Profile/profile";
+import CategoryDetail from "../../CategoryDetail/category-detail";
+import ListCoursesScrollLoad from "../../Courses/ListCoursesScrollLoad/list-course-scroll-load";
+import {Icon} from "react-native-elements";
+import {TouchableOpacity} from 'react-native';
+import SendFeedback from "../../AccountManagement/SendFeedback/send-feedback";
+import {BottomTabBarContext} from "../../../provider/bottom-tab-bar-provider";
+import Payment from "../../Others/Payment/payment";
 
 const HomeStack = createStackNavigator();
 
 const HomeScreen = (props) => {
   const {theme} = useContext(ColorsContext)
+
 
   return <HomeStack.Navigator
     screenOptions={{...objectsConstant.defaultCenterHeaderBar, headerStyle: {backgroundColor: theme.foreground1}, headerTintColor: theme.text}}>
@@ -39,10 +47,22 @@ const HomeScreen = (props) => {
                           return <PathDetailRightHeader route={route} navigation={navigation}/>
                         },
                         title: route.params.name,
-                      })}
-    />
+                      })}/>
     <HomeStack.Screen name='ChannelDetail' component={ChannelDetail} options={({ route }) => ({ title: route.params.name })}/>
     <HomeStack.Screen name='AuthorDetail' component={AuthorDetail} options={({ route }) => ({ title: route.params.name })}/>
+    <HomeStack.Screen name='Profile'
+                      component={Profile}
+                      options={({route, navigation}) => ({
+                        headerLeft: () => (
+                          <TouchableOpacity onPress={() => navigation.navigate('Home')} style={{marginLeft: 10, padding: 10}}>
+                            <Icon name={'arrow-left'} type={"font-awesome-5"} size={18}/>
+                          </TouchableOpacity>
+                        ),
+                      })}/>
+    <HomeStack.Screen name='CategoryDetail' component={CategoryDetail} options={({ route }) => ({ title: route.params.name })}/>
+    <HomeStack.Screen name='ListCoursesScrollLoad' component={ListCoursesScrollLoad} options={({ route }) => ({ title: route.params.name })}/>
+    <HomeStack.Screen name='SendFeedback' component={SendFeedback} options={{title: 'Feedback'}}/>
+    <HomeStack.Screen name='Payment' component={Payment}/>
   </HomeStack.Navigator>
 };
 

@@ -1,49 +1,49 @@
 import React, {useContext} from 'react';
 import {View, Text, ScrollView, TouchableOpacity, StyleSheet} from 'react-native';
 import SectionCourseItems from "../SectionCourseItems/section-course-items";
-import PathItems from "../PathItems/path-items";
-import ChannelItems from "../ChanneItems/channel-items";
 import {ColorsContext} from "../../../../provider/colors-provider";
+import {alertSignIn} from "../../../../globles/alert";
+import {AuthenticationContext} from "../../../../provider/authentication-provider";
+import ChannelItems from "../ChanneItems/channel-items";
 
 const SectionCourses = (props) => {
   const {theme} = useContext(ColorsContext)
+  const {state} = useContext(AuthenticationContext);
 
   const onPressItemInListCourse = (id) => {
     props.navigation.navigate('CourseDetail', {id: id})
   }
 
-  const onPressItemInListPath = (key, title) => {
-    props.navigation.navigate('PathDetail', {key: key, name: title})
-  }
-
-  const onPressItemInListChannel = (channel, title) => {
-    props.navigation.navigate('ChannelDetail', {channel: channel, name: title})
+  const onPressItemInListChannel = (item) => {
+    props.navigation.navigate('ChannelDetail', {channel: item})
   }
 
   const renderListItems = () => {
-    return props.data.map( (item) => <SectionCourseItems key={item.id}  item={item} onPress={() => onPressItemInListCourse(item.id)} />);
-  }
-
-  const renderPathItems = () => {
-    return props.data.map( (item) => <PathItems key={item.key} item={item} onPress={() => onPressItemInListPath(item.key, item.detail.title)} />);
+    return props.data.map( (item) =>
+      <SectionCourseItems key={item.id}  item={item} onPress={() => onPressItemInListCourse(item.id)} />);
   }
 
   const renderChannelItems = () => {
-    return props.data.map( (item) => <ChannelItems key={item.detail.title} item={item} onPress={() => onPressItemInListChannel(item, item.detail.title)} />);
+    return props.data.map( (item) =>
+      <ChannelItems key={item.detail.title}  item={item} onPress={() => onPressItemInListChannel(item)} />);
   }
 
   return <View style={styles.container}>
     <View style={styles.title}>
       <Text style={{...styles.titleText, color: theme.text}}>{props.title}</Text>
-      {props.hasButton!==false ?<TouchableOpacity style={{...styles.button, backgroundColor: theme.foreground1}}
-                        onPress={props.pressSeeAll}
-      >
-        <Text style={{color: theme.text}}>  See all >  </Text>
-      </TouchableOpacity> : null}
+      {
+        props.type==='Channel' ? <TouchableOpacity style={{...styles.button, backgroundColor: 'transparent'}} onPress={props.fetchChannel}>
+          <Text style={{color: '#19B5FE'}}>  Refresh  </Text>
+        </TouchableOpacity> : null
+      }
+      {
+        props.hasButton!==false ? <TouchableOpacity style={{...styles.button, backgroundColor: theme.foreground1}} onPress={props.pressSeeAll}>
+            <Text style={{color: theme.text}}>  See all >  </Text>
+        </TouchableOpacity> : null
+      }
     </View>
     <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-      {props.type==='Path' ? renderPathItems() : props.type==='Channel'
-        ? renderChannelItems() : renderListItems()}
+      {props.type === 'Course' ? renderListItems() : renderChannelItems()}
     </ScrollView>
   </View>
 };

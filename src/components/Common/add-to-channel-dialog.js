@@ -1,4 +1,4 @@
-import React, {useContext, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {
   Modal,
   View,
@@ -10,17 +10,61 @@ import {
 import {Icon, Text} from "react-native-elements";
 import {AuthenticationContext} from "../../provider/authentication-provider";
 import InputTextSae from "./input-text-sae";
+import {getChannel, storeChannel} from "../../core/local_storage/channel-storage";
 
 const AddToChannelDialog = (props) => {
+  const {state} = useContext(AuthenticationContext);
   const [modalVisible, setModalVisible] = useState(false);
   const [newChannel, setNewChannel] = useState('');
-  const {user, setUser} = useContext(AuthenticationContext)
-  const key = !props.keyItem ? props.route.params.key : props.keyItem;
-  const check = !!props.keyItem;
+  const [channels, setChannels] = useState([])
+  const [channelsStorage, setChannelsStorage] = useState([])
+  const [index, setIndex] = useState(-1)
+  const [courseDetail, setCourseDetail] = useState()
+  //const courseDetail = !props.courseDetail ? props.route.params.courseDetail : props.courseDetail;
+  useEffect(() => {
+    let temp = !props.courseDetail ? props.route.params.courseDetail : props.courseDetail
+    delete temp['section']
+    setCourseDetail(temp)
+  }, [])
 
-  const onPressModalItem = (pos, title) => {
-    let temp = {...user}
-    temp.channels[pos].items.push({typeItem: check ? 'course' : 'path', data: [key],});
+  useEffect(() => {
+    getChannel().then(res =>{
+      if(res.status===200) {
+        if(res.data.length) {
+          for(let i=0; i<res.data.length; i++) {
+            if(res.data[i].id === state.userInfo.id) {
+              setChannels(res.data[i].channels)
+              setChannelsStorage(res.data)
+              setIndex(i)
+              return
+            }
+          }
+          setChannels([])
+          setChannelsStorage(res.data)
+        } else {
+          setChannels([])
+          setChannelsStorage([])
+        }
+      } else {}
+    }).catch(err => {
+      alert(err.response.data.message || err)
+      props.closeModel()
+    })
+  }, [])
+
+  //console.log('channelsStorage: ', channelsStorage)
+  //console.log(channels)
+
+  const onPressModalItem = async (index) => {
+    let tempChannels = [...channels]
+    let tempChannelsStorage = [...channelsStorage]
+    console.log(tempChannels)
+    tempChannels[index].items.push(courseDetail)
+    tempChannelsStorage[index].channels = tempChannels
+
+    await storeChannel(tempChannelsStorage)
+    setChannels(tempChannels)
+    setChannelsStorage(tempChannelsStorage)
     props.closeModel();
   }
 
@@ -28,40 +72,40 @@ const AddToChannelDialog = (props) => {
     setNewChannel(newChannel)
   }
 
-  const onPressSaveNewChannel = () => {
+  const onPressSaveNewChannel = async () => {
     const channel = {
       detail: {
         title: newChannel,
-        user: user.name,
-        type: 'Private',
-        member: 1,
       },
-      progress: 0,
-      items: [
-        {
-          typeItem: check ? 'course' : 'path',
-          data: [key],
-        },
-      ]
+      items: [courseDetail]
     };
-    let temp = {...user};
-    temp.channels.push(channel);
-    setUser(temp);
+
+    let tempChannels = [...channels]
+    let tempChannelsStorage = [...channelsStorage]
+    tempChannels.push(channel)
+    if(index!==-1) {
+      tempChannelsStorage[index].channels = tempChannels
+    } else {
+      tempChannelsStorage.push({id: state.userInfo.id, channels: tempChannels})
+    }
+    await storeChannel(tempChannelsStorage)
+    setChannels(tempChannels)
+    setChannelsStorage(tempChannelsStorage)
     setNewChannel('');
     setModalVisible(false);
   }
 
-  const ModalItem = (channels) => {
-    const check = channels.channel.items.find(item => item.data[0]===key);
-    const pos = user.channels.indexOf(channels.channel);
+  const ModalItem = (propsModal) => {
+    const check = propsModal.channel.items.find(item => item.id===courseDetail.id);
+    //const pos = user.channels.indexOf(channels.channel);
 
     return <TouchableOpacity
       style={{ ...styles.channelButton}}
-      onPress={() => {onPressModalItem(pos, channels.channel.detail.title)}}
+      onPress={async () => { await onPressModalItem(propsModal.index)}}
       disabled={!!check}
     >
       <Icon name={!check ? 'cast-connected' : 'check'} size={18} />
-      <Text style={styles.textStyle}>  {channels.channel.detail.title} {!check ? '' : '(added)'}</Text>
+      <Text style={styles.textStyle}>  {propsModal.channel.detail.title} {!check ? '' : '(added)'}</Text>
     </TouchableOpacity>
   }
 
@@ -80,13 +124,15 @@ const AddToChannelDialog = (props) => {
 
                 <TouchableOpacity
                   style={{ ...styles.channelButton}}
-                  onPress={() => {props.closeModel(), setModalVisible(true)}}
+                  onPress={() => {
+                    props.closeModel()
+                    setModalVisible(true)}}
                 >
                   <Icon name={'plus'} type={"font-awesome-5"} size={14} />
                   <Text style={styles.textStyle}>  New channel</Text>
                 </TouchableOpacity>
 
-                {user.channels.map((channel, index) => <ModalItem key={channel+index} channel={channel}/>)}
+                {channels.map((channel, index) => <ModalItem key={channel+index} index={index} channel={channel}/>)}
               </ScrollView>
             </View>
           </TouchableWithoutFeedback>
@@ -114,7 +160,7 @@ const AddToChannelDialog = (props) => {
                 </TouchableOpacity>
                 <TouchableOpacity
                   style={styles.creatChannelButton}
-                  onPress={() => {!user.channels.find(channel => channel.detail.title===newChannel) ? onPressSaveNewChannel() : null}}
+                  onPress={() => {!channels.find(channel => channel.detail.title===newChannel) ? onPressSaveNewChannel() : null}}
                 >
                   <Text style={styles.creatChannelButtonText}>Save</Text>
                 </TouchableOpacity>
