@@ -11,16 +11,20 @@ import {Icon, Text} from "react-native-elements";
 import {AuthenticationContext} from "../../provider/authentication-provider";
 import InputTextSae from "./input-text-sae";
 import {getChannel, storeChannel} from "../../core/local_storage/channel-storage";
+import {UserContext} from "../../provider/user-provider";
 
 const AddToChannelDialog = (props) => {
   const {state} = useContext(AuthenticationContext);
+  const userContext = useContext(UserContext);
+
   const [modalVisible, setModalVisible] = useState(false);
   const [newChannel, setNewChannel] = useState('');
   const [channels, setChannels] = useState([])
   const [channelsStorage, setChannelsStorage] = useState([])
   const [index, setIndex] = useState(-1)
   const [courseDetail, setCourseDetail] = useState()
-  //const courseDetail = !props.courseDetail ? props.route.params.courseDetail : props.courseDetail;
+  const [isLoading, setIsLoading] = useState({...props.modalVisible})
+
   useEffect(() => {
     let temp = {...props.courseDetail}
     delete temp['section']
@@ -28,43 +32,48 @@ const AddToChannelDialog = (props) => {
   }, [])
 
   useEffect(() => {
-    getChannel().then(res =>{
-      if(res.status===200) {
-        if(res.data.length) {
-          for(let i=0; i<res.data.length; i++) {
-            if(res.data[i].id === state.userInfo.id) {
-              setChannels(res.data[i].channels)
-              setChannelsStorage(res.data)
-              setIndex(i)
-              return
+    if(props.modalVisible) {
+      getChannel().then(res =>{
+        if(res.status===200) {
+          if(res.data.length) {
+            let check = false
+            for(let i=0; i<res.data.length; i++) {
+              if(res.data[i].id === state.userInfo.id) {
+                check = true
+                setChannels(res.data[i].channels)
+                setChannelsStorage(res.data)
+                setIndex(i) // pos channel in data array
+              }
             }
+            if(!check) {
+              setChannels([])
+              setChannelsStorage(res.data)
+            } else {}
+          } else {
+            setChannels([])
+            setChannelsStorage([])
           }
-          setChannels([])
-          setChannelsStorage(res.data)
         } else {
-          setChannels([])
-          setChannelsStorage([])
+          console.log('err: ', res.data.e)
         }
-      } else {}
-    }).catch(err => {
-      alert(err.response.data.message || err)
-      props.closeModel()
-    })
-  }, [])
+        setIsLoading(false)
+      }).catch(err => {
+        alert(err.response.data.message || err)
+        props.closeModel()
+      })
+    } else {}
+  }, [props.modalVisible])
 
-  //console.log('channelsStorage: ', channelsStorage)
-  //console.log(channels)
-
-  const onPressModalItem = async (index) => {
+  const onPressModalItem = async (channelIndex) => { // index = pos channel in channels array
     let tempChannels = [...channels]
     let tempChannelsStorage = [...channelsStorage]
-    console.log(tempChannels)
-    tempChannels[index].items.push(courseDetail)
+    tempChannels[channelIndex].items.push(courseDetail)
     tempChannelsStorage[index].channels = tempChannels
 
     await storeChannel(tempChannelsStorage)
     setChannels(tempChannels)
     setChannelsStorage(tempChannelsStorage)
+    userContext.requestUpdateChannel()
     props.closeModel();
   }
 
@@ -92,6 +101,7 @@ const AddToChannelDialog = (props) => {
     setChannels(tempChannels)
     setChannelsStorage(tempChannelsStorage)
     setNewChannel('');
+    userContext.requestUpdateChannel()
     setModalVisible(false);
   }
 
@@ -109,69 +119,73 @@ const AddToChannelDialog = (props) => {
     </TouchableOpacity>
   }
 
-  return <View>
-    <Modal
-      animationType="fade"
-      transparent={true}
-      visible={props.modalVisible}
-      onRequestClose={props.closeModel}>
-      <TouchableWithoutFeedback onPress={props.closeModel}>
-        <View style={styles.centeredView}>
-          <TouchableWithoutFeedback onPress={null}>
-            <View style={styles.modalView}>
-              <ScrollView>
-                <Text style={styles.modalTitle}>Add to Channel</Text>
+  if(isLoading) {
+    return <View/>
+  } else {
+    return <View>
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={props.modalVisible}
+        onRequestClose={props.closeModel}>
+        <TouchableWithoutFeedback onPress={props.closeModel}>
+          <View style={styles.centeredView}>
+            <TouchableWithoutFeedback onPress={null}>
+              <View style={styles.modalView}>
+                <ScrollView>
+                  <Text style={styles.modalTitle}>Add to Channel</Text>
 
-                <TouchableOpacity
-                  style={{ ...styles.channelButton}}
-                  onPress={() => {
-                    props.closeModel()
-                    setModalVisible(true)}}
-                >
-                  <Icon name={'plus'} type={"font-awesome-5"} size={14} />
-                  <Text style={styles.textStyle}>  New channel</Text>
-                </TouchableOpacity>
+                  <TouchableOpacity
+                    style={{ ...styles.channelButton}}
+                    onPress={() => {
+                      props.closeModel()
+                      setModalVisible(true)}}
+                  >
+                    <Icon name={'plus'} type={"font-awesome-5"} size={14} />
+                    <Text style={styles.textStyle}>  New channel</Text>
+                  </TouchableOpacity>
 
-                {channels.map((channel, index) => <ModalItem key={channel+index} index={index} channel={channel}/>)}
-              </ScrollView>
-            </View>
-          </TouchableWithoutFeedback>
-        </View>
-      </TouchableWithoutFeedback>
-    </Modal>
-
-    <Modal animationType="fade"
-           transparent={true}
-           visible={modalVisible}
-           onRequestClose={() => setModalVisible(false)}>
-      <TouchableWithoutFeedback onPress={() => setModalVisible(false)}>
-        <View style={styles.centeredView}>
-          <TouchableWithoutFeedback onPress={null}>
-            <View style={styles.modalView}>
-              <Text style={styles.modalTitle}>Create channel</Text>
-              <InputTextSae title='Channel title' value={newChannel} onChangeText={onChangeNewChannel}/>
-
-              <View style={styles.createChannelButtonContainer}>
-                <TouchableOpacity
-                  style={styles.creatChannelButton}
-                  onPress={() => setModalVisible(false)}
-                >
-                  <Text style={styles.creatChannelButtonText}>Cancel</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={styles.creatChannelButton}
-                  onPress={() => {!channels.find(channel => channel.detail.title===newChannel) ? onPressSaveNewChannel() : null}}
-                >
-                  <Text style={styles.creatChannelButtonText}>Save</Text>
-                </TouchableOpacity>
+                  {channels.map((channel, index) => <ModalItem key={channel+index} index={index} channel={channel}/>)}
+                </ScrollView>
               </View>
-            </View>
-          </TouchableWithoutFeedback>
-        </View>
-      </TouchableWithoutFeedback>
+            </TouchableWithoutFeedback>
+          </View>
+        </TouchableWithoutFeedback>
+      </Modal>
 
-    </Modal>
-  </View>
+      <Modal animationType="fade"
+             transparent={true}
+             visible={modalVisible}
+             onRequestClose={() => setModalVisible(false)}>
+        <TouchableWithoutFeedback onPress={() => setModalVisible(false)}>
+          <View style={styles.centeredView}>
+            <TouchableWithoutFeedback onPress={null}>
+              <View style={styles.modalView}>
+                <Text style={styles.modalTitle}>Create channel</Text>
+                <InputTextSae title='Channel title' value={newChannel} onChangeText={onChangeNewChannel}/>
+
+                <View style={styles.createChannelButtonContainer}>
+                  <TouchableOpacity
+                    style={styles.creatChannelButton}
+                    onPress={() => setModalVisible(false)}
+                  >
+                    <Text style={styles.creatChannelButtonText}>Cancel</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={styles.creatChannelButton}
+                    onPress={() => {!channels.find(channel => channel.detail.title===newChannel) ? onPressSaveNewChannel() : null}}
+                  >
+                    <Text style={styles.creatChannelButtonText}>Save</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </TouchableWithoutFeedback>
+          </View>
+        </TouchableWithoutFeedback>
+
+      </Modal>
+    </View>
+  }
 };
 
 const styles = StyleSheet.create({

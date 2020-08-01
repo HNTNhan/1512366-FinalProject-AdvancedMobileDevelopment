@@ -4,20 +4,20 @@ export const setStoreUserInfo = async (value) => {
   try {
     if(value) {
       const jsonValue = JSON.stringify(value)
-      await SecureStore.setItemAsync('.userInfo', jsonValue)
+      await SecureStore.setItemAsync('.listUserInfo', jsonValue)
     } else {
-      await SecureStore.setItemAsync('.userInfo', null)
+      await SecureStore.setItemAsync('.listUserInfo', null)
     }
-  } catch (e) {
-    console.log('err', e)
+  } catch (err) {
+    console.log('err', err)
   }
 }
 
 export const getStoreUserInfo = async () => {
   try {
-    const jsonValue = await SecureStore.getItemAsync('.userInfo')
-    return jsonValue !== null ? {data: JSON.parse(jsonValue), status: 200} : {data: null, status: 200};
-  } catch(e) {
-    return {status: 400, data: null}
+    const jsonValue = await SecureStore.getItemAsync('.listUserInfo')
+    return jsonValue !== null ? {data: JSON.parse(jsonValue), status: 200} : {data: [], status: 200};
+  } catch(err) {
+    return {status: 400, data: null, err}
   }
 }

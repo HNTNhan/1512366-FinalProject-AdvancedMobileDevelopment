@@ -10,43 +10,61 @@ import {getStoreUserInfo, setStoreUserInfo} from "../../../core/local_storage/au
 
 const Login = (props) => {
   const {theme} = useContext(ColorsContext)
+  const authContext = useContext(AuthenticationContext)
   const [email, setEmail] = useState('hnmfrv@gmail.com');
   const [password, setPassword] = useState('12345678');
   const [pressedSignIn, setPressedSignIn] = useState(false);
-  const authContext = useContext(AuthenticationContext)
+  const [storageData, setStorageData] = useState([])
 
-  // useEffect(() => {
-  //   NetInfo.fetch().then(state => {
-  //     authContext.changeOnlineStatus(state.isConnected)
-  //     if(!state.isConnected) {
-  //       getStoreUserInfo().then((res) => {
-  //         if(res.status===200) {
-  //           if(res.data) {
-  //             const now = new Date()
-  //             if((now - (new Date(res.data.currentDate)))/1000/60/60/24 > 7) {
-  //               setStoreUserInfo(null).then(() => authContext.setUserInfoFromStorage(null))
-  //             } else {
-  //               authContext.setUserInfoFromStorage(res.data)
-  //             }
-  //           } else {
-  //             authContext.setUserInfoFromStorage(null)
-  //           }
-  //         } else {
-  //           authContext.setUserInfoFromStorage(null)
-  //         }
-  //       })
-  //     } else {}
-  //   });
-  // }, [])
+
+  useEffect(() => {
+    NetInfo.fetch().then(state => {
+      authContext.changeOnlineStatus(state.isConnected)
+      getStoreUserInfo().then((res) => {
+        if(res.status===200) {
+          if(res.data && res.data.length) {
+            setStorageData(res.data)
+          } else {
+            setStorageData([])
+          }
+        } else {
+          console.log(res.data.err)
+          setStorageData(null)
+        }
+      })
+    });
+  }, [])
 
   useEffect(() => {
     if(authContext.state.isUpdatingProfile) {
 
     } else {
       if(authContext.state.isAuthenticated) {
-        // const currentDate = new Date();
-        // const userInfo = {...authContext.state.userInfo, currentDate: currentDate, password: password}
-        // setStoreUserInfo(userInfo).then(r => console.log(r))
+        if(authContext.state.isOnline) {
+          const currentDate = new Date();
+          const userInfo = {...authContext.state.userInfo, currentDate: currentDate, password: password};
+          if(storageData) {
+            let temp = [...storageData];
+            if(storageData.length) {
+              let check=false
+              for(let i=0; i<storageData.length; i++) {
+                if(storageData[i].email===email && storageData[i].password===password) {
+                  check=true;
+                  temp[i] = userInfo;
+                  setStoreUserInfo(temp).then()
+                  break;
+                } else {}
+              }
+              if(!check) {
+                temp.push(userInfo);
+                setStoreUserInfo(temp).then()
+              } else {}
+            } else {
+              temp.push(userInfo);
+              setStoreUserInfo(temp).then()
+            }
+          } else {}
+        } else {}
         props.navigation.replace('Main')
       } else {}
     }
@@ -77,23 +95,40 @@ const Login = (props) => {
   }
 
   const onPressSignIn = () => {
-    //if(authContext.state.isOnline) {
+    if(authContext.state.isOnline) {
+      console.log('sign in when online')
       authContext.login(email, password);
-
       if(!pressedSignIn) {
         setPressedSignIn(true)
-      }
-      else {
+      } else {}
+    } else {
+      console.log('sign in when not online')
+      if(storageData) {
+        const currentDate = new Date();
+        let temp = [...storageData];
 
+        if(storageData.length) {
+          for(let i=0; i<storageData.length; i++) {
+            if(storageData[i].email===email && storageData[i].password===password) {
+              console.log('type of date in storage: ', typeof(storageData[i].currentDate))
+              console.log((currentDate - (new Date(storageData[i].currentDate)))/1000/60/60/24)
+              if((currentDate - (new Date(storageData[i].currentDate)))/1000/60/60/24 > 7) {
+                temp[i] = null;
+                setStoreUserInfo(temp).then(() => authContext.setUserInfoFromStorage(null))
+              } else {
+                authContext.setUserInfoFromStorage({...storageData[i]})
+              }
+              return;
+            } else {}
+          }
+          authContext.setUserInfoFromStorage(null)
+          alert('You need connect to internet to sign in!')
+        } else {}
+        alert('You need connect to internet to sign in!')
+      } else {
+        alert('You need connect to internet to sign in!')
       }
-    //}
-    // else {
-    //   if(authContext.state.userInfo) {
-    //     props.navigation.replace('Main')
-    //   } else {
-    //     console.log('sadasd')
-    //   }
-    // }
+    }
   }
 
   return <View style={{...styles.container, backgroundColor: theme.background}}>

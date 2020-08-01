@@ -18,7 +18,6 @@ const Download = (props) => {
       //console.log(res)
       if(res.status===200) {
         if(res.data && res.data.length) {
-          console.log(res.data.length)
           setCoursesDownload(res.data)
         } else {
           setCoursesDownload([])

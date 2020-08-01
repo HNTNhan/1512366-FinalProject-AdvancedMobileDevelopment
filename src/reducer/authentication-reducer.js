@@ -28,6 +28,7 @@ export const initialState = {
   isForgotPassword: null,
   isForgettingPassword: false,
   isUpdatingProfile: false,
+  isOnline: false,
   message: null,
   userInfo: null,
   token: null,
@@ -84,7 +85,7 @@ export const reducer = (prevState, action) => {
     case CHANGE_ONLINE_STATUS:
       return {...prevState, isOnline: action.data,}
     case SET_USER_INFO_FROM_STORAGE:
-      return {...prevState, userInfo: action.data}
+      return {...prevState, userInfo: action.data, isAuthenticated: true}
     default:
       throw new Error();
   }

@@ -29,15 +29,13 @@ const Home = (props) => {
         } else {
           setChannels([])
         }
-      } else {}
+      } else {
+        console.log('err: ', res.e)
+      }
     }).catch(err => {
       alert(err.response.data.message || err)
     })
   }
-
-  useEffect(() => {
-    fetchChannel()
-  }, [])
 
   useEffect(() =>{
     if(state.isAuthenticated) {
@@ -49,6 +47,23 @@ const Home = (props) => {
       } else {}
     } else {}
   }, [])
+
+  useEffect(() => {
+    if(userContext.state.isUpdateChannel) {
+      fetchChannel()
+      userContext.endUpdateChanel()
+    } else {}
+
+  }, [userContext.state.isUpdateChannel])
+
+  useEffect(() => {
+    if(state.isAuthenticated) {
+      if (userContext.state.isUpdateContinueCourse) {
+        userContext.fetchContinueCourses(state.token)
+        userContext.endUpdateChanel()
+      } else {}
+    } else{}
+  }, [userContext.state.isUpdateContinueCourse])
 
   useEffect(() => {
     if(state.isAuthenticated) {
@@ -86,7 +101,6 @@ const Home = (props) => {
                                title: false,
                                name: 'Favorite courses'
                              })}/>
-            {
               <SectionCourses title='Channels'
                              type='Channel'
                              navigation={props.navigation}
@@ -97,7 +111,6 @@ const Home = (props) => {
                              data: channels,
                              title: false
                              })}/>
-            }
           </ScrollView>
         : <CenterActivityIndicator /> :
         <View style={{...styles.container}}>

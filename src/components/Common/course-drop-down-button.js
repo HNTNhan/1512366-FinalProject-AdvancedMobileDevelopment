@@ -84,7 +84,7 @@ const CourseDropDownButton = (props) => {
           <Text>{favorite ? 'UnFavorite' : 'Favorite'}</Text>
         </MenuOption>
         {/*<MenuOption onSelect={() => state.isAuthenticated ? onSelectDownload() : alertSignIn()} text={'Download'} />*/}
-        {/*<MenuOption onSelect={() => state.isAuthenticated ? onSelectAddToChannel() : alertSignIn()} text={'Add to channel'} />*/}
+        <MenuOption onSelect={() => state.isAuthenticated ? onSelectAddToChannel() : alertSignIn()} text={'Add to channel'} />
       </MenuOptions>
     </Menu>
     <Icon name='ellipsis-v'
@@ -92,10 +92,10 @@ const CourseDropDownButton = (props) => {
           type='font-awesome-5'
     />
 
-    {/*{*/}
-    {/*  props.courseDetail ? <AddToChannelDialog modalVisible={modalVisible} courseDetail={props.courseDetail} closeModel={() => setModalVisible(false)}/> : null*/}
-    {/*}*/}
-    {/*<AddToChannelDialog modalVisible={modalVisible} courseDetail={props.courseDetail} closeModel={() => setModalVisible(false)}/>*/}
+    {
+      props.courseDetail ? <AddToChannelDialog modalVisible={modalVisible} courseDetail={props.courseDetail} closeModel={() => setModalVisible(false)}/> : null
+    }
+    <AddToChannelDialog modalVisible={modalVisible} courseDetail={props.courseDetail} closeModel={() => setModalVisible(false)}/>
   </View>
 };
 

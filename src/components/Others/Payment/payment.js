@@ -6,6 +6,7 @@ import CenterActivityIndicator from "../../Common/center-activity-indicator";
 import {Button, Icon} from "react-native-elements";
 import {ColorsContext} from "../../../provider/colors-provider";
 import * as WebBrowser from 'expo-web-browser';
+import {UserContext} from "../../../provider/user-provider";
 
 const Payment = (props) => {
   const {state} = useContext(AuthenticationContext)
@@ -13,7 +14,7 @@ const Payment = (props) => {
   const [paymentInfo, setPaymentInfo] = useState({});
   const [isLoading, setIsLoading] = useState(true)
   const [paymentSuccess, setPaymentSuccess] = useState(false)
-
+  const userContext = useContext(UserContext);
 
   useEffect(() => {
     apiPaymentInfo(props.route.params.id, state.token).then(res => {
@@ -37,15 +38,14 @@ const Payment = (props) => {
       paymentFreeCourse(props.route.params.id, state.token)
         .then(res => {
           if(res.status === 200) {
+            userContext.requestUpdateContinueLearning()
             setPaymentSuccess(true)
           } else {}
         }).catch(err => {
         console.log(err.response.data.message)
       })
     }
-
   }
-
 
   if(isLoading) {
     return <CenterActivityIndicator />
