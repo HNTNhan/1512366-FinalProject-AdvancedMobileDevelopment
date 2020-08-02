@@ -19,11 +19,9 @@ const AddToChannelDialog = (props) => {
 
   const [modalVisible, setModalVisible] = useState(false);
   const [newChannel, setNewChannel] = useState('');
-  const [channels, setChannels] = useState([])
-  const [channelsStorage, setChannelsStorage] = useState([])
-  const [index, setIndex] = useState(-1)
-  const [courseDetail, setCourseDetail] = useState()
-  const [isLoading, setIsLoading] = useState({...props.modalVisible})
+  const [channelsStorageData, setChannelStorageData] = useState({data: [], index: -1})
+  const [courseDetail, setCourseDetail] = useState();
+  const [isLoading, setIsLoading] = useState({...props.modalVisible});
 
   useEffect(() => {
     let temp = {...props.courseDetail}
@@ -40,18 +38,14 @@ const AddToChannelDialog = (props) => {
             for(let i=0; i<res.data.length; i++) {
               if(res.data[i].id === state.userInfo.id) {
                 check = true
-                setChannels(res.data[i].channels)
-                setChannelsStorage(res.data)
-                setIndex(i) // pos channel in data array
+                setChannelStorageData({data: res.data, index: i})
               }
             }
             if(!check) {
-              setChannels([])
-              setChannelsStorage(res.data)
+              setChannelStorageData({data: res.data, index: -1})
             } else {}
           } else {
-            setChannels([])
-            setChannelsStorage([])
+            setChannelStorageData({data: [], index: -1})
           }
         } else {
           console.log('err: ', res.data.e)
@@ -65,14 +59,14 @@ const AddToChannelDialog = (props) => {
   }, [props.modalVisible])
 
   const onPressModalItem = async (channelIndex) => { // index = pos channel in channels array
-    let tempChannels = [...channels]
-    let tempChannelsStorage = [...channelsStorage]
+    let tempChannels = [...channelsStorageData.data[channelsStorageData.index].channels]
+    let tempChannelsStorage = [...channelsStorageData.data]
+
     tempChannels[channelIndex].items.push(courseDetail)
-    tempChannelsStorage[index].channels = tempChannels
+    tempChannelsStorage[channelsStorageData.index].channels = tempChannels
 
     await storeChannel(tempChannelsStorage)
-    setChannels(tempChannels)
-    setChannelsStorage(tempChannelsStorage)
+    setChannelStorageData({...channelsStorageData, data: tempChannelsStorage})
     userContext.requestUpdateChannel()
     props.closeModel();
   }
@@ -88,18 +82,20 @@ const AddToChannelDialog = (props) => {
       },
       items: [courseDetail]
     };
-
-    let tempChannels = [...channels]
-    let tempChannelsStorage = [...channelsStorage]
+    console.log(0)
+    let tempChannels = channelsStorageData.index!==-1 ? [...channelsStorageData.data[channelsStorageData.index].channels] : []
+    let tempChannelsStorage = [...channelsStorageData.data]
+    console.log(1)
     tempChannels.push(channel)
-    if(index!==-1) {
-      tempChannelsStorage[index].channels = tempChannels
+
+    if(channelsStorageData.index!==-1) {
+      tempChannelsStorage[channelsStorageData.index].channels = tempChannels
     } else {
       tempChannelsStorage.push({id: state.userInfo.id, channels: tempChannels})
     }
+
     await storeChannel(tempChannelsStorage)
-    setChannels(tempChannels)
-    setChannelsStorage(tempChannelsStorage)
+    setChannelStorageData({data: tempChannelsStorage, index: tempChannelsStorage.length-1})
     setNewChannel('');
     userContext.requestUpdateChannel()
     setModalVisible(false);
@@ -107,7 +103,6 @@ const AddToChannelDialog = (props) => {
 
   const ModalItem = (propsModal) => {
     const check = propsModal.channel.items.find(item => item.id===courseDetail.id);
-    //const pos = user.channels.indexOf(channels.channel);
 
     return <TouchableOpacity
       style={{ ...styles.channelButton}}
@@ -144,8 +139,12 @@ const AddToChannelDialog = (props) => {
                     <Icon name={'plus'} type={"font-awesome-5"} size={14} />
                     <Text style={styles.textStyle}>  New channel</Text>
                   </TouchableOpacity>
-
-                  {channels.map((channel, index) => <ModalItem key={channel+index} index={index} channel={channel}/>)}
+                  {
+                    channelsStorageData.index!==-1 ?
+                      channelsStorageData.data[channelsStorageData.index].channels.map(
+                        (channel, index) => <ModalItem key={channel+index} index={index} channel={channel}/>)
+                      : null
+                  }
                 </ScrollView>
               </View>
             </TouchableWithoutFeedback>
@@ -173,7 +172,10 @@ const AddToChannelDialog = (props) => {
                   </TouchableOpacity>
                   <TouchableOpacity
                     style={styles.creatChannelButton}
-                    onPress={() => {!channels.find(channel => channel.detail.title===newChannel) ? onPressSaveNewChannel() : null}}
+                    onPress={() => {
+                      channelsStorageData.index===-1 || !channelsStorageData.data[channelsStorageData.index].channels.find(
+                        channel => channel.detail.title===newChannel) ? onPressSaveNewChannel() : null}
+                    }
                   >
                     <Text style={styles.creatChannelButtonText}>Save</Text>
                   </TouchableOpacity>

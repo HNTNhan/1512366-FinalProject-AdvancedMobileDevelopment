@@ -8,7 +8,6 @@ import ChannelItems from "../ChanneItems/channel-items";
 
 const SectionCourses = (props) => {
   const {theme} = useContext(ColorsContext)
-  const {state} = useContext(AuthenticationContext);
 
   const onPressItemInListCourse = (id) => {
     props.navigation.navigate('CourseDetail', {id: id})
