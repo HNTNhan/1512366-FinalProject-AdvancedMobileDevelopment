@@ -79,7 +79,7 @@ const Home = (props) => {
   return <View style={[globalStyles.container, {backgroundColor: theme.background}]}>
     {
       state.isAuthenticated ?
-        !userContext.state.favoriteCoursesRequest && !userContext.state.continueCouresRequest ?
+        !userContext.state.favoriteCoursesRequest || !userContext.state.continueCouresRequest ?
           <ScrollView showsVerticalScrollIndicator={false}>
             <SectionCourses title='Continue learning'
                            type='Course'
@@ -102,15 +102,15 @@ const Home = (props) => {
                                name: 'Favorite courses'
                              })}/>
               <SectionCourses title='Channels'
-                             type='Channel'
-                             navigation={props.navigation}
-                             route={props.route}
-                             data={channels}
-                              fetchChannel={() => fetchChannel()}
-                             pressSeeAll={() => props.navigation.navigate('ListChannels', {
-                             data: channels,
-                             title: false
-                             })}/>
+                               type='Channel'
+                               navigation={props.navigation}
+                               route={props.route}
+                               data={channels}
+                               fetchChannel={() => fetchChannel()}
+                               pressSeeAll={() => props.navigation.navigate('ListChannels', {
+                               data: channels,
+                               title: false
+                               })}/>
           </ScrollView>
         : <CenterActivityIndicator /> :
         <View style={{...styles.container}}>

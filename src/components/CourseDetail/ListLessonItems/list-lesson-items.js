@@ -15,14 +15,18 @@ const ListLessonItems = (props) => {
     props.videoLoading()
     if(props.downloaded) {
       const data = {
-        videoUrl: lesson.videoUrl,
+        videoUrl: lesson.videoPath,
+        currentTime: lesson.currentTime,
       }
       props.onPress(data)
     } else {
       let temp = null;
       if(props.checkOwn || lesson.isPreview) {
-        Promise.all([getLessonDetail(props.courseId, lesson.id, state.token), getLessonSubtitle(props.courseId, lesson.id, state.token), getLessonUrlAndTime(props.courseId, lesson.id, state.token)])
-          .then(res => {
+        Promise.all([
+          getLessonDetail(props.courseId, lesson.id, state.token),
+          getLessonSubtitle(props.courseId, lesson.id, state.token),
+          getLessonUrlAndTime(props.courseId, lesson.id, state.token)
+        ]).then(res => {
             temp = {...res[0].data.payload, subtitle: res[1].data.payload, ...res[2].data.payload}
             props.onPress(temp)
           }).catch(err => {
@@ -32,16 +36,14 @@ const ListLessonItems = (props) => {
               currentTime: null,
               isFinish: null
             }
-            //temp = {...temp, data}
             props.onPress(data)
           }
           else {
-            console.log('fail1: ', err.response.data.message, err.response.status)
+            alert.log(err.response.data.message || err)
           }
         })
       } else {
         props.showInfoDialog()
-        console.log(props.checkOwn, lesson.isPreview)
       }
     }
   }

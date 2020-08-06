@@ -14,33 +14,31 @@ import {convertDate, convertTime} from "../../Common/convert-data";
 import {getInstructorInfo} from "../../../core/services/instructor-services";
 import RatingCourse from "../../Common/rating-course";
 import {DownloadContext} from "../../../provider/download-provider";
+import {alertSignIn} from "../../../globles/alert";
 
 const GeneralCourseDetail = (props) => {
   const {theme} = useContext(ColorsContext);
   const {state} = useContext(AuthenticationContext);
-  const {isDownloading} = useContext(DownloadContext)
+  const {startDownload} = useContext(DownloadContext)
   const userContext = useContext(UserContext);
   const [modalVisible, setModalVisible] = useState(false);
   const [favorite, setFavorite] = useState(false)
   const [rating, setRating] = useState(false)
-  const [downloadAll, setDownloadAll] = useState(false)
 
   const courseDetail = props.detail;
   const [instructorInfo, setInstructorInfo] = useState(props.detail.instructor || null);
-  // const keyItem = props.route.params.id;
 
-  useEffect(() => {
-    if(props.courseDownload){
-      for(let i=0; i<props.courseDownload.section.length; i++) {
-        if(props.courseDownload.section[i].downloaded) {
-
-        } else {
-          return
-        }
-      }
-      setDownloadAll(true)
-    } else {}
-  }, [])
+  // useEffect(() => {
+  //   if(props.courseDownload){
+  //     for(let i=0; i<props.courseDownload.section.length; i++) {
+  //       if(props.courseDownload.section[i].downloaded) {
+  //
+  //       } else {
+  //         return
+  //       }
+  //     }
+  //   } else {}
+  // }, [])
 
   useEffect(() => {
     let mounted1 = true;
@@ -143,19 +141,17 @@ const GeneralCourseDetail = (props) => {
           <Button title={'Payment'} type={'outline'} buttonStyle={styles.buttonStyle} titleStyle={styles.buttonTitle}
                   icon={<Icon name={'shopping-cart'} type={"font-awesome-5"} size={18} color={'#19B5FE'}/>} iconRight
                   onPress={() => {
-                    console.log(courseDetail.id)
-                    props.navigation.push('Payment', {id: courseDetail.id})
+                    state.isAuthenticated ? props.navigation.push('Payment', {id: courseDetail.id}) : alertSignIn()
                   }}/>
         </View> : null
       }
     </View>
 
-
-
     <View style={styles.activeContainer}>
       <IconButton name='bookmark-border' title={favorite ? 'UnFavorite' : 'Favorite'} onPress={() => onPressFavortie()}/>
       <IconButton name='cast-connected' title='Add to channel' onPress={() => onSelectAddToChannel()}/>
-      <IconButton downloadAll={downloadAll} isDownloading={isDownloading} name='get-app' title={'Download'} onPress={async () => await props.onPressDownload()}/>
+      <IconButton downloadId={props.downloadId} isDownloading={startDownload} id={courseDetail.id} type={'download'}
+                  name='get-app' title={'Download'} onPress={async () => await props.onPressDownload()}/>
     </View>
 
     <View style={{...styles.descriptionContainer}}>

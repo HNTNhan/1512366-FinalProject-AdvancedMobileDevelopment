@@ -8,8 +8,7 @@ import {alertSignIn} from "../../../globles/alert";
 
 const ListLessonTitle = (props) => {
   const {theme} = useContext(ColorsContext)
-  const {isDownloading, setIsDownloading} = useContext(DownloadContext)
-  const [downloading, setDownloading] = useState(false)
+  const {startDownload, setDownloadId, downloadId} = useContext(DownloadContext)
 
   return <View style={styles.container}>
     <View style={styles.subContainer}>
@@ -26,18 +25,17 @@ const ListLessonTitle = (props) => {
     </View>
 
     {
-      props.downloaded ? null : !isDownloading || !downloading?
-        <Button type='clear' containerStyle={{padding: 5}} disabled={isDownloading}
+      props.downloaded ? null : !startDownload || downloadId.sectionId !== props.id ?
+        <Button type='clear' containerStyle={{padding: 5}} disabled={startDownload}
                 onPress={async () => {
                   if(props.checkOwn) {
-                    setIsDownloading(true)
-                    setDownloading(true)
+                    setDownloadId({...downloadId, sectionId: props.id})
                     await props.onPressDownloadSection()
                   } else {
                     alertSignIn()
                   }
                 }}
-                icon={<Icon name={'download'} type='font-awesome-5' size={16} color={!isDownloading ? theme.text : 'gray'}/>}/> :
+                icon={<Icon name={'download'} type='font-awesome-5' size={16} color={!startDownload ? theme.text : 'gray'}/>}/> :
       <ActivityIndicator style={{padding: 5}} size={'small'} color={theme.text} />
     }
   </View>

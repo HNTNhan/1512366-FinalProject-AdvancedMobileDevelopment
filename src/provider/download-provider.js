@@ -3,12 +3,23 @@ import React, {useState} from 'react';
 const DownloadContext = React.createContext({});
 
 const DownloadProvider = (props) => {
-  const [downloadInfo, setDownloadInfo] = useState({lessonName: '', progress: 0});
-  const [isDownloading, setIsDownloading] = useState(false)
-  const [sectionId, setSectionId] = useState('')
+  const [downloadId, setDownloadId] = useState({sectionId: '', courseId: ''})
+  const [list, setList] = useState(null)
+  const [startDownload, setStartDownload] = useState(false)
+  const [downloadData, setDownloadData] = useState({
+    listAccountAndCourseDownload: {},
+    data: [],
+    detail: {},
+    numberOrder: -1,
+    id: '',
+    downloadSection: true,
+  })
 
   return <DownloadContext.Provider
-    value={{downloadInfo: downloadInfo, setDownloadInfo: setDownloadInfo, isDownloading: isDownloading, setIsDownloading: setIsDownloading, sectionId, setSectionId}}
+    value={{
+      downloadId: downloadId, setDownloadId: setDownloadId, downloadData: downloadData, setDownloadData: setDownloadData,
+      list: list, setList: setList, startDownload: startDownload, setStartDownload: setStartDownload,
+    }}
   >
     {props.children}
   </DownloadContext.Provider>

@@ -1,13 +1,14 @@
 import React, {useContext, useEffect, useState} from 'react';
-import {ScrollView, StyleSheet, View} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import {Icon, Text} from "react-native-elements";
 import { Menu, MenuOptions, MenuOption, MenuTrigger} from "react-native-popup-menu";
 import {AuthenticationContext} from "../../provider/authentication-provider";
-import {ColorsContext} from "../../provider/colors-provider";
 import {getFavoriteStatus, setFavoriteStatus} from "../../core/services/user-services";
 import {UserContext} from "../../provider/user-provider";
 import {alertSignIn} from "../../globles/alert";
 import AddToChannelDialog from "./add-to-channel-dialog";
+import {getCoursesDownload, storeCoursesDownload} from "../../core/local_storage/courses-download-storage";
+import * as FileSystem from "expo-file-system";
 
 const CourseDropDownButton = (props) => {
   const {state} = useContext(AuthenticationContext);
@@ -74,6 +75,28 @@ const CourseDropDownButton = (props) => {
     setModalVisible(true)
   }
 
+  const onPressRemove = () => {
+    getCoursesDownload().then(async res => {
+      if(res.status===200) {
+        let temp = [...res.data]
+        for(let i=0; i<temp.length; i++) {
+          if(temp[i].id===state.userInfo.id) {
+            for(let j=0; j<temp[i].courses.length; j++) {
+              if(temp[i].courses[j].id===props.keyItem) {
+                temp[i].courses.splice(j, 1)
+                await storeCoursesDownload(temp)
+                await FileSystem.deleteAsync(FileSystem.documentDirectory + '/itedu/'+ state.userInfo.id + '/' + props.keyItem, {idempotent: true})
+                return
+              } else {}
+            }
+          } else {}
+        }
+      } else {
+        alert(res.error)
+      }
+    })
+  }
+
   return <View style={styles.container}>
     <Menu style={styles.dropdown}>
       <MenuTrigger triggerText={styles.trigger}>
@@ -85,6 +108,9 @@ const CourseDropDownButton = (props) => {
         </MenuOption>
         {/*<MenuOption onSelect={() => state.isAuthenticated ? onSelectDownload() : alertSignIn()} text={'Download'} />*/}
         <MenuOption onSelect={() => state.isAuthenticated ? onSelectAddToChannel() : alertSignIn()} text={'Add to channel'} />
+        {
+          props.type==='download' ? <MenuOption onSelect={() => onPressRemove()} text={'Remove'}/> : null
+        }
       </MenuOptions>
     </Menu>
     <Icon name='ellipsis-v'

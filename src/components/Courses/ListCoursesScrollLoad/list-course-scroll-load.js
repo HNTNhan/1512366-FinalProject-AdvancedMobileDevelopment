@@ -72,7 +72,7 @@ const ListCoursesScrollLoad = (props) => {
           showsVerticalScrollIndicator={false}
           data={data.courses}
           keyExtractor={(item) => item.id}
-          renderItem={({item}) => <ListCourseItems item={item} onPress={() =>  onPressItem(item.id) }/>}
+          renderItem={({item}) => <ListCourseItems item={item} onPress={() => onPressItem(item.id) }/>}
           ItemSeparatorComponent= {() => <View style={globalStyles.separator} />}
           onEndReached={() => handleLoadMore()}
           onEndReachedThreshold={0}

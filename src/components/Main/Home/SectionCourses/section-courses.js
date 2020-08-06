@@ -31,11 +31,6 @@ const SectionCourses = (props) => {
     <View style={styles.title}>
       <Text style={{...styles.titleText, color: theme.text}}>{props.title}</Text>
       {
-        props.type==='Channel' ? <TouchableOpacity style={{...styles.button, backgroundColor: 'transparent'}} onPress={props.fetchChannel}>
-          <Text style={{color: '#19B5FE'}}>  Refresh  </Text>
-        </TouchableOpacity> : null
-      }
-      {
         props.hasButton!==false ? <TouchableOpacity style={{...styles.button, backgroundColor: theme.foreground1}} onPress={props.pressSeeAll}>
             <Text style={{color: theme.text}}>  See all >  </Text>
         </TouchableOpacity> : null

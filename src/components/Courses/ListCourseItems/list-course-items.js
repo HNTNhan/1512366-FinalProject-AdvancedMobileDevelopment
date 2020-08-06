@@ -12,7 +12,7 @@ const ListCourseItems = (props) => {
       <SubCourseInfo item={props.item} />
     </TouchableOpacity>
 
-    <CourseDropDownButton keyItem={props.item.id} courseDetail={props.item} iconSize={18}/>
+    <CourseDropDownButton keyItem={props.item.id} courseDetail={props.item} iconSize={18} type={props.type}/>
   </View>
 };
 

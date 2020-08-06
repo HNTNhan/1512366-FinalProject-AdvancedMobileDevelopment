@@ -1,49 +1,65 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {View, FlatList, StyleSheet, Text, TouchableOpacity} from 'react-native';
 import ListCourseItems from "../../Courses/ListCourseItems/list-course-items";
-import {AuthenticationContext} from "../../../provider/authentication-provider";
 import {globalStyles} from "../../../globles/styles";
 import {ColorsContext} from "../../../provider/colors-provider";
-import {getCoursesDownload} from "../../../core/local_storage/courses-download-storage";
+import {getCoursesDownload, storeCoursesDownload} from "../../../core/local_storage/courses-download-storage";
 import CenterActivityIndicator from "../../Common/center-activity-indicator";
+import {AuthenticationContext} from "../../../provider/authentication-provider";
+import {DownloadContext} from "../../../provider/download-provider";
+import * as FileSystem from "expo-file-system";
 
 const Download = (props) => {
   const {theme} = useContext(ColorsContext)
-  const {state} = useContext(AuthenticationContext);
+  const {startDownload} = useContext(DownloadContext)
+  const {state} = useContext(AuthenticationContext)
   const [coursesDownload, setCoursesDownload] = useState([])
   const [isLoading, setIsLoading] = useState(true)
+
+  useEffect(() => {
+    fetchData()
+  }, [])
 
   const fetchData = () => {
     getCoursesDownload().then(res => {
       //console.log(res)
       if(res.status===200) {
         if(res.data && res.data.length) {
-          setCoursesDownload(res.data)
+          for(let i=0; i<res.data.length; i++) {
+            if(res.data[i].id===state.userInfo.id) {
+              setCoursesDownload(res.data[i].courses)
+              break;
+            } else if(i===res.data.length-1) {
+              setCoursesDownload([])
+            }
+          }
         } else {
           setCoursesDownload([])
         }
         setIsLoading(false)
       } else {
         setCoursesDownload([])
-        setIsLoading(false)
-        console.log(res.error)
+        //setIsLoading(false)
+        alert(res.error)
       }
     })
   }
 
-  useEffect(() => {
+  const onPressRemoveAll = async () => {
+    await FileSystem.deleteAsync(FileSystem.documentDirectory + '/itedu/'+ state.userInfo.id, {idempotent: true})
+    await storeCoursesDownload([])
     fetchData()
-  }, [])
+  }
 
   const renderHeader = () => {
     return <View style={styles.header}>
       <Text style={{...styles.headerText, color: theme.text}}>Download</Text>
       <TouchableOpacity style={styles.button}
-                        onPress={() => fetchData()}>
+                        onPress={!startDownload ? () => fetchData() : null}>
         <Text style={styles.buttonText}> Refresh </Text>
       </TouchableOpacity>
       <TouchableOpacity style={styles.button}
-                        onPress={() => {console.log('Remove all')}}>
+                        onPress={() => onPressRemoveAll()}>
         <Text style={styles.buttonText}> Remove all </Text>
       </TouchableOpacity>
     </View>
@@ -60,7 +76,7 @@ const Download = (props) => {
       return <View style={{...styles.containerEmpty, backgroundColor: theme.background}}>
         <Text style={{fontSize: 20, color: theme.text}}>No Download</Text>
         <TouchableOpacity style={styles.button}
-                          onPress={() => fetchData()}>
+                          onPress={!startDownload ? () => fetchData() : null}>
           <Text style={{...styles.buttonText, fontSize: 20}}> Refresh </Text>
         </TouchableOpacity>
       </View>
@@ -68,8 +84,8 @@ const Download = (props) => {
       return <View style={[globalStyles.container, {backgroundColor: theme.background}]}>
         <FlatList
           data={coursesDownload}
-          keyExtractor={(item, index) => item.id}
-          renderItem={({item}) => <ListCourseItems item={item} onPress={() => onPressItem(item.id)}/>}
+          keyExtractor={(item) => item.id}
+          renderItem={({item}) => <ListCourseItems item={item} onPress={() => onPressItem(item.id)} type={'download'}/>}
           ItemSeparatorComponent={() => <View style={styles.separator}/>}
           ListHeaderComponent = {renderHeader}
         />
