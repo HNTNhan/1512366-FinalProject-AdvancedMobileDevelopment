@@ -18,7 +18,6 @@ import ListCoursesScrollLoad from "../../Courses/ListCoursesScrollLoad/list-cour
 import {Icon} from "react-native-elements";
 import {TouchableOpacity} from 'react-native';
 import SendFeedback from "../../AccountManagement/SendFeedback/send-feedback";
-import {BottomTabBarContext} from "../../../provider/bottom-tab-bar-provider";
 import Payment from "../../Others/Payment/payment";
 
 const HomeStack = createStackNavigator();

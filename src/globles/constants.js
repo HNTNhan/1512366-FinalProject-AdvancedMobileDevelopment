@@ -35,12 +35,12 @@ export const defaultColors = {
     dark: {
       foreground1: '#444444',
       foreground2: '#dddddd',
-      background: '#000000',
+      background: '#111111',
       text: '#ffffff',
     },
     light: {
       foreground1: '#eeeeee',
-      foreground2: '#222222',
+      foreground2: '#333333',
       background: '#ffffff',
       text: '#000000',
     }

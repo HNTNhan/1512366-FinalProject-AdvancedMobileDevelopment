@@ -42,6 +42,14 @@ export const getCourseInfo = (courseId, token) => {
   return axios.get('https://api.itedu.me/course/get-course-info', config)
 }
 
+export const getCourseProcess = (courseId, token) => {
+  const config = {
+    headers: { Authorization: `Bearer ${token}` }
+  };
+
+  return axios.get('https://api.itedu.me/course/process-course/' + courseId, config)
+}
+
 export const getCourseAndLessonsDetail = (courseId, token) => {
   const config = {
     headers: { Authorization: `Bearer ${token}` }

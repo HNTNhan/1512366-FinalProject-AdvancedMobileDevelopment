@@ -49,9 +49,7 @@ const GeneralCourseDetail = (props) => {
         if(mounted2) {
           if(res.status === 200) {
             setInstructorInfo(res.data.payload)
-          } else {
-            console.log(res.data.message)
-          }
+          } else {}
         } else {}
       }).catch(err => {
         console.log('getInstructorInfo: ', err.response.data.message || err)
@@ -65,9 +63,7 @@ const GeneralCourseDetail = (props) => {
                 setFavorite(res.data.likeStatus)
               } else {}
             }
-          } else {
-            //return res.data.message
-          }
+          } else {}
         })
         .catch((err) => {
           console.log('getFavorite: ', err.response.data.message || err)

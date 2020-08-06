@@ -12,6 +12,7 @@ import {AuthenticationContext} from "../../provider/authentication-provider";
 import InputTextSae from "./input-text-sae";
 import {getChannel, storeChannel} from "../../core/local_storage/channel-storage";
 import {UserContext} from "../../provider/user-provider";
+import {getCourseInfo, getCourseProcess} from "../../core/services/course-services";
 
 const AddToChannelDialog = (props) => {
   const {state} = useContext(AuthenticationContext);
@@ -24,9 +25,17 @@ const AddToChannelDialog = (props) => {
   const [isLoading, setIsLoading] = useState({...props.modalVisible});
 
   useEffect(() => {
-    let temp = {...props.courseDetail}
-    delete temp['section']
-    setCourseDetail(temp)
+    Promise.all([getCourseInfo(props.courseDetail.id, state.token), getCourseProcess(props.courseDetail.id, state.token)])
+      .then(res => {
+        res[0].data.payload.instructorName = props.courseDetail.instructorName || props.courseDetail['instructor.user.name'] || props.courseDetail.name
+        res[0].data.payload.process = res[1].data.payload
+        setCourseDetail(res[0].data.payload)
+      }).catch(err => {
+        alert(err.response.data.message || err)
+      })
+    // let temp = {...props.courseDetail}
+    // delete temp['section']
+    // setCourseDetail(temp)
   }, [])
 
   useEffect(() => {

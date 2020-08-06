@@ -7,7 +7,6 @@ import SectionTitleFilter from "../../../Common/section-title-filter";
 import CenterActivityIndicator from "../../../Common/center-activity-indicator";
 import NoResultPage from "../NoResultPage/no-result-page";
 import {AuthenticationContext} from "../../../../provider/authentication-provider";
-import {alertSignIn} from "../../../../globles/alert";
 
 const ResultSearch = (props) => {
   const {state} = useContext(AuthenticationContext)

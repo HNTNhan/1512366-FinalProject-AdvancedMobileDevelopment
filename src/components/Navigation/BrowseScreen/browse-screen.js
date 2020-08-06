@@ -1,5 +1,4 @@
 import React, {useContext} from 'react';
-import {View} from 'react-native';
 import {createStackNavigator} from "@react-navigation/stack";
 import Browse from "../../Main/Browse/browse";
 import ListCourses from "../../Courses/ListCourses/list-courses";

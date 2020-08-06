@@ -9,9 +9,11 @@ import {alertSignIn} from "../../globles/alert";
 import AddToChannelDialog from "./add-to-channel-dialog";
 import {getCoursesDownload, storeCoursesDownload} from "../../core/local_storage/courses-download-storage";
 import * as FileSystem from "expo-file-system";
+import {ColorsContext} from "../../provider/colors-provider";
 
 const CourseDropDownButton = (props) => {
   const {state} = useContext(AuthenticationContext);
+  const {theme} = useContext(ColorsContext)
   const userContext = useContext(UserContext);
   const [favorite, setFavorite] = useState(false);
   const [modalVisible, setModalVisible] = useState(false)
@@ -32,7 +34,6 @@ const CourseDropDownButton = (props) => {
           }
         })
         .catch((err) => {
-          alert('haha')
           alert(err.response.data.message || err)
         })
 
@@ -116,6 +117,7 @@ const CourseDropDownButton = (props) => {
     <Icon name='ellipsis-v'
           size={props.iconSize}
           type='font-awesome-5'
+          color={theme.foreground2}
     />
 
     {

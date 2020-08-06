@@ -10,6 +10,7 @@ const ItemsInChannel = (props) => {
   const onPressCourseItem = (id) => {
     props.navigation.navigate('CourseDetail', {id: id});
   }
+
   return <View>
     <View>
       <Text style={{...styles.title, color: theme.text}}>Courses in channel</Text>
@@ -26,7 +27,7 @@ const ItemsInChannel = (props) => {
 
 const styles = StyleSheet.create({
   title: {
-    fontSize: 18,
+    fontSize: 22,
     marginTop: 10
   }
 })

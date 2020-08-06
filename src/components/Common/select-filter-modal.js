@@ -51,7 +51,7 @@ const SelectFilterModal = (props) => {
     <View style={{...styles.centeredView}}>
       <View style={styles.modalView}>
         <View style={{...styles.modalTitleContainer}}>
-          <Text style={{...styles.modalTitle, color: theme.text}}>Select Filter</Text>
+          <Text style={{...styles.modalTitle}}>Select Filter</Text>
           <TouchableOpacity style={{position: 'absolute', right: 5, top: 0}} onPress={() => {
             props.onPressClose(categories, time, price)
           }}>

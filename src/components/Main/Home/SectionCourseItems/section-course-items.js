@@ -23,7 +23,6 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     width: 220,
     height: 215,
-    backgroundColor: 'rgb(219, 221, 231)',
     shadowColor: 'black',
     shadowOffset: { width: 10, height: -10 },
     shadowOpacity: 0.1,
@@ -33,7 +32,7 @@ const styles = StyleSheet.create({
   image: {
     width: 220,
     height: 110,
-    opacity: 0.9,
+    opacity: 0.8,
   },
   dropDownButton: {
     position: 'absolute',

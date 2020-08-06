@@ -62,10 +62,9 @@ const Search = (props) => {
     setShowResult(true);
   }
 
-  const onPressClear = () => {
-    // let temp = {...user};
-    // temp.recentSearch = [];
-    // setUser(temp);
+  const onPressClear = async () => {
+    await storeRecentSearch([])
+    setRecentSearch([])
   }
 
   const checkRecentSearch = (value) => {
@@ -78,7 +77,7 @@ const Search = (props) => {
   }
 
   const onSubmitEditing = async () => {
-    if(!checkRecentSearch(searchKey)) {
+    if(searchKey!=='' && !checkRecentSearch(searchKey)) {
       let temp = [...recentSearch]
       temp.unshift(searchKey)
       if(recentSearch.length > 5) {

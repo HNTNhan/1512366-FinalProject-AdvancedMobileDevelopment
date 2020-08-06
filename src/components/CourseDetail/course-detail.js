@@ -32,49 +32,6 @@ const CourseDetail = (props) => {
   const [listAccountAndCourseDownload, setListAccountAndCourseDownload] = useState({data: [], userIndex: -1, courseIndex: -1})
   const [loadingError, setLoadingError] = useState(false)
 
-  // useEffect(() => {
-  //   console.log('list change')
-  //   if(!list) {
-  //     console.log('list null')
-  //     getCoursesDownload().then(res => {
-  //       if(res.status===200) {
-  //         if(res.data && res.data.length) {
-  //           console.log('number of course download: ', res.data.length)
-  //           for(let i=0; i<res.data.length; i++) {
-  //             if(res.data[i].id === state.userInfo.id && res.data[i].courses.length) {
-  //               for(let j=0; j<res.data[i].courses.length; j++) {
-  //                 if(res.data[i].courses[j].id === props.route.params.id) {
-  //                   setListAccountAndCourseDownload({data: res.data, userIndex: i, courseIndex: j})
-  //                   break
-  //                 }
-  //                 else if(j===res.data[i].courses.length-1) {
-  //                   setListAccountAndCourseDownload({data: res.data, userIndex: i, courseIndex: -1})
-  //                 } else {}
-  //               }
-  //               break
-  //             }
-  //             else if(i===res.data.length) {
-  //               setListAccountAndCourseDownload({data: res.data, userIndex: -1, courseIndex: -1})
-  //             } else {}
-  //           }
-  //         } else {
-  //           setListAccountAndCourseDownload({data: [], userIndex: -1, courseIndex: -1})
-  //         }
-  //       } else {
-  //         setListAccountAndCourseDownload(null)
-  //         setLoadingError(true)
-  //         console.log(res.error)
-  //       }
-  //     })
-  //   } else {
-  //     console.log('list not null')
-  //     if(props.route.params.id===list.data[list.userIndex].courses[list.courseIndex].id) {
-  //       console.log()
-  //       setListAccountAndCourseDownload(list)
-  //     } else {}
-  //   }
-  // }, [list])
-
   useEffect(() => {
     if(!startDownload){
       console.log('startDownload change')
@@ -186,15 +143,23 @@ const CourseDetail = (props) => {
   }
 
   const onPressDownload = async () => {
-    setDownloadData({listAccountAndCourseDownload: listAccountAndCourseDownload, data: [], detail: detail, numberOrder: -1,
-      id: props.route.params.id, downloadSection: false})
-    setStartDownload(true)
+    if(!loadingError) {
+      setDownloadData({listAccountAndCourseDownload: listAccountAndCourseDownload, data: [], detail: detail, numberOrder: -1,
+        id: props.route.params.id, downloadSection: false})
+      setStartDownload(true)
+    } else {
+      alert('Something wrong! Please try again later')
+    }
   }
 
   const onPressDownloadSection = async (data, numberOrder) => {
-    setDownloadData({listAccountAndCourseDownload: listAccountAndCourseDownload, data: data, detail: detail, numberOrder: numberOrder,
-      id: props.route.params.id, downloadSection: true})
-    setStartDownload(true)
+    if(!loadingError) {
+      setDownloadData({listAccountAndCourseDownload: listAccountAndCourseDownload, data: data, detail: detail, numberOrder: numberOrder,
+        id: props.route.params.id, downloadSection: true})
+      setStartDownload(true)
+    } else {
+      alert('Something wrong! Please try again later')
+    }
   }
 
   const [index, setIndex] = useState(0);

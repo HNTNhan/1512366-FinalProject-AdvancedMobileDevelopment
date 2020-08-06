@@ -6,7 +6,7 @@ const ChannelProgress = (props) => {
   const {theme} = useContext(ColorsContext)
 
   return <View style={styles.container}>
-    <Text style={{...styles.title, color: theme.text}}>Your Progress: {props.progress}%</Text>
+    <Text style={{...styles.title, color: theme.text}}>Your Progress: {props.progress.toFixed(2)}%</Text>
     <View style={styles.progressBar}>
       <View style={{height: 5, backgroundColor: '#2ECC71', width: props.progress*2}}/>
     </View>
@@ -24,6 +24,7 @@ const styles = StyleSheet.create({
     width: 200,
     height: 5,
     backgroundColor: '#BDC3C7',
+    marginTop: 5
   }
 })
 export default ChannelProgress;

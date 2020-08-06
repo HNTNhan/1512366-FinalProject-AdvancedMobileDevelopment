@@ -4,7 +4,7 @@ import {ColorsContext} from "../../../provider/colors-provider";
 
 const GeneralChannelDetail = (props) => {
   const {theme} = useContext(ColorsContext)
-  return <View>
+  return <View style={{flex: 1}}>
     <Text style={{...styles.title, color: theme.text}}>{props.detail.title}</Text>
     {/*<Text style={{...styles.text, color: theme.text}}>{props.detail.user} . {props.detail.type} . {props.detail.member} member</Text>*/}
   </View>
@@ -12,8 +12,10 @@ const GeneralChannelDetail = (props) => {
 
 const styles = StyleSheet.create({
   title: {
-    fontSize: 22,
+    fontSize: 24,
     fontWeight: 'bold',
+    textAlign: 'center',
+    marginVertical: 10
   },
   text: {
     fontSize: 16,

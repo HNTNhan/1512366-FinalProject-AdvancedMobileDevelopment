@@ -2,8 +2,6 @@ import React, {useContext} from 'react';
 import {View, Text, ScrollView, TouchableOpacity, StyleSheet} from 'react-native';
 import SectionCourseItems from "../SectionCourseItems/section-course-items";
 import {ColorsContext} from "../../../../provider/colors-provider";
-import {alertSignIn} from "../../../../globles/alert";
-import {AuthenticationContext} from "../../../../provider/authentication-provider";
 import ChannelItems from "../ChanneItems/channel-items";
 
 const SectionCourses = (props) => {
@@ -14,17 +12,18 @@ const SectionCourses = (props) => {
   }
 
   const onPressItemInListChannel = (item) => {
-    props.navigation.navigate('ChannelDetail', {channel: item})
+    console.log(item.detail.title)
+    props.navigation.navigate('ChannelDetail', {channel: item, name: item.detail.title})
   }
 
   const renderListItems = () => {
     return props.data.map( (item) =>
-      <SectionCourseItems key={item.id}  item={item} onPress={() => onPressItemInListCourse(item.id)} />);
+      <SectionCourseItems key={item.id} item={item} onPress={() => onPressItemInListCourse(item.id)} />);
   }
 
   const renderChannelItems = () => {
     return props.data.map( (item) =>
-      <ChannelItems key={item.detail.title}  item={item} onPress={() => onPressItemInListChannel(item)} />);
+      <ChannelItems key={item.detail.title} item={item} onPress={() => onPressItemInListChannel(item)} />);
   }
 
   return <View style={styles.container}>
