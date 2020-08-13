@@ -4,7 +4,7 @@ import {
   changeEmail, changeOnlineStatus, changePassword,
   forgotPassword,
   forgotPasswordEnd,
-  login, logout,
+  login, loginWithGoogle, logout,
   register,
   registerEnd, setUserInfoFromStorage,
   updateFavoriteCategories, updateProfile
@@ -32,7 +32,7 @@ const AuthenticationProvider = (props) => {
 
   return <AuthenticationContext.Provider
     value={{user: user, setUser: setUser,
-      state, login: login(dispatch), logout: logout(dispatch),
+      state, login: login(dispatch), loginWithGoogle: loginWithGoogle(dispatch), logout: logout(dispatch),
       changeOnlineStatus: changeOnlineStatus(dispatch), setUserInfoFromStorage: setUserInfoFromStorage(dispatch),
       register: register(dispatch), registerEnd: registerEnd(dispatch),
       forgotPassword: forgotPassword(dispatch), forgotPasswordEnd: forgotPasswordEnd(dispatch),

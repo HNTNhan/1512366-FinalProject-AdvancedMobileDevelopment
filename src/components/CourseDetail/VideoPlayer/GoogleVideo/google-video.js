@@ -1,6 +1,7 @@
 import React, {useContext, useState, useRef, useEffect} from 'react';
 import {Dimensions, StyleSheet, Text, TouchableOpacity, View, Alert} from 'react-native';
-import Video from "expo-av/build/Video";
+import {Video} from "expo-av";
+import VideoPlayer from 'expo-video-player'
 import {Icon, Slider} from "react-native-elements";
 import * as ScreenOrientation from 'expo-screen-orientation';
 import {BottomTabBarContext} from "../../../../provider/bottom-tab-bar-provider";
@@ -24,11 +25,11 @@ const GoogleVideo = (props) => {
 
   const showVideoInFullscreen = async () => {
     if(fullScreen) {
-      await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT)
       setShow(true)
+      await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT)
     } else {
-      await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE)
       setShow(false)
+      await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE)
     }
     setFullScreen(!fullScreen)
   }
@@ -41,7 +42,6 @@ const GoogleVideo = (props) => {
     const hr = digit(Math.floor((t/3600)%60));
     return hr>0 ? hr + ':' + min + ':' + sec : min + ':' + sec;
   }
-
 
   const backward = () => {
     ref.getStatusAsync().then((status) => {
@@ -116,9 +116,9 @@ const GoogleVideo = (props) => {
     if(status.didJustFinish) {
       if(props.id) {
         finishLesson(props.id, props.token).then((res) => {
-          console.log(res.data)
+
         }).catch(err => {
-          console.log(err.response.data.message)
+          alert(err.response.data.message)
         })
       } else {}
     } else {
@@ -148,8 +148,9 @@ const GoogleVideo = (props) => {
         // showControlsOnLoad={true}
         // progressUpdateIntervalMillis={500}
         //onLoadStart={() => console.log('onLoadStart')}
+        //onLoadStart={() => setVideoRef(ref)}
         onLoad={(status) => onLoad(status)}
-        onError={(err) => console.log('error: ', err)}
+        onError={(err) => alert(err)}
         onPlaybackStatusUpdate={(status) => onPlaybackStatusUpdate(status)}
         ref={component => setRef(component)}
         style={{
@@ -164,6 +165,9 @@ const GoogleVideo = (props) => {
           <View style={{...styles.overlaySet, opacity: 0.5, backgroundColor: 'black'}}>
           </View>
           <View style={{...styles.overlaySet}} >
+            <View style={{...styles.overlaySet}}>
+              <Text style={{color: 'white', marginLeft: 10, fontSize: 18}}>{props.name}</Text>
+            </View>
             <View style={{...styles.iconContainer}}>
               {
                 props.checkOwn && props.checkBack ?
@@ -218,6 +222,7 @@ const GoogleVideo = (props) => {
                   <Icon name={fullScreen ? 'compress' : 'expand'} containerStyle={{zIndex: 1}} iconStyle={{padding: 13}} type={"font-awesome-5"} size={18} color='white' onPress={() => showVideoInFullscreen()} />
                 </View>
               </View>
+
               <Slider
                 style={{marginHorizontal: 15}}
                 thumbStyle={{height: 15, width: 15}}
@@ -226,7 +231,7 @@ const GoogleVideo = (props) => {
                 minimumTrackTintColor={'white'}
                 thumbTintColor={'white'}
                 value={videoStatus.currentTime/videoStatus.duration || 0}
-                onSlidingStart={() => {ref.pauseAsync().then()}}
+                onSlidingStart={async () => {await ref.pauseAsync()}}
                 onValueChange={(value) => {
                   setVideoStatus({...videoStatus, currentTime: value*videoStatus.duration})
                 }}

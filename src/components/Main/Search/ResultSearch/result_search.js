@@ -35,7 +35,6 @@ const ResultSearch = (props) => {
     searchCoursesHasAllParams({...filter, offset: type * data.nextPage * 20})
       .then(res => {
         if(res.status === 200) {
-          console.log('success')
           let temp = {...data}
           if(type === 0) {
             temp.nextPage = 1
@@ -51,7 +50,6 @@ const ResultSearch = (props) => {
         } else {}
       })
       .catch(err => {
-        console.log('fail')
         setData({...data, isLoading: false})
         console.log(err.response.data.message)
       })
@@ -142,7 +140,7 @@ const ResultSearch = (props) => {
           <SectionTitleFilter onSelectSortType={onSelectSortType} categorySelect={props.categorySelect} getFilter={getFilter} onPressOK={() => onPressOK()}/>
         }
         onEndReached={() => handleLoadMore()}
-        onEndReachedThreshold={0}
+        onEndReachedThreshold={0.00001}
       />
     } else {
       return <View style={{flex: 1}}>

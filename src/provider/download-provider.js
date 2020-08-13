@@ -14,11 +14,13 @@ const DownloadProvider = (props) => {
     id: '',
     downloadSection: true,
   })
+  const [videoRef, setVideoRef] = useState(0)
 
   return <DownloadContext.Provider
     value={{
       downloadId: downloadId, setDownloadId: setDownloadId, downloadData: downloadData, setDownloadData: setDownloadData,
-      list: list, setList: setList, startDownload: startDownload, setStartDownload: setStartDownload,
+      list: list, setList: setList, startDownload: startDownload, setStartDownload: setStartDownload, videoRef: videoRef,
+      setVideoRef: setVideoRef
     }}
   >
     {props.children}

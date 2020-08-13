@@ -1,13 +1,13 @@
 import {
   CHANGE_EMAIL_FAIL,
-  CHANGE_EMAIL_SUCCESS, CHANGE_LOGOUT_STATUS, CHANGE_ONLINE_STATUS, CHANGE_PASSWORD_FAIL, CHANGE_PASSWORD_SUCCESS,
+  CHANGE_EMAIL_SUCCESS, CHANGE_ONLINE_STATUS, CHANGE_PASSWORD_FAIL, CHANGE_PASSWORD_SUCCESS,
   FORGOT_PASSWORD_END,
   FORGOT_PASSWORD_FAIL,
   FORGOT_PASSWORD_REQUEST,
   FORGOT_PASSWORD_SUCCESS,
   LOGIN_FAIL,
   LOGIN_REQUEST,
-  LOGIN_SUCCESS,
+  LOGIN_SUCCESS, LOGIN_WITH_GOOGLE_FAIL, LOGIN_WITH_GOOGLE_SUCCESS,
   LOGOUT_SUCCESS,
   REGISTER_END,
   REGISTER_FAIL,
@@ -42,6 +42,10 @@ export const reducer = (prevState, action) => {
     case LOGIN_SUCCESS:
       return {...prevState, isAuthenticated: true,  isAuthenticating: false, token: action.data.token, userInfo: action.data.userInfo, message: action.message}
     case LOGIN_FAIL:
+      return {...prevState, isAuthenticated: false, isAuthenticating: false, message: action.message}
+    case LOGIN_WITH_GOOGLE_SUCCESS:
+      return {...prevState, isAuthenticated: true,  isAuthenticating: false, token: action.data.token, userInfo: action.data.userInfo, message: action.message}
+    case LOGIN_WITH_GOOGLE_FAIL:
       return {...prevState, isAuthenticated: false, isAuthenticating: false, message: action.message}
     case LOGOUT_SUCCESS:
       return initialState

@@ -5,6 +5,7 @@ import ListLessonTitle from "../ListLessonTitle/list-lesson-title";
 import {globalStyles} from "../../../globles/styles";
 import {ColorsContext} from "../../../provider/colors-provider";
 import CenterActivityIndicator from "../../Common/center-activity-indicator";
+import {getCourseProcess} from "../../../core/services/course-services";
 
 const ListLessons = (props) => {
   const {theme} = useContext(ColorsContext);
@@ -14,11 +15,9 @@ const ListLessons = (props) => {
   if(props.isAuthenticated || props.courseDownload) {
     useEffect(() => {
       if(props.courseDownload) {
-        console.log('local')
         setSection(props.courseDownload.section)
         setLoading(false)
       } else {
-        console.log('online')
         setSection(props.courseDetail.section)
         setLoading(false)
       }

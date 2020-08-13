@@ -9,11 +9,6 @@ import {getLessonDetail, getLessonSubtitle, getLessonUrlAndTime} from "../../../
 
 const VideoPlayer = (props) => {
   const {state} = useContext(AuthenticationContext)
-  const [key, setKey] = useState(0)
-
-  useEffect(() => {
-    setKey(key+1)
-  }, [props.lesson])
 
   const onPress = (next) => {
     props.setVideoLoading()
@@ -34,18 +29,18 @@ const VideoPlayer = (props) => {
           temp = {...res[0].data.payload, subtitle: res[1].data.payload, ...res[2].data.payload}
           props.onPressLesson(temp)
         }).catch(err => {
-          console.log('fail: ', err.response.data.message, err.response.status)
+          alert(err.response.data.message || err)
         })
     } else {}
   }
 
-  const uri = props.lesson.videoUrl || props.lesson.promoVidUrl;
   {
-    if(props.videoLoading) {
+    if(props.videoLoading || !props.lesson) {
       return <View style={{...styles.container}}>
-        <CenterActivityIndicator />
+        <CenterActivityIndicator backgroundColor={'black'} />
       </View>
     } else {
+      const uri = props.lesson.videoUrl || props.lesson.promoVidUrl;
       if(!uri) {
         return <View style={{...styles.container}}>
           <View>
@@ -54,15 +49,15 @@ const VideoPlayer = (props) => {
         </View>
       } else {
         if(uri.includes("https://youtube.com")) {
-          return <YoutubeVideo uri={uri} id={props.lesson.id || null} token={state.token} pos={props.lesson.currentTime || 0} key={key}
+          return <YoutubeVideo uri={uri} id={props.lesson.id || null} token={state.token} pos={props.lesson.currentTime || 0}
                                checkOwn={props.checkOwn} onPressNextBack={onPress}
                                checkNext={props.lesson.nextLessonId} checkBack={props.lesson.prevLessonId}
           />
         } else {
-          return <GoogleVideo uri={uri} id={props.lesson.id || null} token={state.token} pos={props.lesson.currentTime || 0} key={key}
+          return <GoogleVideo uri={uri} id={props.lesson.id || null} token={state.token} pos={props.lesson.currentTime || 0}
                               checkOwn={props.checkOwn} onPressNextBack={onPress} local={props.lesson.local || null}
-                              checkNext={props.lesson.nextLessonId} checkBack={props.lesson.prevLessonId}
-                              navigation={props.navigation} route={props.route}/>
+                              checkNext={props.lesson.nextLessonId} checkBack={props.lesson.prevLessonId} name={props.lesson.name}
+          />
         }
       }
     }

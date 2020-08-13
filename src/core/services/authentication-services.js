@@ -33,6 +33,15 @@ export const apiLogin = async (email, password) => {
   })
 }
 
+export const apiLoginWithGoogle = async (email, id) => {
+  return await axios.post('https://api.itedu.me/user/login-google-mobile', {
+    user: {
+      email: email,
+      id: id
+    }
+  })
+}
+
 export const apiRegister = (username, email, phone, password) => {
   const body = {
     name: username,
@@ -89,3 +98,5 @@ export const apiChangePassword = (token, id, password) => {
 
   return axios.post('https://api.itedu.me/user/change-password', body, config)
 }
+
+export const androidClientID = '341931098042-oqei764sbb1fhu6rpgvdfbiohbu0bt7s.apps.googleusercontent.com'

@@ -123,7 +123,7 @@ const CourseDropDownButton = (props) => {
     {
       props.courseDetail ? <AddToChannelDialog modalVisible={modalVisible} courseDetail={props.courseDetail} closeModel={() => setModalVisible(false)}/> : null
     }
-    <AddToChannelDialog modalVisible={modalVisible} courseDetail={props.courseDetail} closeModel={() => setModalVisible(false)}/>
+    {/*<AddToChannelDialog modalVisible={modalVisible} courseDetail={props.courseDetail} closeModel={() => setModalVisible(false)}/>*/}
   </View>
 };
 

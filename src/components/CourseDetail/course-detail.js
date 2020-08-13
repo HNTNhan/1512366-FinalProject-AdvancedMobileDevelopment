@@ -7,13 +7,18 @@ import Transcript from "./Transcript/transcript";
 import { TabView} from 'react-native-tab-view';
 import TabBarStyle from "../Common/tab-bar-style";
 import {ColorsContext} from "../../provider/colors-provider";
-import {getCourseAndLessonsDetail, getCourseInfo, getUserCourseDetail} from "../../core/services/course-services";
+import {
+  getCourseAndLessonsDetail,
+  getLastWatchedLesson,
+  getUserCourseDetail
+} from "../../core/services/course-services";
 import {AuthenticationContext} from "../../provider/authentication-provider";
 import {checkOwnCourse} from "../../core/services/user-services";
 import InfoDialog from "./InfoDialog/info-dialog";
 import {DownloadContext} from "../../provider/download-provider";
-import {getCoursesDownload, storeCoursesDownload} from "../../core/local_storage/courses-download-storage";
+import {getCoursesDownload} from "../../core/local_storage/courses-download-storage";
 import {extractData} from "./Functions/functions";
+import {getLessonDetail, getLessonSubtitle, getLessonUrlAndTime} from "../../core/services/lesson-services";
 
 const initialLayout = { width: Dimensions.get('window').width };
 
@@ -33,10 +38,11 @@ const CourseDetail = (props) => {
   const [loadingError, setLoadingError] = useState(false)
 
   useEffect(() => {
-    if(!startDownload){
+    let mounted = true
+    if(!startDownload && state.isAuthenticated){
       console.log('startDownload change')
       getCoursesDownload().then(res => {
-        if (res.status === 200) {
+        if (res.status === 200 && mounted === true) {
           if (res.data && res.data.length) {
             //console.log('number of user download: ', res.data.length)
             for (let i = 0; i < res.data.length; i++) {
@@ -68,50 +74,69 @@ const CourseDetail = (props) => {
         }
       })
     }
+    return () => mounted = false
   }, [startDownload])
 
   //Lay thong tin khoa hoc
   useEffect(() => {
+    let mounted = true
     //Kiem tra nguoi dung da dang nhap
     if(state.isAuthenticated) {
       //Kiem tra nguoi dung da mua khoa hoc
       checkOwnCourse(state.token, props.route.params.id)
         .then(res => {
-          if(res.status === 200) {
+          if(res.status === 200 && mounted===true) {
+            let sub_mounted1 = true
+            let sub_mounted2 = true
             setCheckOwn(res.data.payload.isUserOwnCourse)
             if(res.data.payload.isUserOwnCourse) {
-              console.log('own')
               getCourseAndLessonsDetail(props.route.params.id, state.token).then(res => {
-                if(res.status===200) {
+                if(res.status===200 && sub_mounted1) {
                   const data = extractData(res.data.payload)
-                  setDetail(data)
-                  setLesson({videoUrl: data.promoVidUrl || null})
-                  setIsLoading(false)
+                  getLastWatchedLesson(props.route.params.id, state.token).then(res => {
+                    Promise.all([
+                      getLessonDetail(props.route.params.id, res.data.payload.lessonId, state.token),
+                      getLessonSubtitle(props.route.params.id, res.data.payload.lessonId, state.token),
+                      getLessonUrlAndTime(props.route.params.id, res.data.payload.lessonId, state.token)
+                    ]).then(res => {
+                      const temp = {...res[0].data.payload, subtitle: res[1].data.payload, ...res[2].data.payload}
+                      setLesson(temp)
+                      setDetail(data)
+                      setIsLoading(false)
+                      }).catch(err => {
+                      setLesson({videoUrl: data.promoVidUrl || null})
+                      setDetail(data)
+                      setIsLoading(false)
+                    })
+                  })
                 } else {}
               }).catch(err => {
                 alert.log(err.response.data.message || err)
               })
               getUserCourseDetail(props.route.params.id, state.userInfo.id)
                 .then(res => {
-                  if(res.status===200) {
+                  if(res.status===200 && sub_mounted2) {
                     setTempDetail(res.data.payload)
                   } else {}
                 }).catch(err => {
                 alert(err.response.data.message || err)
               })
             } else {
-              console.log('not own')
               getUserCourseDetail(props.route.params.id, state.userInfo.id)
                 .then(res => {
-                  if(res.status===200) {
+                  if(res.status===200 && sub_mounted1) {
                     const data = extractData(res.data.payload)
-                    setDetail(data)
                     setLesson({videoUrl: data.promoVidUrl || null})
+                    setDetail(data)
                     setIsLoading(false)
                   } else {}
                 }).catch(err => {
                 alert(err.response.data.message || err)
               })
+            }
+          return () => {
+              sub_mounted1=false
+              sub_mounted2=false
             }
           } else {}
         }).catch(err => {
@@ -119,19 +144,18 @@ const CourseDetail = (props) => {
       })
     } else {
       //Lay thong tin khoa hoc
-      console.log('review')
-      getCourseInfo(props.route.params.id, state.token).then(res => {
-        if(res.status === 200) {
-          setDetail(res.data.payload)
-          setLesson({videoUrl: res.data.payload.promoVidUrl || null})
+      getUserCourseDetail(props.route.params.id, '0').then(res => {
+        if(res.status === 200 && mounted===true) {
+          const data = extractData(res.data.payload)
+          setDetail(data)
+          setLesson({videoUrl: data.promoVidUrl || null})
           setIsLoading(false)
-        } else {
-          //res.data.message
-        }
+        } else {}
       }).catch(err => {
-        console.log('getCourse: ', err.response.data.message || err)
+        alert(err.response.data.message || err)
       })
     }
+    return () => mounted = false
   }, [])
 
   const onPressLesson = (item) => {
@@ -174,6 +198,8 @@ const CourseDetail = (props) => {
       case 'first':
         return <GeneralCourseDetail
           detail={detail} token={state.token} navigation={props.navigation} route={props.route} checkOwn={checkOwn} downloadId={downloadId}
+          coursesLikeCategory={state.isAuthenticated ? (tempDetail ? tempDetail.coursesLikeCategory : detail.coursesLikeCategory) : []}
+          ratings={state.isAuthenticated ? (tempDetail ? tempDetail.ratings : detail.ratings) : []}
           courseDownload={
             listAccountAndCourseDownload.courseIndex!==-1 ?
               listAccountAndCourseDownload.data[listAccountAndCourseDownload.userIndex].courses[listAccountAndCourseDownload.courseIndex]
@@ -182,7 +208,7 @@ const CourseDetail = (props) => {
         />;
       case 'second':
         return <ListLessons
-          courseDetail={detail} courseId={props.route.params.id} onPressLesson={onPressLesson}
+          courseDetail={detail} courseId={props.route.params.id} onPressLesson={onPressLesson} token={state.token}
           courseDownload={
           listAccountAndCourseDownload.courseIndex!==-1 ?
             listAccountAndCourseDownload.data[listAccountAndCourseDownload.userIndex].courses[listAccountAndCourseDownload.courseIndex]
@@ -200,7 +226,7 @@ const CourseDetail = (props) => {
   if(!isLoading) {
     return <View style={{...styles.container, backgroundColor: theme.background}}>
       <VideoPlayer lesson={lessonLocal || lesson} videoLoading={videoLoading} checkOwn={checkOwn} courseId={detail.id} onPressLesson={onPressLesson}
-                   setVideoLoading={() => setVideoLoading(true)} navigation={props.navigation} route={props.route}/>
+                   setVideoLoading={() => setVideoLoading(true)}/>
       <TabView
         renderTabBar={TabBarStyle}
         navigationState={{index, routes}}

@@ -1,5 +1,5 @@
 import React, {useContext, useEffect, useState} from 'react';
-import {View, StyleSheet, ScrollView, Text, Image} from 'react-native';
+import {View, StyleSheet, ScrollView, Text, Image, BackHandler,Alert} from 'react-native';
 import {apiPaymentInfo, paymentFreeCourse} from "../../../core/services/payment-services";
 import {AuthenticationContext} from "../../../provider/authentication-provider";
 import CenterActivityIndicator from "../../Common/center-activity-indicator";
@@ -17,10 +17,29 @@ const Payment = (props) => {
   const userContext = useContext(UserContext);
 
   useEffect(() => {
+    const backHandler = BackHandler.addEventListener(
+      "hardwareBackPress",
+      () => {
+        if(paymentSuccess) {
+          props.navigation.goBack()
+          props.navigation.replace('CourseDetail', {id: props.route.params.id})
+        } else {
+          props.navigation.goBack()
+        }
+        return true;
+      }
+    );
+
+    return () => backHandler.remove();
+  }, [paymentSuccess]);
+
+
+  useEffect(() => {
     apiPaymentInfo(props.route.params.id, state.token).then(res => {
       if(res.status===200) {
         if(res.data.didUserBuyCourse) {
-          props.navigation.navigate('CourseDetail', {id: props.route.params.id})
+          props.navigation.goBack()
+          props.navigation.replace('CourseDetail', {id: props.route.params.id})
         } else {
           setPaymentInfo(res.data)
           setIsLoading(false)
@@ -35,14 +54,17 @@ const Payment = (props) => {
     if(paymentInfo.payload.price) {
       await WebBrowser.openBrowserAsync('https://itedu.me/payment/' + props.route.params.id);
     } else {
+      setIsLoading(true)
       paymentFreeCourse(props.route.params.id, state.token)
         .then(res => {
           if(res.status === 200) {
             userContext.requestUpdateContinueLearning()
             setPaymentSuccess(true)
+            setIsLoading(false)
           } else {}
         }).catch(err => {
-        console.log(err.response.data.message)
+        alert(err.response.data.message || err)
+        setIsLoading(false)
       })
     }
   }
@@ -58,11 +80,14 @@ const Payment = (props) => {
         <View style={{flexDirection: 'row'}}>
           <Button buttonStyle={{marginHorizontal: 5, borderColor: theme.text}} titleStyle={{color: theme.text}} title={'Home'}
                   type={"outline"} icon={<Icon name={'home'} type={"font-awesome-5"} size={18} color={theme.text} />}
-                  onPress={() => props.navigation.replace('Home')}
+                  onPress={() => props.navigation.reset({index: 0, routes: [{name: 'Home'}]})}
           />
           <Button buttonStyle={{marginHorizontal: 5, backgroundColor: '#19B5FE'}} title={'Course'}
                   icon={<Icon name={'leanpub'} type={"font-awesome-5"} size={18} color={'white'} />}
-                  onPress={() => props.navigation.navigate('CourseDetail', {id: props.route.params.id})}
+                  onPress={() => {
+                    props.navigation.goBack()
+                    props.navigation.replace('CourseDetail', {id: props.route.params.id})
+                  }}
           />
         </View>
         </View>

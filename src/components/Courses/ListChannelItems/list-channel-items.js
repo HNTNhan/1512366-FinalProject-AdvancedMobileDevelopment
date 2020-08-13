@@ -22,6 +22,7 @@ const ListChannelItems = (props) => {
                 channels[i].channels.splice(j, 1)
                 await storeChannel(channels)
                 userContext.requestUpdateChannel()
+                props.setData(channels[i].channels)
               }
             }
           } else {}

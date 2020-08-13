@@ -1,8 +1,6 @@
 import React from 'react';
 import {FlatList, View, StyleSheet} from 'react-native';
 import ListKeyItems from "../ListKeyItems/list-key-items";
-import {skillsData} from "../../../../testdata/skills-data";
-import {categoriesData} from "../../../../testdata/categories-data";
 
 const WhileSearch = (props) => {
   const filter = props.keys.filter(v => v.key.toLowerCase().includes(props.searchKey.toLowerCase())).slice(0, 10);

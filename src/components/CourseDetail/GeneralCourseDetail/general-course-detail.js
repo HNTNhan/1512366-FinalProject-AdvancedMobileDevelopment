@@ -1,5 +1,5 @@
 import React, {useContext, useEffect, useReducer, useState} from 'react';
-import {View, StyleSheet, ScrollView} from 'react-native';
+import {View, StyleSheet, ScrollView, Share} from 'react-native';
 import {Button, Icon, Text} from "react-native-elements";
 import AuthorIconButton from "../../Common/author-icon-button";
 import IconButton from "../../Common/icon-button";
@@ -15,6 +15,8 @@ import {getInstructorInfo} from "../../../core/services/instructor-services";
 import RatingCourse from "../../Common/rating-course";
 import {DownloadContext} from "../../../provider/download-provider";
 import {alertSignIn} from "../../../globles/alert";
+import SectionCourses from "../../Main/Home/SectionCourses/section-courses";
+import {getCourseProcess} from "../../../core/services/course-services";
 
 const GeneralCourseDetail = (props) => {
   const {theme} = useContext(ColorsContext);
@@ -24,51 +26,52 @@ const GeneralCourseDetail = (props) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [favorite, setFavorite] = useState(false)
   const [rating, setRating] = useState(false)
+  const [process, setProcess] = useState(null)
 
   const courseDetail = props.detail;
   const [instructorInfo, setInstructorInfo] = useState(props.detail.instructor || null);
 
-  // useEffect(() => {
-  //   if(props.courseDownload){
-  //     for(let i=0; i<props.courseDownload.section.length; i++) {
-  //       if(props.courseDownload.section[i].downloaded) {
-  //
-  //       } else {
-  //         return
-  //       }
-  //     }
-  //   } else {}
-  // }, [])
 
   useEffect(() => {
     let mounted1 = true;
     let mounted2 = true;
 
-    if(!instructorInfo) {
-      getInstructorInfo(courseDetail.instructorId).then(res => {
-        if(mounted2) {
-          if(res.status === 200) {
-            setInstructorInfo(res.data.payload)
-          } else {}
-        } else {}
-      }).catch(err => {
-        console.log('getInstructorInfo: ', err.response.data.message || err)
-      })
-    } else {
+    if(state.isAuthenticated) {
+      if (!instructorInfo) {
+        getInstructorInfo(courseDetail.instructorId).then(res => {
+          if (mounted2) {
+            if (res.status === 200) {
+              setInstructorInfo(res.data.payload)
+            } else {
+            }
+          } else {
+          }
+        }).catch(err => {
+          alert(err.response.data.message || err)
+        })
+        getCourseProcess(courseDetail.id, state.token).then(res => {
+          console.log(res.data.payload)
+          setProcess(res.data.payload)
+        }).catch(err => {
+          setProcess(0)
+        })
+      } else {}
       getFavoriteStatus(state.token, props.route.params.id)
         .then((res) => {
-          if(res.status === 200) {
-            if(mounted1){
-              if(favorite !== res.data.likeStatus) {
+          if (res.status === 200) {
+            if (mounted1) {
+              if (favorite !== res.data.likeStatus) {
                 setFavorite(res.data.likeStatus)
-              } else {}
+              } else {
+              }
             }
-          } else {}
+          } else {
+          }
         })
         .catch((err) => {
           console.log('getFavorite: ', err.response.data.message || err)
         })
-    }
+    } else {}
 
     return () => {
       mounted1 = false
@@ -76,13 +79,15 @@ const GeneralCourseDetail = (props) => {
     }
   }, [])
 
-  useEffect(() => {
-    if(userContext.state.favoriteCoursesChange === props.route.params.id) {
-      setFavorite(!favorite);
-    } else {
+  if(state.isAuthenticated) {
+    useEffect(() => {
+      if(userContext.state.favoriteCoursesChange === props.route.params.id) {
+        setFavorite(!favorite);
+      } else {
 
-    }
-  }, [userContext.state.favoriteCoursesChange])
+      }
+    }, [userContext.state.favoriteCoursesChange])
+  }
 
   const authorListItems = (instructorInfo) => {
     return <AuthorIconButton key={instructorInfo.id} instructorInfo={instructorInfo} text={theme.text}
@@ -115,6 +120,12 @@ const GeneralCourseDetail = (props) => {
     setModalVisible(true)
   }
 
+  const onSelectShare = async () => {
+    await Share.share({
+      message: 'https://itedu.me/course-detail/' + props.route.params.id
+    })
+  }
+
   return <ScrollView showsVerticalScrollIndicator={false}>
     <Text style={{...styles.title, color: theme.text}}>{courseDetail.title}</Text>
 
@@ -127,9 +138,9 @@ const GeneralCourseDetail = (props) => {
         </ScrollView>
         <View style={{...styles.subInfo, alignItems: 'flex-start'}}>
             <Text style={{fontSize: 14, color: theme.text}}>
-              {convertDate(courseDetail.updatedAt, 1) + ' . ' + convertTime(courseDetail.totalHours)}
+              {convertDate(courseDetail.updatedAt, 1) + ' . '}{process ? convertTime(courseDetail.totalHours * process / 100) + '/': null}{convertTime(courseDetail.totalHours)}
             </Text>
-            <RatingStart rating={(courseDetail.formalityPoint + courseDetail.contentPoint + courseDetail.presentationPoint)/3.0} size={12}/>
+            <RatingStart rating={(courseDetail.formalityPoint + courseDetail.contentPoint + courseDetail.presentationPoint)/3.0} size={14}/>
         </View>
       </View>
       {
@@ -145,7 +156,8 @@ const GeneralCourseDetail = (props) => {
 
     <View style={styles.activeContainer}>
       <IconButton name='bookmark-border' title={favorite ? 'UnFavorite' : 'Favorite'} onPress={() => onPressFavortie()}/>
-      <IconButton name='cast-connected' title='Add to channel' onPress={() => onSelectAddToChannel()}/>
+      <IconButton name='cast-connected' title='Channel' onPress={() => onSelectAddToChannel()}/>
+      <IconButton name='share' title='Share' onPress={() => onSelectShare()}/>
       <IconButton downloadId={props.downloadId} isDownloading={startDownload} id={courseDetail.id} type={'download'}
                   name='get-app' title={'Download'} onPress={async () => await props.onPressDownload()}/>
     </View>
@@ -176,17 +188,22 @@ const GeneralCourseDetail = (props) => {
       }
       containerStyle={{marginVertical: 5}}
     />
-    <Button
-      title='View related paths & course'
-      type='outline'
-      icon={
-        <Icon name='layer-group' type='font-awesome-5' color='#19B5FE' iconStyle={{marginHorizontal: 8}}/>
-      }
-      containerStyle={{marginVertical: 5}}
-    />
-    {rating ? <RatingCourse modalVisible={rating} token={props.token} courseId={props.detail.id}
+    {rating ? <RatingCourse modalVisible={rating} token={props.token} courseId={props.detail.id} ratings={props.ratings}
                             onPressClose={() => setRating(false)}/> : null}
     <AddToChannelDialog modalVisible={modalVisible} courseDetail={props.detail} closeModel={() => setModalVisible(false)}/>
+    {
+      props.coursesLikeCategory ?
+        <SectionCourses title='Courses like category'
+                       type='Course'
+                       navigation={props.navigation}
+                       route={props.route}
+                       data={props.coursesLikeCategory}
+                       pressSeeAll={() => props.navigation.push('ListCourses', {
+                         data: props.coursesLikeCategory,
+                         title: false,
+                         name: 'Courses like category'
+                       })}/> : null
+    }
   </ScrollView>
 };
 

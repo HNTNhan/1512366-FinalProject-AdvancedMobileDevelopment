@@ -6,16 +6,20 @@ import {AuthenticationContext} from "../../../provider/authentication-provider";
 import {ColorsContext} from "../../../provider/colors-provider";
 import NetInfo from "@react-native-community/netinfo";
 import {getStoreUserInfo, setStoreUserInfo} from "../../../core/local_storage/authentication-storage";
+import {LanguageContext} from "../../../provider/language-provider";
+import * as Google from 'expo-google-app-auth';
+import {androidClientID} from "../../../core/services/authentication-services";
 
 
 const Login = (props) => {
   const {theme} = useContext(ColorsContext)
+  const {language} =  useContext(LanguageContext)
   const authContext = useContext(AuthenticationContext)
   const [email, setEmail] = useState('hnmfrv@gmail.com');
   const [password, setPassword] = useState('12345678');
   const [pressedSignIn, setPressedSignIn] = useState(false);
-  const [storageData, setStorageData] = useState([])
-
+  const [storageData, setStorageData] = useState([]);
+  const [isGoogleSignIn, setIsGoogleSignIn] = useState(false);
 
   useEffect(() => {
     NetInfo.fetch().then(state => {
@@ -28,7 +32,6 @@ const Login = (props) => {
             setStorageData([])
           }
         } else {
-          console.log(res.data.err)
           setStorageData(null)
         }
       })
@@ -74,9 +77,9 @@ const Login = (props) => {
     if (pressedSignIn) {
       if (!authContext.state.isAuthenticating) {
         if (status) {
-          return <Text style={{...styles.message, color: theme.text}}>{authContext.state.message}</Text>
+          return <Text style={{...styles.message, color: '#19B5FE'}}>{language.login.loginSuccess}</Text>
         } else {
-          return <Text style={{...styles.message}}>{authContext.state.message}</Text>
+          return <Text style={{...styles.message}}>{language.login.loginFail}</Text>
         }
       } else {
         return <ActivityIndicator size="large" color="#0000ff"/>
@@ -96,13 +99,11 @@ const Login = (props) => {
 
   const onPressSignIn = () => {
     if(authContext.state.isOnline) {
-      console.log('sign in when online')
       authContext.login(email, password);
       if(!pressedSignIn) {
         setPressedSignIn(true)
       } else {}
     } else {
-      console.log('sign in when not online')
       if(storageData) {
         const currentDate = new Date();
         let temp = [...storageData];
@@ -110,8 +111,6 @@ const Login = (props) => {
         if(storageData.length) {
           for(let i=0; i<storageData.length; i++) {
             if(storageData[i].email===email && storageData[i].password===password) {
-              console.log('type of date in storage: ', typeof(storageData[i].currentDate))
-              console.log((currentDate - (new Date(storageData[i].currentDate)))/1000/60/60/24)
               if((currentDate - (new Date(storageData[i].currentDate)))/1000/60/60/24 > 7) {
                 temp[i] = null;
                 setStoreUserInfo(temp).then(() => authContext.setUserInfoFromStorage(null))
@@ -131,36 +130,67 @@ const Login = (props) => {
     }
   }
 
+  const signInWithGoogle = async () => {
+    try {
+      const result = await Google.logInAsync({
+        androidClientId: androidClientID,
+        scopes: ['profile', 'email'],
+      });
+      setIsGoogleSignIn(true)
+      if (result.type === 'success') {
+        authContext.loginWithGoogle(result.user.email.replace('.', ''), result.user.id)
+        if(!pressedSignIn) {
+          setPressedSignIn(true)
+        } else {}
+      } else {
+        //console.log(result)
+      }
+    } catch (e) {
+      alert(e)
+    }
+  }
+
+  const onPressGoogleSignIn = async () => {
+    setIsGoogleSignIn(true)
+    await signInWithGoogle()
+  }
+
   return <View style={{...styles.container, backgroundColor: theme.background}}>
       <ScrollView contentContainerStyle={{paddingBottom: 100}} showsVerticalScrollIndicator={false}>
         {renderLoginStatus(authContext.state.isAuthenticated)}
-        <InputTextSae title='Email' value={email} onChangeText={onChangeUsername}/>
-        <InputTextSae title='Password' value={password} onChangeText={onChangePassword} secureTextEntry={true}/>
+        <InputTextSae title={language.same.email} value={email} onChangeText={onChangeUsername}/>
+        <InputTextSae title={language.same.password} value={password} onChangeText={onChangePassword} secureTextEntry={true}/>
 
         <Button
           disabled={!(email.length > 0 && password.length > 0)}
           buttonStyle={styles.signInButton}
           titleStyle={styles.signInButtonText}
           onPress={() => onPressSignIn()}
-          title = 'SIGN IN' />
+          title={language.login.buttonSignIn} />
+        <Button
+          disabled={!(email.length > 0 && password.length > 0)}
+          buttonStyle={styles.signInButton}
+          titleStyle={styles.signInButtonText}
+          onPress={() => onPressGoogleSignIn()}
+          loading={isGoogleSignIn}
+          title={language.login.buttonSignInWithGoogle} />
         <Button
           buttonStyle={styles.button}
           titleStyle={styles.buttonText}
           onPress={() => props.navigation.navigate('Forgot Password')}
-          title ='FORGOT PASSWORD' />
+          title={language.login.buttonForgot} />
         <Button
           buttonStyle={styles.button}
           titleStyle={styles.buttonText}
           onPress={() => props.navigation.navigate('Sign Up')}
-          title= 'SIGN UP FREE' />
+          title={language.login.buttonSignUp} />
         <Button
           buttonStyle={styles.button}
           titleStyle={styles.buttonText}
           onPress={() => {
-            console.log(123)
             props.navigation.replace('Main')
           }}
-          title= 'JOIN AS GUEST' />
+          title={language.login.buttonGuestJoin} />
       </ScrollView>
     </View>
 };

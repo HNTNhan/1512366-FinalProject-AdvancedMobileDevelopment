@@ -1,14 +1,14 @@
 import React, {useState, useRef, useEffect} from 'react';
 import {Alert, Dimensions, StyleSheet, View} from 'react-native';
-import WebView from "react-native-webview";
 import YoutubePlayer from 'react-native-youtube-iframe';
 import {Icon} from "react-native-elements";
 import {finishLesson, updateVideoTime} from "../../../../core/services/lesson-services";
+import CenterActivityIndicator from "../../../Common/center-activity-indicator";
 
 
 const YoutubeVideo = (props) => {
   const playerRef = useRef(null);
-  const [playing, setPlaying] = useState(false);
+  const [buffering, setBuffering] = useState(false);
   const [pos, setPos] = useState(Math.floor(props.pos*60));
   const [overlay, setOverlay] = useState(false)
   const [time, setTime] = useState(-1)
@@ -22,8 +22,8 @@ const YoutubeVideo = (props) => {
               if(time-currentTime<=-4 || time-currentTime>0) {
                 if(props.id) {
                   updateVideoTime(currentTime/60, props.id, props.token)
-                    .then((res) => {console.log(res.data)})
-                    .catch(err => console.log(err))
+                    .then()
+                    .catch()
                 } else {}
               } else {}
               setTime(currentTime)
@@ -67,9 +67,11 @@ const YoutubeVideo = (props) => {
     switch (event) {
       case 'playing':
         setOverlay(false)
+        setBuffering(false)
         break;
       case 'paused':
         setOverlay(true)
+        setBuffering(false)
         break;
       case 'ended':
         if(props.id) {
@@ -82,8 +84,14 @@ const YoutubeVideo = (props) => {
         } else {
           setOverlay(true)
         }
+        setBuffering(false)
+        break;
+      case 'buffering':
+        setOverlay(false)
+        setBuffering(true)
         break;
       default:
+        setBuffering(false)
     }
   }
 
@@ -93,13 +101,12 @@ const YoutubeVideo = (props) => {
       height={Dimensions.get('window').width / 1.9}
       width={Dimensions.get('window').width}
       videoId={props.uri.slice(props.uri.indexOf('embed')+6)}
-      play={playing}
+      play={false}
       onChangeState={event => onChangeState(event)}
       onReady={() => onReady()}
       onError={e => console.log('error: ', e)}
-      onPlaybackQualityChange={q => console.log('quality', q)}
+      //onPlaybackQualityChange={q => console.log('quality', q)}
       volume={100}
-      //playbackQuality={'hd720'}
       playbackRate={1}
       initialPlayerParams={{
         start: pos,
@@ -121,6 +128,12 @@ const YoutubeVideo = (props) => {
           </View> : null
         }
       </View> : null
+    }
+    {
+      buffering ?
+        <View style={{...styles.overlay}}>
+          <CenterActivityIndicator backgroundColor={'transparent'}/>
+        </View> : null
     }
   </View>
 };

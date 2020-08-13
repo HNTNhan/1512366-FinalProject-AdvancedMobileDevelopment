@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React, {useContext, useEffect} from 'react';
 import {createStackNavigator} from "@react-navigation/stack";
 import Download from "../../Main/Download/download";
 import CourseDetail from "../../CourseDetail/course-detail";
@@ -6,6 +6,7 @@ import AuthorDetail from "../../AuthorDetail/author-detail";
 import {objectsConstant} from "../../../globles/constants";
 import {ColorsContext} from "../../../provider/colors-provider";
 import MainScreenRightHeader from "../../NavigationHeader/MainScreenRightHeader/main-screen-right-header";
+import {BottomTabBarContext} from "../../../provider/bottom-tab-bar-provider";
 
 const DownloadStack = createStackNavigator();
 const DownloadScreen = (props) => {

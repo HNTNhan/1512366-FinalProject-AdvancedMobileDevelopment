@@ -8,36 +8,44 @@ import {UserContext} from "../../../provider/user-provider";
 import {Button, Icon} from "react-native-elements";
 import CenterActivityIndicator from "../../Common/center-activity-indicator";
 import {getChannel} from "../../../core/local_storage/channel-storage";
+import {getCoursesNewRelease, getCoursesTopRate} from "../../../core/services/course-services";
+import {LanguageContext} from "../../../provider/language-provider";
 
 const Home = (props) => {
   const {theme} = useContext(ColorsContext);
+  const {language} = useContext(LanguageContext)
   const {state} = useContext(AuthenticationContext);
   const userContext = useContext(UserContext);
-  const [channels, setChannels] = useState([])
+  const [channels, setChannels] = useState([]);
+  const [newAndRecomendCourses, setNewAndRecomendCourses] = useState([]);
+  const [isLoading, setIsLoading] = useState(true)
 
   const fetchChannel = () => {
-    getChannel().then(res =>{
-      if(res.status===200) {
-        if(res.data.length) {
-          for(let i=0; i<res.data.length; i++) {
-            if(res.data[i].id === state.userInfo.id) {
-              setChannels(res.data[i].channels)
-              return
+    if(state.isAuthenticated) {
+      getChannel().then(res =>{
+        if(res.status===200) {
+          if(res.data.length) {
+            for(let i=0; i<res.data.length; i++) {
+              if(res.data[i].id === state.userInfo.id) {
+                setChannels(res.data[i].channels)
+                return
+              }
             }
+            setChannels([])
+          } else {
+            setChannels([])
           }
-          setChannels([])
-        } else {
-          setChannels([])
-        }
-      } else {
-        console.log('err: ', res.e)
-      }
-    }).catch(err => {
-      alert(err.response.data.message || err)
-    })
+        } else {}
+      }).catch(err => {
+        alert(err)
+        setChannels([])
+      })
+    } else {
+      setChannels([])
+    }
   }
 
-  useEffect(() =>{
+  useEffect(() =>{                                 //Lay cac khoa hoc thich va dang hoc
     if(state.isAuthenticated) {
       if (!userContext.state.continueCouresRequest) {
         userContext.fetchContinueCourses(state.token)
@@ -45,18 +53,26 @@ const Home = (props) => {
       if (!userContext.state.favoriteCoursesRequest) {
         userContext.fetchFavoriteCourses(state.token)
       } else {}
+      Promise.all([getCoursesNewRelease(0, 8), getCoursesTopRate(0, 8)]).then(res => {
+        setNewAndRecomendCourses([res[0].data.payload, res[1].data.payload])
+        setIsLoading(false)
+      }).catch((err) => {
+        alert(err)
+        setNewAndRecomendCourses([[], []])
+      })
     } else {}
   }, [])
 
-  useEffect(() => {
-    if(userContext.state.isUpdateChannel) {
-      fetchChannel()
-      userContext.endUpdateChanel()
+  useEffect(() => {                               //Cap nhat channel
+    if(state.isAuthenticated) {
+      if(userContext.state.isUpdateChannel) {
+        fetchChannel()
+        userContext.endUpdateChanel()
+      } else {}
     } else {}
-
   }, [userContext.state.isUpdateChannel])
 
-  useEffect(() => {
+  useEffect(() => {                              //Cap nhat cac khoa dang hoc
     if(state.isAuthenticated) {
       if (userContext.state.isUpdateContinueCourse) {
         userContext.fetchContinueCourses(state.token)
@@ -65,7 +81,7 @@ const Home = (props) => {
     } else{}
   }, [userContext.state.isUpdateContinueCourse])
 
-  useEffect(() => {
+  useEffect(() => {                              //Cap nhat cac khoa thich
     if(state.isAuthenticated) {
       if (userContext.state.favoriteCoursesChange) {
         if (!userContext.state.favoriteCoursesRequest) {
@@ -79,55 +95,70 @@ const Home = (props) => {
   return <View style={[globalStyles.container, {backgroundColor: theme.background}]}>
     {
       state.isAuthenticated ?
-        !userContext.state.favoriteCoursesRequest || !userContext.state.continueCouresRequest ?
+        (!userContext.state.favoriteCoursesRequest || !userContext.state.continueCouresRequest) && !isLoading?
           <ScrollView showsVerticalScrollIndicator={false}>
-            <SectionCourses title='Continue learning'
+            <SectionCourses title={language.home.new}
+                            type='Course'
+                            navigation={props.navigation}
+                            route={props.route}
+                            data={newAndRecomendCourses[0].slice(0, 8)}
+                            pressSeeAll={() => props.navigation.navigate('ListCoursesScrollLoad', {type: 'New Releases', name: language.home.new})}
+            />
+            <SectionCourses title={language.home.recommend}
+                            type='Course'
+                            navigation={props.navigation}
+                            route={props.route}
+                            data={newAndRecomendCourses[1].slice(0, 8)}
+                            pressSeeAll={() => props.navigation.navigate('ListCoursesScrollLoad', {type: 'Top Rate', name: language.home.recommend})}
+            />
+            <SectionCourses title={language.home.continue}
                            type='Course'
                            navigation={props.navigation}
                            route={props.route}
-                           data={userContext.state.continueCoures}
+                           data={userContext.state.continueCoures.slice(0, 8)}
                            pressSeeAll={() => props.navigation.navigate('ListCourses', {
                              data: userContext.state.continueCoures,
                              title: false,
-                             name: 'Continue learning'
+                             name: language.home.recommend
                            })}/>
-            <SectionCourses title='Favorite courses'
+            <SectionCourses title={language.home.favorite}
                              type='Course'
                              navigation={props.navigation}
                              route={props.route}
-                             data={userContext.state.favoriteCourses}
+                             data={userContext.state.favoriteCourses.slice(0, 8)}
                              pressSeeAll={() => props.navigation.navigate('ListCourses', {
                                data: userContext.state.favoriteCourses,
                                title: false,
-                               name: 'Favorite courses'
+                               name: language.home.favorite
                              })}/>
-              <SectionCourses title='Channels'
-                               type='Channel'
-                               navigation={props.navigation}
-                               route={props.route}
-                               data={channels}
-                               fetchChannel={() => fetchChannel()}
-                               pressSeeAll={() => props.navigation.navigate('ListChannels', {
+            <SectionCourses title={language.home.channels}
+                             type='Channel'
+                             navigation={props.navigation}
+                             route={props.route}
+                             data={channels}
+                             fetchChannel={() => fetchChannel()}
+                             pressSeeAll={() => props.navigation.navigate('ListChannels', {
                                data: channels,
-                               title: false
-                               })}/>
+                               title: false,
+                               name: language.home.channels
+                             })}/>
           </ScrollView>
         : <CenterActivityIndicator /> :
         <View style={{...styles.container}}>
-          <Text style={{...styles.title, color: theme.text}}>Let's get you started</Text>
+          <Text style={{...styles.title, color: theme.text}}>{language.home.description}</Text>
           <View style={{...styles.subContiner}}>
             <Icon name={'th'} type={"font-awesome-5"} color={'#19B5FE'} size={30} onPress={() => props.navigation.navigate('Browse')}/>
-            <Text style={{...styles.text, color: theme.text}}>Browse new & popular courses</Text>
+            <Text style={{...styles.text, color: theme.text}}>{language.home.browse}</Text>
           </View>
           <View style={{...styles.subContiner}}>
             <Icon name={'search'} type={"font-awesome-5"} color={'#19B5FE'} size={30} onPress={() => props.navigation.navigate('Search')}/>
-            <Text style={{...styles.text, color: theme.text}}>Search the library</Text>
+            <Text style={{...styles.text, color: theme.text}}>{language.home.search}</Text>
           </View>
           <Button
             buttonStyle={styles.signInButton}
             titleStyle={styles.signInButtonText}
             onPress={() => props.navigation.replace('Authentication')}
-            title = 'SIGN IN'/>
+            title={language.home.buttonSignIn}/>
         </View>
     }
   </View>

@@ -13,6 +13,7 @@ import InputTextSae from "./input-text-sae";
 import {getChannel, storeChannel} from "../../core/local_storage/channel-storage";
 import {UserContext} from "../../provider/user-provider";
 import {getCourseInfo, getCourseProcess} from "../../core/services/course-services";
+import {checkOwnCourse} from "../../core/services/user-services";
 
 const AddToChannelDialog = (props) => {
   const {state} = useContext(AuthenticationContext);
@@ -25,14 +26,28 @@ const AddToChannelDialog = (props) => {
   const [isLoading, setIsLoading] = useState({...props.modalVisible});
 
   useEffect(() => {
-    Promise.all([getCourseInfo(props.courseDetail.id, state.token), getCourseProcess(props.courseDetail.id, state.token)])
-      .then(res => {
-        res[0].data.payload.instructorName = props.courseDetail.instructorName || props.courseDetail['instructor.user.name'] || props.courseDetail.name
-        res[0].data.payload.process = res[1].data.payload
-        setCourseDetail(res[0].data.payload)
-      }).catch(err => {
+    if(state.isAuthenticated) {
+      Promise.all([getCourseInfo(props.courseDetail.id, state.token), checkOwnCourse(state.token, props.courseDetail.id)])
+        .then(res => {
+          if(res[0].data.payload.isUserOwnCourse) {
+            getCourseProcess(props.courseDetail.id, state.token).then(progress => {
+              res[0].data.payload.instructorName = props.courseDetail.instructorName || props.courseDetail['instructor.user.name'] || props.courseDetail.name
+              res[0].data.payload.process = progress.data.payload
+              setCourseDetail(res[0].data.payload)
+            }).catch(err => {
+              res[0].data.payload.instructorName = props.courseDetail.instructorName || props.courseDetail['instructor.user.name'] || props.courseDetail.name
+              res[0].data.payload.process = 0
+              setCourseDetail(res[0].data.payload)
+            })
+          } else {
+            res[0].data.payload.instructorName = props.courseDetail.instructorName || props.courseDetail['instructor.user.name'] || props.courseDetail.name
+            res[0].data.payload.process = 0
+            setCourseDetail(res[0].data.payload)
+          }
+        }).catch(err => {
         alert(err.response.data.message || err)
       })
+    } else {}
     // let temp = {...props.courseDetail}
     // delete temp['section']
     // setCourseDetail(temp)

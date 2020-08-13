@@ -1,15 +1,12 @@
-import React, {useContext} from 'react';
+import React, {useContext, useEffect} from 'react';
 import {createStackNavigator} from "@react-navigation/stack";
 import Home from "../../Main/Home/home";
 import ListCourses from "../../Courses/ListCourses/list-courses";
-import ListPaths from "../../Courses/ListPaths/list-paths";
 import ListChannels from "../../Courses/ListChannels/list-channels";
 import CourseDetail from "../../CourseDetail/course-detail";
-import PathDetail from "../../PathDetail/path-detail";
 import ChannelDetail from "../../ChannelDetail/channel-detail";
 import AuthorDetail from "../../AuthorDetail/author-detail";
 import {objectsConstant} from "../../../globles/constants";
-import PathDetailRightHeader from "../../NavigationHeader/PathDetailHeader/PathDetailRightHeader";
 import {ColorsContext} from "../../../provider/colors-provider";
 import MainScreenRightHeader from "../../NavigationHeader/MainScreenRightHeader/main-screen-right-header";
 import Profile from "../../AccountManagement/Profile/profile";
@@ -19,12 +16,12 @@ import {Icon} from "react-native-elements";
 import {TouchableOpacity} from 'react-native';
 import SendFeedback from "../../AccountManagement/SendFeedback/send-feedback";
 import Payment from "../../Others/Payment/payment";
+import {BottomTabBarContext} from "../../../provider/bottom-tab-bar-provider";
 
 const HomeStack = createStackNavigator();
 
 const HomeScreen = (props) => {
   const {theme} = useContext(ColorsContext)
-
 
   return <HomeStack.Navigator
     screenOptions={{...objectsConstant.defaultCenterHeaderBar, headerStyle: {backgroundColor: theme.foreground1}, headerTintColor: theme.text}}>
@@ -36,17 +33,8 @@ const HomeScreen = (props) => {
                           }}
                       )}/>
     <HomeStack.Screen name='ListCourses' component={ListCourses} options={({ route }) => ({ title: route.params.name })}/>
-    <HomeStack.Screen name='ListPaths' component={ListPaths} options={{title: 'Paths'}} />
     <HomeStack.Screen name='ListChannels' component={ListChannels} options={{title: 'Channels'}}/>
     <HomeStack.Screen name='CourseDetail' component={CourseDetail} options={{headerShown: false}}/>
-    <HomeStack.Screen name='PathDetail'
-                      component={PathDetail}
-                      options={({route, navigation}) => ({
-                        headerRight: () => {
-                          return <PathDetailRightHeader route={route} navigation={navigation}/>
-                        },
-                        title: route.params.name,
-                      })}/>
     <HomeStack.Screen name='ChannelDetail' component={ChannelDetail} options={({ route }) => ({ title: route.params.name })}/>
     <HomeStack.Screen name='AuthorDetail' component={AuthorDetail} options={({ route }) => ({ title: route.params.name })}/>
     <HomeStack.Screen name='Profile'
@@ -61,7 +49,7 @@ const HomeScreen = (props) => {
     <HomeStack.Screen name='CategoryDetail' component={CategoryDetail} options={({ route }) => ({ title: route.params.name })}/>
     <HomeStack.Screen name='ListCoursesScrollLoad' component={ListCoursesScrollLoad} options={({ route }) => ({ title: route.params.name })}/>
     <HomeStack.Screen name='SendFeedback' component={SendFeedback} options={{title: 'Feedback'}}/>
-    <HomeStack.Screen name='Payment' component={Payment}/>
+    <HomeStack.Screen name='Payment' component={Payment} options={{headerLeft: null}}/>
   </HomeStack.Navigator>
 };
 

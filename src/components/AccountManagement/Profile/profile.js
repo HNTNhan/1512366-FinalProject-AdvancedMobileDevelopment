@@ -2,7 +2,6 @@ import React, {useContext, useEffect, useState} from 'react';
 import {View, Image, StyleSheet, Text, TouchableOpacity} from 'react-native';
 import FavoriteCategories from "../../Main/Browse/FavoriteCategories/favoriteCategories";
 import {AuthenticationContext} from "../../../provider/authentication-provider";
-import {skillsData} from "../../../testdata/skills-data";
 import {ColorsContext} from "../../../provider/colors-provider";
 import {getAllCategory} from "../../../core/services/category-service";
 import {Button, Icon} from "react-native-elements";

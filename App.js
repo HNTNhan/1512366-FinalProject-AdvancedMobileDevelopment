@@ -14,6 +14,7 @@ import {UserProvider} from "./src/provider/user-provider";
 import {BottomTabBarProvider} from "./src/provider/bottom-tab-bar-provider";
 import {DownloadProvider} from "./src/provider/download-provider";
 import DownloadBar from "./src/components/Common/download-bar";
+import {LanguageProvider} from "./src/provider/language-provider";
 
 const Stack = createStackNavigator();
 
@@ -23,21 +24,23 @@ export default function App() {
       <DownloadProvider>
       <AuthenticationProvider>
         <UserProvider>
-          <ColorsProvider>
-            <MenuProvider>
-              <BottomTabBarProvider>
-                <NavigationContainer>
-                  <Stack.Navigator>
-                    <Stack.Screen name='SplashScreen' component={SplashScreen} options={{headerShown: false}}/>
-                    <Stack.Screen name='Authentication' component={AuthenticationScreen} options={{headerShown: false}}/>
-                    <Stack.Screen name='Main' component={MainScreen} options={{headerShown: false}}/>
-                    <Stack.Screen name='AccountManagement' component={AccountManagementScreen} options={{headerShown: false}}/>
-                  </Stack.Navigator>
-                </NavigationContainer>
-                <DownloadBar />
-              </BottomTabBarProvider>
-            </MenuProvider>
-          </ColorsProvider>
+          <LanguageProvider>
+            <ColorsProvider>
+              <MenuProvider>
+                <BottomTabBarProvider>
+                  <NavigationContainer>
+                    <Stack.Navigator>
+                      <Stack.Screen name='SplashScreen' component={SplashScreen} options={{headerShown: false}}/>
+                      <Stack.Screen name='Authentication' component={AuthenticationScreen} options={{headerShown: false}}/>
+                      <Stack.Screen name='Main' component={MainScreen} options={{headerShown: false}}/>
+                      <Stack.Screen name='AccountManagement' component={AccountManagementScreen} options={{headerShown: false}}/>
+                    </Stack.Navigator>
+                  </NavigationContainer>
+                  <DownloadBar />
+                </BottomTabBarProvider>
+              </MenuProvider>
+            </ColorsProvider>
+          </LanguageProvider>
         </UserProvider>
       </AuthenticationProvider>
       </DownloadProvider>
@@ -48,6 +51,6 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: 26,
+    marginTop: 28,
   },
 });

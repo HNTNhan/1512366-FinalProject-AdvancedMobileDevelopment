@@ -3,16 +3,17 @@ import {View, Text, ScrollView, TouchableOpacity, StyleSheet} from 'react-native
 import SectionCourseItems from "../SectionCourseItems/section-course-items";
 import {ColorsContext} from "../../../../provider/colors-provider";
 import ChannelItems from "../ChanneItems/channel-items";
+import {LanguageContext} from "../../../../provider/language-provider";
 
 const SectionCourses = (props) => {
   const {theme} = useContext(ColorsContext)
+  const {language} = useContext(LanguageContext)
 
   const onPressItemInListCourse = (id) => {
-    props.navigation.navigate('CourseDetail', {id: id})
+    props.navigation.push('CourseDetail', {id: id})
   }
 
   const onPressItemInListChannel = (item) => {
-    console.log(item.detail.title)
     props.navigation.navigate('ChannelDetail', {channel: item, name: item.detail.title})
   }
 
@@ -30,8 +31,8 @@ const SectionCourses = (props) => {
     <View style={styles.title}>
       <Text style={{...styles.titleText, color: theme.text}}>{props.title}</Text>
       {
-        props.hasButton!==false ? <TouchableOpacity style={{...styles.button, backgroundColor: theme.foreground1}} onPress={props.pressSeeAll}>
-            <Text style={{color: theme.text}}>  See all >  </Text>
+        props.data.length ? <TouchableOpacity style={{...styles.button, backgroundColor: theme.foreground1}} onPress={props.pressSeeAll}>
+            <Text style={{color: theme.text}}>{language.home.sectionCourse.seeAll}</Text>
         </TouchableOpacity> : null
       }
     </View>

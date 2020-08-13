@@ -21,28 +21,36 @@ const Download = (props) => {
   }, [])
 
   const fetchData = () => {
-    getCoursesDownload().then(res => {
-      //console.log(res)
-      if(res.status===200) {
-        if(res.data && res.data.length) {
-          for(let i=0; i<res.data.length; i++) {
-            if(res.data[i].id===state.userInfo.id) {
-              setCoursesDownload(res.data[i].courses)
-              break;
-            } else if(i===res.data.length-1) {
-              setCoursesDownload([])
+    if(state.isAuthenticated) {
+      getCoursesDownload().then(res => {
+        if (res.status === 200) {
+          if (res.data && res.data.length) {
+            for (let i = 0; i < res.data.length; i++) {
+              if (res.data[i].id === state.userInfo.id) {
+                setCoursesDownload(res.data[i].courses)
+                break;
+              } else if (i === res.data.length - 1) {
+                setCoursesDownload([])
+              }
             }
+          } else {
+            setCoursesDownload([])
           }
+          setIsLoading(false)
         } else {
           setCoursesDownload([])
+          setIsLoading(false)
+          alert(res.error)
         }
-        setIsLoading(false)
-      } else {
+      }).catch(err => {
+        alert(err)
         setCoursesDownload([])
-        //setIsLoading(false)
-        alert(res.error)
-      }
-    })
+        setIsLoading(false)
+      })
+    } else {
+      setCoursesDownload([])
+      setIsLoading(false)
+    }
   }
 
   const onPressRemoveAll = async () => {
@@ -115,8 +123,8 @@ const styles = StyleSheet.create({
   button: {
     padding: 3,
     borderRadius: 10,
-    marginRight: 20,
-    textAlign: 'center',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   headerText: {
     fontSize: 18,

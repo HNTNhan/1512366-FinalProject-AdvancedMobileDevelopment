@@ -1,7 +1,7 @@
 import {
   apiChangeEmail, apiChangePassword,
   apiForgotPassword,
-  apiLogin,
+  apiLogin, apiLoginWithGoogle,
   apiRegister,
   apiUpdateProfile
 } from "../core/services/authentication-services";
@@ -10,6 +10,8 @@ import {apiUpdateFavoriteCategories} from "../core/services/user-services";
 export const LOGIN_REQUEST = 'LOGIN_REQUEST';
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
 export const LOGIN_FAIL = 'LOGIN_FAIL';
+export const LOGIN_WITH_GOOGLE_SUCCESS = 'LOGIN_WITH_GOOGLE_SUCCESS';
+export const LOGIN_WITH_GOOGLE_FAIL = 'LOGIN_WITH_GOOGLE_FAIL';
 export const LOGOUT_SUCCESS = 'LOGOUT_SUCCESS';
 export const REGISTER_REQUEST = 'REGISTER_REQUEST';
 export const REGISTER_SUCCESS = 'REGISTER_SUCCESS';
@@ -46,6 +48,19 @@ const loginSuccess = (data) => {
 const loginFail = (message) => {
   return {
     type: LOGIN_FAIL,
+    message: message
+  }
+}
+const loginWithGoogleSuccess = (data) => {
+  return {
+    type: LOGIN_WITH_GOOGLE_SUCCESS,
+    data,
+    message: 'Login succeeded!',
+  }
+}
+const loginWithGoogleFail = (message) => {
+  return {
+    type: LOGIN_WITH_GOOGLE_FAIL,
     message: message
   }
 }
@@ -141,6 +156,20 @@ export const login = (dispatch) => (email, password) => {
     }
   }).catch(err => {
     dispatch(loginFail(err.response.data.message || err))
+  })
+}
+
+export const loginWithGoogle = (dispatch) => (email, id) => {
+  dispatch({type: LOGIN_REQUEST})
+  apiLoginWithGoogle(email, id).then(res => {
+    if(res.status === 200) {
+      dispatch(loginWithGoogleSuccess(res.data))
+    } else {
+      dispatch(loginWithGoogleFail(res.data.message))
+    }
+  }).catch(err => {
+    console.log(err)
+    dispatch(loginWithGoogleFail(err.response.data.message || err))
   })
 }
 

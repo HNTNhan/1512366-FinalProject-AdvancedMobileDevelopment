@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React, {useContext, useState} from 'react';
 import {TouchableOpacity, TouchableWithoutFeedback, View} from 'react-native';
 import {createBottomTabNavigator} from "@react-navigation/bottom-tabs";
 import {objectsConstant} from "../../../globles/constants";
@@ -47,7 +47,7 @@ const MainScreen = (props) => {
   const {show} = useContext(BottomTabBarContext)
 
   return <MainTab.Navigator
-    screenOptions={({route, navigation}) => ({
+    screenOptions={({route}) => ({
       tabBarIcon: ({focused}) => bottomTabIcons(route, focused),
       tabBarVisible: show,
     })}
