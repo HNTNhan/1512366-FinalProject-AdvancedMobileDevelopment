@@ -108,10 +108,11 @@ const updateContinueCategoriesFail = (message) => {
 }
 
 
-const updateProfileSuccess = (data) => {
+const updateProfileSuccess = (data, message) => {
   return {
     type: UPDATE_PROFILE_SUCCESS,
-    data
+    data,
+    message: message,
   }
 }
 const updateProfileFail = (message) => {
@@ -121,10 +122,10 @@ const updateProfileFail = (message) => {
   }
 }
 
-const changeEmailSuccess = (navigation) => {
+const changeEmailSuccess = (message) => {
   return {
     type: CHANGE_EMAIL_SUCCESS,
-    navigation: navigation
+    message: message
   }
 }
 const changeEmailFail = (message) => {
@@ -134,9 +135,10 @@ const changeEmailFail = (message) => {
   }
 }
 
-const changePasswordSuccess = () => {
+const changePasswordSuccess = (message) => {
   return {
     type: CHANGE_PASSWORD_SUCCESS,
+    message: message
   }
 }
 const changePasswordFail = (message) => {
@@ -223,11 +225,11 @@ export const updateFavoriteCategories = (dispatch) => (token, categoriesIds) => 
   })
 }
 
-export const updateProfile = (dispatch) => (token, profile) => {
+export const updateProfile = (dispatch) => (token, profile, successMessage) => {
   dispatch({type: UPDATE_PROFILE_REQUEST})
   apiUpdateProfile(token, profile).then(res => {
     if(res.status === 200) {
-      dispatch(updateProfileSuccess(res.data))
+      dispatch(updateProfileSuccess(res.data, successMessage))
     } else {
       dispatch(updateProfileFail(res.data.message))
     }
@@ -236,11 +238,11 @@ export const updateProfile = (dispatch) => (token, profile) => {
   })
 }
 
-export const changeEmail = (dispatch) => (token, email) => {
+export const changeEmail = (dispatch) => (token, email, messageSuccess) => {
   dispatch({type: UPDATE_PROFILE_REQUEST})
   apiChangeEmail(token, email).then(res => {
     if(res.status === 200) {
-      dispatch(changeEmailSuccess())
+      dispatch(changeEmailSuccess(messageSuccess))
     } else {
       dispatch(changeEmailFail(res.data.message))
     }
@@ -249,11 +251,11 @@ export const changeEmail = (dispatch) => (token, email) => {
   })
 }
 
-export const changePassword = (dispatch) => (token, id, password) => {
+export const changePassword = (dispatch) => (token, id, password, successMessage) => {
   dispatch({type: UPDATE_PROFILE_REQUEST})
   apiChangePassword(token, id, password).then(res => {
     if(res.status === 200) {
-      dispatch(changePasswordSuccess())
+      dispatch(changePasswordSuccess(successMessage))
     } else {
       dispatch(changePasswordFail(res.data.message))
     }

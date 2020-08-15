@@ -1,7 +1,10 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {View, Text, ImageBackground, TouchableOpacity, StyleSheet} from 'react-native';
+import {ColorsContext} from "../../provider/colors-provider";
 
 const ImageButton = (props) => {
+  const {theme} = useContext(ColorsContext)
+
   const RandomNumber = Math.floor(Math.random() * 8) + 1 ;
   let source;
   switch (RandomNumber) {
@@ -35,7 +38,7 @@ const ImageButton = (props) => {
       style={styles.touch}
       onPress={props.onPress}
     >
-      <Text style={styles.title}>{props.title}</Text>
+      <Text style={{...styles.title}}>{props.title}</Text>
     </TouchableOpacity>
   </ImageBackground>
 };
@@ -45,6 +48,8 @@ const styles = StyleSheet.create({
     margin: 5,
     height: 100,
     width: '100%',
+    backgroundColor: 'black',
+    opacity: 0.8,
   },
   touch: {
     flex: 1,

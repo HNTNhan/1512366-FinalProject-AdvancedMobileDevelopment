@@ -21,7 +21,8 @@ export const defaultLanguage = {
       download: 'Download',
       browse: 'Browse',
       profile: 'Profile',
-      search: 'Search'
+      search: 'Search',
+      accountManagement: 'Account Management',
     },
     login: {
       loginSuccess: 'Login successful',
@@ -248,6 +249,9 @@ export const defaultLanguage = {
       confirmPassword: 'Confirm password',
       passwordError3: 'Password and Confirm Password do not match!',
       update: 'Update',
+      updateProfileSuccess: 'Success! Your profile has beeen changed!',
+      updatePasswordSuccess: 'Success! Your password has beeen changed!',
+      updateEmailSuccess: 'Success! Your email has beeen changed!',
     },
   },
   Vietnamese: {
@@ -273,6 +277,7 @@ export const defaultLanguage = {
       browse: 'Duyệt',
       profile: 'Thông tin',
       search: 'Tìm kiếm',
+      accountManagement: 'Quản lý tài khoản',
     },
     login: {
       loginSuccess: 'Đăng nhập thành công',
@@ -499,6 +504,10 @@ export const defaultLanguage = {
       confirmPassword: 'Xác nhận mật khẩu',
       passwordError3: 'Mật khẩu và mật khẩu xác nhận không khớp!',
       update: 'Cập nhật',
+      updateProfileSuccess: 'Thành công! Thông tin tài khoản đã thay đổi!',
+      updatePasswordSuccess: 'Thành công! Mật khẩu của bạn đã thay đổi!',
+      updateEmailSuccess: 'Thành công! Email của bạn đã thay đổi!',
+
     },
   }
 }

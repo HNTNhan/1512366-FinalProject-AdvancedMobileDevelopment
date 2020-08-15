@@ -6,12 +6,14 @@ import {createStackNavigator} from "@react-navigation/stack";
 import {objectsConstant} from "../../../globles/constants";
 import Payment from "../../Others/Payment/payment";
 import SendFeedback from "../../AccountManagement/SendFeedback/send-feedback";
+import ListCourses from "../../Courses/ListCourses/list-courses";
 
 const SearchStack = createStackNavigator();
 
 const SearchScreen = (props) => {
   return <SearchStack.Navigator screenOptions={objectsConstant.defaultCenterHeaderBar}>
     <SearchStack.Screen name='Search' component={Search} options={{headerShown: false}}/>
+    <SearchStack.Screen name='ListCourses' component={ListCourses} options={({ route }) => ({ title: route.params.name })}/>
     <SearchStack.Screen name='CourseDetail' component={CourseDetail} options={{headerShown: false}}/>
     <SearchStack.Screen name='AuthorDetail' component={AuthorDetail} options={({ route }) => ({ title: route.params.name })}/>
     <SearchStack.Screen name='Payment' component={Payment} />

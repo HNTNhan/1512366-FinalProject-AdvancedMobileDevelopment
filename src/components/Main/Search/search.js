@@ -24,6 +24,7 @@ const Search = (props) => {
 
   useEffect(() => {
     if(state.isAuthenticated) {
+      console.log(123)
       getAllCategory().then(res => {
         if (res.status === 200) {
           let favoriteCategories = [];
@@ -43,8 +44,8 @@ const Search = (props) => {
         setIsLoading(false)
         alert(err.response.data.message || err)
       })
-    }
-  }, [])
+    } else {}
+  }, [state.userInfo])
 
   useEffect(() => {
     if(state.isAuthenticated) {
@@ -56,7 +57,7 @@ const Search = (props) => {
         alert(err.response.data.message || err)
       })
     }
-  }, [])
+  }, [showResult])
 
 
   const onPressItem = (item, type) => {

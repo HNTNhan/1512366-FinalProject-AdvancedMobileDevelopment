@@ -13,11 +13,11 @@ const YoutubeVideo = (props) => {
   const [buffering, setBuffering] = useState(false);
   const [pos, setPos] = useState(Math.floor(props.pos*60));
   const [overlay, setOverlay] = useState(false)
-  const [time, setTime] = useState(-1)
+  const [time, setTime] = useState(0)
 
   useEffect(() => {
     const interval = setInterval(() => {
-      if(time!==-1) {
+      if(time!==0) {
         if(!overlay) {
           if(playerRef) {
             playerRef.current.getCurrentTime().then(currentTime => {

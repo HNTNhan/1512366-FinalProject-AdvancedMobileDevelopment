@@ -17,9 +17,8 @@ export const storeCoursesDownload = async (value) => {
 export const getCoursesDownload = async () => {
   try {
     const jsonValue = await AsyncStorage.getItem('.coursesDownload')
-    return jsonValue !== null ? {data: JSON.parse(jsonValue), status: 200} : {data: null, status: 200};
+    return jsonValue !== null ? {data: JSON.parse(jsonValue), status: 200} : {data: [], status: 200};
   } catch(e) {
-    console.log('err', e)
-    return {status: 400, data: null, error: e}
+    return {status: 400, data: [], error: e}
   }
 }

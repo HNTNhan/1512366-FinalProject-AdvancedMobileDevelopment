@@ -11,6 +11,7 @@ import ListCoursesScrollLoad from "../../Courses/ListCoursesScrollLoad/list-cour
 import Payment from "../../Others/Payment/payment";
 import SendFeedback from "../../AccountManagement/SendFeedback/send-feedback";
 import {LanguageContext} from "../../../provider/language-provider";
+import ListCourses from "../../Courses/ListCourses/list-courses";
 
 const BrowseStack = createStackNavigator();
 const BrowseScreen = (props) => {
@@ -29,6 +30,7 @@ const BrowseScreen = (props) => {
                             title: language.navigation.browse
                           })}
     />
+    <BrowseStack.Screen name='ListCourses' component={ListCourses} options={({ route }) => ({ title: route.params.name })}/>
     <BrowseStack.Screen name='ListCoursesScrollLoad' component={ListCoursesScrollLoad} options={({ route }) => ({ title: route.params.name })}/>
     <BrowseStack.Screen name='CourseDetail' component={CourseDetail} options={{headerShown: false}}/>
     <BrowseStack.Screen name='AuthorDetail' component={AuthorDetail} options={({ route }) => ({ title: route.params.name })}/>

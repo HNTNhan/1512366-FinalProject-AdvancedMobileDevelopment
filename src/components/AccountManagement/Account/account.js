@@ -2,11 +2,10 @@ import React, {useContext, useEffect, useState} from 'react';
 import {StyleSheet, View, Text, TouchableOpacity, TextInput, ScrollView, ActivityIndicator, Alert} from 'react-native';
 import {ColorsContext} from "../../../provider/colors-provider";
 import {AuthenticationContext} from "../../../provider/authentication-provider";
-import {Button, Icon, Image} from "react-native-elements";
+import {Icon, Image} from "react-native-elements";
 import ModalActivityIndicator from "../../Common/modal-activity-indicator";
 import {checkEmail, checkName, checkPhone} from "../../../core/services/authentication-services";
 import {LanguageContext} from "../../../provider/language-provider";
-// import * as ImagePicker from 'expo-image-picker';
 
 const Account = (props) => {
   const {theme} = useContext(ColorsContext);
@@ -15,7 +14,7 @@ const Account = (props) => {
   const authContext = useContext(AuthenticationContext);
 
   const initialStateAccount = {
-    fullName: '',
+    name: '',
     phone: '',
     avatar: '',
     checkFullName: false,
@@ -39,29 +38,34 @@ const Account = (props) => {
   const [showPassword, setShowPassword] = useState({showCurrentPassword: false, showNewPassword: false, showConfirmPassword: false})
 
   useEffect(() => {
-    setAccount({...account, fullName: state.userInfo.name, avatar: state.userInfo.avatar, phone: state.userInfo.phone})
+    if(!authContext.state.userInfo) {
+      props.navigation.reset({
+        index: 0,
+        routes: [{ name: 'Authentication'}],
+      })
+    }
+  }, [authContext.state.userInfo])
+
+  useEffect(() => {
+    setAccount({...account, name: state.userInfo.name, avatar: state.userInfo.avatar, phone: state.userInfo.phone})
     setEmail({...email, email: state.userInfo.email})
   }, [])
 
   const onPressUpdateAccount = () => {
-    if(checkName(account.fullName) && (account.phone.length===10 && checkPhone(account.phone))) {
-      authContext.updateProfile(state.token, account)
-      setAccount({...account, checkFullName: checkName(account.fullName), checkPhone: (account.phone.length===10 && checkPhone(account.phone))})
+    if(checkName(account.name) && (account.phone.length===10 && checkPhone(account.phone))) {
+      authContext.updateProfile(state.token, account, language.account.updateProfileSuccess)
+      setAccount({...account, checkFullName: checkName(account.name), checkPhone: (account.phone.length===10 && checkPhone(account.phone))})
     } else {
-      setAccount({...account, checkFullName: checkName(account.fullName), checkPhone: (account.phone.length===10 && checkPhone(account.phone)), showCheck: true})
+      setAccount({...account, checkFullName: checkName(account.name), checkPhone: (account.phone.length===10 && checkPhone(account.phone)), showCheck: true})
     }
   }
 
   const onPressChangeEmail = async () => {
     if(checkEmail(email.email)) {
-      await authContext.changeEmail(state.token, email.email)
-      if(!authContext.isUpdatingProfile) {
-        Alert.alert('', language.account.changeEmailSuccess, [{}], { cancelable: true })
-        props.navigation.reset({
-          index: 0,
-          routes: [{ name: 'Authentication'}],
-        })
-      }
+      authContext.changeEmail(state.token, email.email, language.account.updateEmailSuccess)
+      //if(!authContext.isUpdatingProfile) {
+        //Alert.alert('', language.account.changeEmailSuccess, [{}], { cancelable: true })
+      //}
     } else {
       setEmail({...email, checkEmail: false})
     }
@@ -74,7 +78,7 @@ const Account = (props) => {
 
     if(checkCurrentPassword && checkNewPassword && password.currentPassword!==password.newPassword
       && checkConfirmPassword && password.confirmPassword===password.newPassword) {
-      authContext.changePassword(state.token, state.userInfo.id, password)
+      authContext.changePassword(state.token, state.userInfo.id, password, language.account.updatePasswordSuccess)
       setPassword(initialStatePassword)
     } else {
       setPassword({...password, checkConfirmPassword: checkConfirmPassword, checkNewPassword: checkNewPassword, checkCurrentPassword: checkCurrentPassword, showCheck: true})
@@ -103,9 +107,9 @@ const Account = (props) => {
         />
 
         <Text style={{...styles.subTitle, color: theme.text}}>{language.account.fullName}</Text>
-        <TextInput value={account.fullName}
+        <TextInput value={account.name}
                    style={{...styles.textInput, backgroundColor: theme.background, color: theme.text}}
-                   onChangeText={(text) => setAccount({...account, fullName: text})}/>
+                   onChangeText={(text) => setAccount({...account, name: text})}/>
         {
           account.showCheck ? !account.checkFullName ?
             <Text style={{...styles.checkText}}>{language.account.fullNameError}</Text> : null : null

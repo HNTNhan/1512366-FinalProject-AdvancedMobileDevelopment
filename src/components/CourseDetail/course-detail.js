@@ -51,10 +51,8 @@ const CourseDetail = (props) => {
       getCoursesDownload().then(res => {
         if (res.status === 200 && mounted === true) {
           if (res.data && res.data.length) {
-            //console.log('number of user download: ', res.data.length)
             for (let i = 0; i < res.data.length; i++) {
               if (res.data[i].id === state.userInfo.id && res.data[i].courses.length) {
-                //console.log('number of course download: ', res.data[i].courses.length)
                 for (let j = 0; j < res.data[i].courses.length; j++) {
                   if (res.data[i].courses[j].id === props.route.params.id) {
                     //console.log(res.data[i].courses[j].id, props.route.params.id)
@@ -78,6 +76,8 @@ const CourseDetail = (props) => {
           setListAccountAndCourseDownload(null)
           setLoadingError(true)
         }
+      }).catch(err => {
+
       })
     }
     return () => mounted = false
@@ -114,6 +114,10 @@ const CourseDetail = (props) => {
                       setDetail(data)
                       setIsLoading(false)
                     })
+                  }).catch(err => {
+                    setLesson({videoUrl: data.promoVidUrl || null})
+                    setDetail(data)
+                    setIsLoading(false)
                   })
                 } else {}
               }).catch(err => {

@@ -2,6 +2,7 @@ import React, {useContext, useEffect} from 'react';
 import {createStackNavigator} from "@react-navigation/stack";
 import Home from "../../Main/Home/home";
 import ListChannels from "../../Courses/ListChannels/list-channels";
+import ListCourses from "../../Courses/ListCourses/list-courses";
 import CourseDetail from "../../CourseDetail/course-detail";
 import ChannelDetail from "../../ChannelDetail/channel-detail";
 import AuthorDetail from "../../AuthorDetail/author-detail";
@@ -35,6 +36,7 @@ const HomeScreen = (props) => {
                           title: language.navigation.home
                         })}/>
     <HomeStack.Screen name='ListChannels' component={ListChannels} options={({ route }) => ({ title: route.params.name })}/>
+    <HomeStack.Screen name='ListCourses' component={ListCourses} options={({ route }) => ({ title: route.params.name })}/>
     <HomeStack.Screen name='CourseDetail' component={CourseDetail} options={{headerShown: false}}/>
     <HomeStack.Screen name='ChannelDetail' component={ChannelDetail} options={({ route }) => ({ title: route.params.name })}/>
     <HomeStack.Screen name='AuthorDetail' component={AuthorDetail} options={({ route }) => ({ title: route.params.name })}/>

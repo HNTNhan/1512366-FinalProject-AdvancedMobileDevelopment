@@ -38,7 +38,6 @@ export const initialState = {
 }
 
 export const reducer = (prevState, action) => {
-  console.log('reducer: ', action.type)
   switch (action.type) {
     case LOGIN_REQUEST:
       return {...prevState, isAuthenticating: true}
@@ -71,17 +70,22 @@ export const reducer = (prevState, action) => {
     case UPDATE_PROFILE_REQUEST:
       return {...prevState, isUpdatingProfile: true}
     case UPDATE_PROFILE_SUCCESS:
+      Alert.alert('', action.message, [], {cancelable: true})
       return {...prevState, isUpdatingProfile: false, userInfo: action.data.payload}
     case UPDATE_PROFILE_FAIL:
+      Alert.alert('', action.message, [], {cancelable: true})
       return {...prevState, isUpdatingProfile: false, message: action.message}
     case CHANGE_EMAIL_SUCCESS:
+      Alert.alert('', action.message, [], {cancelable: true})
       return initialState
     case CHANGE_EMAIL_FAIL:
+      Alert.alert('', action.message, [], {cancelable: true})
       return {...prevState, isUpdatingProfile: false, message: action.message}
     case CHANGE_PASSWORD_SUCCESS:
-      Alert.alert('', 'Success! Your password has beeen changed!', [{}], {cancelable: true})
+      Alert.alert('', action.message, [{}], {cancelable: true})
       return {...prevState, isUpdatingProfile: false}
     case CHANGE_PASSWORD_FAIL:
+      Alert.alert('', action.message, [], {cancelable: true})
       return {...prevState, isUpdatingProfile: false, message: action.message}
     case CHANGE_ONLINE_STATUS:
       return {...prevState, isOnline: action.data,}

@@ -5,7 +5,6 @@ import {Icon, Image, Text} from "react-native-elements";
 import {ColorsContext} from "../../../provider/colors-provider";
 import {AuthenticationContext} from "../../../provider/authentication-provider";
 import SendFeedback from "../../AccountManagement/SendFeedback/send-feedback";
-import * as Google from 'expo-google-app-auth';
 import {androidClientID} from "../../../core/services/authentication-services";
 import {LanguageContext} from "../../../provider/language-provider";
 
@@ -27,19 +26,11 @@ const MainScreenRightHeader = (props) => {
   }
 
   const onSelectSignOut = async () => {
-    // if(authContext.state.isGoogleSignIn !== '') {
-    //   console.log('google sign out')
-    //   const config = {
-    //     androidClientId: androidClientID,
-    //   };
-    //   const accessToken = authContext.state.isGoogleSignIn
-    //   await Google.logOutAsync({accessToken, ...config})
-    // }
-    await authContext.logout()
     props.navigation.reset({
       index: 0,
-      routes: [{ name: 'Authentication' }],
+      routes: [{ name: 'SplashScreen' }],
     });
+    await authContext.logout()
   }
 
   const onSelectSignIn = () => {
