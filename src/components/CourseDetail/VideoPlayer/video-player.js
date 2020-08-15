@@ -1,14 +1,15 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {View, StyleSheet, Dimensions, Text, ActivityIndicator, TouchableOpacity, Slider} from 'react-native';
 import CenterActivityIndicator from "../../Common/center-activity-indicator";
-import Video from "expo-av/build/Video";
 import GoogleVideo from "./GoogleVideo/google-video";
 import YoutubeVideo from "./YoutubeVideo/youtube-video";
 import {AuthenticationContext} from "../../../provider/authentication-provider";
 import {getLessonDetail, getLessonSubtitle, getLessonUrlAndTime} from "../../../core/services/lesson-services";
+import {LanguageContext} from "../../../provider/language-provider";
 
 const VideoPlayer = (props) => {
   const {state} = useContext(AuthenticationContext)
+  const {language} = useContext(LanguageContext)
 
   const onPress = (next) => {
     props.setVideoLoading()
@@ -44,13 +45,14 @@ const VideoPlayer = (props) => {
       if(!uri) {
         return <View style={{...styles.container}}>
           <View>
-            <Text style={{color: 'white'}}>Something went wrong!!!</Text>
+            <Text style={{color: 'white'}}>{language.courseDetail.video.error}</Text>
           </View>
         </View>
       } else {
         if(uri.includes("https://youtube.com")) {
+          const videoId = uri.slice(uri.indexOf('embed')+6)
           return <YoutubeVideo uri={uri} id={props.lesson.id || null} token={state.token} pos={props.lesson.currentTime || 0}
-                               checkOwn={props.checkOwn} onPressNextBack={onPress}
+                               checkOwn={props.checkOwn} onPressNextBack={onPress} videoId={videoId}
                                checkNext={props.lesson.nextLessonId} checkBack={props.lesson.prevLessonId}
           />
         } else {

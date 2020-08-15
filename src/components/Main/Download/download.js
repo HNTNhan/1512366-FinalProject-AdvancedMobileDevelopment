@@ -8,9 +8,12 @@ import CenterActivityIndicator from "../../Common/center-activity-indicator";
 import {AuthenticationContext} from "../../../provider/authentication-provider";
 import {DownloadContext} from "../../../provider/download-provider";
 import * as FileSystem from "expo-file-system";
+import {Icon} from "react-native-elements";
+import {LanguageContext} from "../../../provider/language-provider";
 
 const Download = (props) => {
   const {theme} = useContext(ColorsContext)
+  const {language} = useContext(LanguageContext)
   const {startDownload} = useContext(DownloadContext)
   const {state} = useContext(AuthenticationContext)
   const [coursesDownload, setCoursesDownload] = useState([])
@@ -74,7 +77,7 @@ const Download = (props) => {
   }
 
   const onPressItem = (id) => {
-    props.navigation.push('CourseDetail', {id: id});
+    props.navigation.push('CourseDetail', {id: id, downloaded: true});
   }
 
   if(isLoading) {
@@ -82,10 +85,11 @@ const Download = (props) => {
   } else {
     if(coursesDownload.length===0) {
       return <View style={{...styles.containerEmpty, backgroundColor: theme.background}}>
-        <Text style={{fontSize: 20, color: theme.text}}>No Download</Text>
+        <Icon name={'box-open'} type={"font-awesome-5"} size={80} color={theme.text} />
+        <Text style={{fontSize: 20, color: theme.text}}>{language.download.empty}</Text>
         <TouchableOpacity style={styles.button}
                           onPress={!startDownload ? () => fetchData() : null}>
-          <Text style={{...styles.buttonText, fontSize: 20}}> Refresh </Text>
+          <Text style={{...styles.buttonText, fontSize: 20}}>{language.download.refresh}</Text>
         </TouchableOpacity>
       </View>
     } else {

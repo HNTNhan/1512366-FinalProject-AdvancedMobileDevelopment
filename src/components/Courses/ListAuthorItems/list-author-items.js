@@ -6,10 +6,10 @@ const ListAuthorItems = (props) => {
   const {theme} = useContext(ColorsContext);
 
   return <TouchableOpacity style={styles.item} onPress={props.onPress}>
-    <Image source={require('../../../../assets/ic_person.png')} style={styles.image}/>
+    <Image source={{uri: props.item.avatar}} style={styles.image}/>
     <View style={styles.detail}>
-      <Text style={{fontSize: 16, color: theme.text}}>{props.item.detail.name}</Text>
-      <Text style={styles.darkText}>{props.item.courses.length} Courses</Text>
+      <Text style={{fontSize: 16, color: theme.text}}>{props.item.name}</Text>
+      <Text style={styles.darkText}>{props.item.numcourses} {props.item.numcourses > 1 ? props.language.search.courses : props.language.search.course}</Text>
     </View>
   </TouchableOpacity>
 };

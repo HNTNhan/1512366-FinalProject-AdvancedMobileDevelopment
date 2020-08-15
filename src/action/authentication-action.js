@@ -219,7 +219,6 @@ export const updateFavoriteCategories = (dispatch) => (token, categoriesIds) => 
       dispatch(updateContinueCategoriesFail(res.data.message))
     }
   }).catch(err => {
-    console.log(err.response.data.message || err)
     dispatch(updateContinueCategoriesFail(err.response.data.message || err))
   })
 }

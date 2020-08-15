@@ -4,9 +4,11 @@ import {Icon, Text} from "react-native-elements";
 import {ColorsContext} from "../../../provider/colors-provider";
 import {getLessonDetail, getLessonSubtitle, getLessonUrlAndTime} from "../../../core/services/lesson-services";
 import {AuthenticationContext} from "../../../provider/authentication-provider";
+import {LanguageContext} from "../../../provider/language-provider";
 
 const ListLessonItems = (props) => {
   const {theme} = useContext(ColorsContext)
+  const {language} = useContext(LanguageContext)
   const {state} = useContext(AuthenticationContext)
 
   const lesson = props.item;
@@ -61,7 +63,7 @@ const ListLessonItems = (props) => {
   } else {
     return <TouchableOpacity style={styles.container} onPress={() => props.onPress(props.item)}>
       <View style={{...styles.titleContainer}}>
-        <Text style={{flexShrink: 1, marginLeft: 15, color: theme.text}}>Course Overview</Text>
+        <Text style={{flexShrink: 1, marginLeft: 15, color: theme.text}}>{language.courseDetail.lessonItemOverview}</Text>
       </View>
     </TouchableOpacity>
   }

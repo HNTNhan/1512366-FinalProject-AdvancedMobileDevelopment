@@ -7,7 +7,6 @@ const ModalActivityIndicator = (props) => {
                 visible={props.modalVisible}>
     <View style={{...styles.centeredView}}>
       <View style={{opacity: 100}}>
-        {console.log('activity')}
         <ActivityIndicator size={'large'} color={'blue'} />
       </View>
     </View>

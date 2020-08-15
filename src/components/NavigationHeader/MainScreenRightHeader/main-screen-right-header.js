@@ -1,13 +1,17 @@
-import React, {useContext, useState} from 'react';
+import React, {useContext} from 'react';
 import {TouchableOpacity, StyleSheet, View} from 'react-native';
 import {Menu, MenuOption, MenuOptions, MenuTrigger} from "react-native-popup-menu";
 import {Icon, Image, Text} from "react-native-elements";
 import {ColorsContext} from "../../../provider/colors-provider";
 import {AuthenticationContext} from "../../../provider/authentication-provider";
 import SendFeedback from "../../AccountManagement/SendFeedback/send-feedback";
+import * as Google from 'expo-google-app-auth';
+import {androidClientID} from "../../../core/services/authentication-services";
+import {LanguageContext} from "../../../provider/language-provider";
 
 const MainScreenRightHeader = (props) => {
   const {theme} = useContext(ColorsContext)
+  const {language} = useContext(LanguageContext)
   const authContext = useContext(AuthenticationContext)
 
   const onSelectProfile = () => {
@@ -22,13 +26,27 @@ const MainScreenRightHeader = (props) => {
     props.navigation.navigate('SendFeedback')
   }
 
-  const onSelectSignOut = () => {
-    authContext.logout()
-    props.navigation.replace('Authentication');
+  const onSelectSignOut = async () => {
+    // if(authContext.state.isGoogleSignIn !== '') {
+    //   console.log('google sign out')
+    //   const config = {
+    //     androidClientId: androidClientID,
+    //   };
+    //   const accessToken = authContext.state.isGoogleSignIn
+    //   await Google.logOutAsync({accessToken, ...config})
+    // }
+    await authContext.logout()
+    props.navigation.reset({
+      index: 0,
+      routes: [{ name: 'Authentication' }],
+    });
   }
 
   const onSelectSignIn = () => {
-    props.navigation.replace('Authentication');
+    props.navigation.reset({
+      index: 0,
+      routes: [{ name: 'Authentication' }],
+    });
   }
 
   return <View style={styles.container}>
@@ -54,22 +72,19 @@ const MainScreenRightHeader = (props) => {
         authContext.state.isAuthenticated ?
           <MenuOptions customStyles={optionsStyles}>
             <MenuOption onSelect={() => onSelectSetting()}>
-              <Text style={styles.menuOptionText}>Setting</Text>
+              <Text style={styles.menuOptionText}>{language.mainScreenHeader.setting}</Text>
             </MenuOption>
             <MenuOption onSelect={() => onSelectSendFeedBack()}>
-              <Text style={styles.menuOptionText}>Send feedback</Text>
+              <Text style={styles.menuOptionText}>{language.mainScreenHeader.sendFeedback}</Text>
             </MenuOption>
-            {/*<MenuOption onSelect={() => console.log('Contact support')}>*/}
-            {/*  <Text style={styles.menuOptionText}>Contact support</Text>*/}
-            {/*</MenuOption>*/}
             <MenuOption onSelect={() => onSelectSignOut()}>
-              <Text style={styles.menuOptionText}>Sign Out</Text>
+              <Text style={styles.menuOptionText}>{language.mainScreenHeader.signOut}</Text>
             </MenuOption>
           </MenuOptions> :
 
           <MenuOptions customStyles={optionsStyles}>
             <MenuOption onSelect={() => onSelectSignIn()}>
-              <Text style={styles.menuOptionText}>Sign In</Text>
+              <Text style={styles.menuOptionText}>{language.mainScreenHeader.signIn}</Text>
             </MenuOption>
           </MenuOptions>
       }

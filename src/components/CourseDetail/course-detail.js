@@ -19,11 +19,13 @@ import {DownloadContext} from "../../provider/download-provider";
 import {getCoursesDownload} from "../../core/local_storage/courses-download-storage";
 import {extractData} from "./Functions/functions";
 import {getLessonDetail, getLessonSubtitle, getLessonUrlAndTime} from "../../core/services/lesson-services";
+import {LanguageContext} from "../../provider/language-provider";
 
 const initialLayout = { width: Dimensions.get('window').width };
 
 const CourseDetail = (props) => {
   const {theme} = useContext(ColorsContext)
+  const {language} = useContext(LanguageContext)
   const {downloadId, setDownloadData, list, setStartDownload, startDownload} = useContext(DownloadContext)
   const {state} = useContext(AuthenticationContext)
   const [checkOwn, setCheckOwn] = useState(false)
@@ -36,11 +38,16 @@ const CourseDetail = (props) => {
   const [videoLoading, setVideoLoading] = useState(false)
   const [listAccountAndCourseDownload, setListAccountAndCourseDownload] = useState({data: [], userIndex: -1, courseIndex: -1})
   const [loadingError, setLoadingError] = useState(false)
+  const [index, setIndex] = useState(0);
+  const [routes] = useState([
+    { key: 'first', title: language.courseDetail.titleTab.course },
+    { key: 'second', title: language.courseDetail.titleTab.lessons },
+    { key: 'third', title: language.courseDetail.titleTab.transcript },
+  ]);
 
   useEffect(() => {
     let mounted = true
     if(!startDownload && state.isAuthenticated){
-      console.log('startDownload change')
       getCoursesDownload().then(res => {
         if (res.status === 200 && mounted === true) {
           if (res.data && res.data.length) {
@@ -70,7 +77,6 @@ const CourseDetail = (props) => {
         } else {
           setListAccountAndCourseDownload(null)
           setLoadingError(true)
-          console.log(res.error)
         }
       })
     }
@@ -92,7 +98,7 @@ const CourseDetail = (props) => {
             if(res.data.payload.isUserOwnCourse) {
               getCourseAndLessonsDetail(props.route.params.id, state.token).then(res => {
                 if(res.status===200 && sub_mounted1) {
-                  const data = extractData(res.data.payload)
+                  const data = extractData(res.data.payload, language.same.lang)
                   getLastWatchedLesson(props.route.params.id, state.token).then(res => {
                     Promise.all([
                       getLessonDetail(props.route.params.id, res.data.payload.lessonId, state.token),
@@ -172,7 +178,7 @@ const CourseDetail = (props) => {
         id: props.route.params.id, downloadSection: false})
       setStartDownload(true)
     } else {
-      alert('Something wrong! Please try again later')
+      alert(language.courseDetail.downloadError)
     }
   }
 
@@ -182,16 +188,9 @@ const CourseDetail = (props) => {
         id: props.route.params.id, downloadSection: true})
       setStartDownload(true)
     } else {
-      alert('Something wrong! Please try again later')
+      alert(language.courseDetail.downloadError)
     }
   }
-
-  const [index, setIndex] = useState(0);
-  const [routes] = useState([
-    { key: 'first', title: 'Course' },
-    { key: 'second', title: 'Lessons' },
-    { key: 'third', title: 'Transcript' },
-  ]);
 
   const renderScene = ({ route }) => {
     switch (route.key) {
@@ -201,18 +200,18 @@ const CourseDetail = (props) => {
           coursesLikeCategory={state.isAuthenticated ? (tempDetail ? tempDetail.coursesLikeCategory : detail.coursesLikeCategory) : []}
           ratings={state.isAuthenticated ? (tempDetail ? tempDetail.ratings : detail.ratings) : []}
           courseDownload={
-            listAccountAndCourseDownload.courseIndex!==-1 ?
+            props.route.params.downloaded ? listAccountAndCourseDownload.courseIndex!==-1 ?
               listAccountAndCourseDownload.data[listAccountAndCourseDownload.userIndex].courses[listAccountAndCourseDownload.courseIndex]
-            : null}
+              : null : null}
           onPressDownload={onPressDownload}
         />;
       case 'second':
         return <ListLessons
           courseDetail={detail} courseId={props.route.params.id} onPressLesson={onPressLesson} token={state.token}
           courseDownload={
-          listAccountAndCourseDownload.courseIndex!==-1 ?
-            listAccountAndCourseDownload.data[listAccountAndCourseDownload.userIndex].courses[listAccountAndCourseDownload.courseIndex]
-          : null}
+            listAccountAndCourseDownload.courseIndex!==-1 ?
+              listAccountAndCourseDownload.data[listAccountAndCourseDownload.userIndex].courses[listAccountAndCourseDownload.courseIndex] : null}
+          checkDownload={props.route.params.downloaded}
           showInfoDialog={() => setShowInfoDialog(true)} videoLoading={() => setVideoLoading(true)}
           isAuthenticated={state.isAuthenticated} checkOwn={checkOwn} onPressDownloadSection={onPressDownloadSection}
         />;

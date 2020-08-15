@@ -6,9 +6,11 @@ import ItemsInAuthor from "./ItemsInAuthor/items-in-author";
 import {ColorsContext} from "../../provider/colors-provider";
 import {getInstructorInfo} from "../../core/services/instructor-services";
 import CenterActivityIndicator from "../Common/center-activity-indicator";
+import {LanguageContext} from "../../provider/language-provider";
 
 const AuthorDetail = (props) => {
   const {theme} = useContext(ColorsContext)
+  const {language} = useContext(LanguageContext)
   const [author, setAuthor] = useState(props.route.params.author)
 
   useEffect(() => {
@@ -25,7 +27,7 @@ const AuthorDetail = (props) => {
           }
         })
         .catch(err => {
-          console.log('getInstructor: ', err.response.data.message || err)
+          alert(err.response.data.message || err)
         })
       return () => mounted = false
     } else {}
@@ -33,8 +35,8 @@ const AuthorDetail = (props) => {
 
   if(author) {
     return <ScrollView style={{...globalStyles.container, backgroundColor: theme.background}} showsVerticalScrollIndicator={false}>
-      <GeneralAuthorDetail detail={author}/>
-      <ItemsInAuthor courses={author.courses} name={author.name} navigation={props.navigation} route={props.route}/>
+      <GeneralAuthorDetail detail={author} language={language}/>
+      <ItemsInAuthor courses={author.courses} name={author.name} navigation={props.navigation} route={props.route} language={language}/>
     </ScrollView>
   } else {
     return <CenterActivityIndicator />

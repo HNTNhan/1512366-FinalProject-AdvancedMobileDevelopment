@@ -4,14 +4,17 @@ import {ColorsContext} from "../../provider/colors-provider";
 import SelectFilterModal from "./select-filter-modal";
 import {Menu, MenuOption, MenuOptions, MenuTrigger} from "react-native-popup-menu";
 import {Icon} from "react-native-elements";
+import {LanguageContext} from "../../provider/language-provider";
 
 const SectionTitleFilter = (props) => {
   const {theme} = useContext(ColorsContext);
+  const {language} = useContext(LanguageContext);
 
   const [sortType, setSortType] = useState(0);
   const [modalVisible, setModalVisible] = useState(false);
 
-  const type = ['Newest', 'Oldest', 'Price increase', 'Price decrease', 'Best Seller'];
+  const type = [language.search.titleFilter.newest, language.search.titleFilter.oldest, language.search.titleFilter.priceIncrease1,
+    language.search.titleFilter.priceDecrease1, language.search.titleFilter.bestSell];
 
   const onTypeChange = (itemValue) => {
     setSortType(itemValue);
@@ -25,23 +28,23 @@ const SectionTitleFilter = (props) => {
 
   return <View style={styles.titleContainer}>
     <TouchableOpacity onPress={() => setModalVisible(true)} style={{...styles.selectFilterButton}}>
-      <Text style={{...styles.titleText, color: theme.text}}>Select Filter   </Text>
+      <Text style={{...styles.titleText, color: theme.text}}>{language.search.titleFilter.selectFilter}</Text>
       <Icon name={'caret-down'} type={"font-awesome-5"} size={16} />
     </TouchableOpacity>
 
     <Menu style={styles.dropdown}>
       <MenuTrigger>
         {
-          type[sortType] === 'Price increase' ?
+          type[sortType] === language.search.titleFilter.priceIncrease1 ?
             <View style={styles.trigger}>
-              <Text style={{...styles.titleText, color: theme.text}}>Price</Text>
+              <Text style={{...styles.titleText, color: theme.text}}>{language.search.titleFilter.price}</Text>
               <Icon name={'long-arrow-alt-up'} type={"font-awesome-5"} size={16} color={'#777777'}/>
               <Text style={{...styles.titleText, color: theme.text}}>  </Text>
               <Icon name={'caret-down'} type={"font-awesome-5"} size={16} />
             </View> :
-            type[sortType] === 'Price decrease' ?
+            type[sortType] === language.search.titleFilter.priceDecrease1 ?
               <View style={styles.trigger}>
-                <Text style={{...styles.titleText, color: theme.text}}>Price</Text>
+                <Text style={{...styles.titleText, color: theme.text}}>{language.search.titleFilter.price}</Text>
                 <Icon name={'long-arrow-alt-down'} type={"font-awesome-5"} size={16} color={'#777777'}/>
                 <Text style={{...styles.titleText, color: theme.text}}>  </Text>
                 <Icon name={'caret-down'} type={"font-awesome-5"} size={16} />
@@ -53,16 +56,16 @@ const SectionTitleFilter = (props) => {
         }
       </MenuTrigger>
       <MenuOptions customStyles={optionsStyles}>
-        <MenuOption onSelect={() => onTypeChange(0)} text={'Newest'} />
-        <MenuOption onSelect={() => onTypeChange(1)} text={'Oldest'} />
-        <MenuOption onSelect={() => onTypeChange(2)} text={'Price (Low-High)'} />
-        <MenuOption onSelect={() => onTypeChange(3)} text={'Price (High-Low)'} />
-        <MenuOption onSelect={() => onTypeChange(4)} text={'Best Seller'} />
+        <MenuOption onSelect={() => onTypeChange(0)} text={language.search.titleFilter.newest} />
+        <MenuOption onSelect={() => onTypeChange(1)} text={language.search.titleFilter.oldest} />
+        <MenuOption onSelect={() => onTypeChange(2)} text={language.search.titleFilter.priceIncrease2} />
+        <MenuOption onSelect={() => onTypeChange(3)} text={language.search.titleFilter.priceDecrease2} />
+        <MenuOption onSelect={() => onTypeChange(4)} text={language.search.titleFilter.bestSell} />
       </MenuOptions>
     </Menu>
 
     <TouchableOpacity onPress={props.onPressOK} style={{...styles.okButton}}>
-      <Text style={{...styles.titleText, color: theme.text}}>OK</Text>
+      <Text style={{...styles.titleText, color: theme.text}}>{language.same.buttonOK}</Text>
     </TouchableOpacity>
 
     <SelectFilterModal modalVisible={modalVisible} categorySelect={props.categorySelect} onPressClose={onPressClose}/>
@@ -90,12 +93,9 @@ const optionsStyles = {
 
 const styles = StyleSheet.create({
   titleContainer: {
-    flex: 1,
     flexDirection: 'row',
     marginLeft: 5,
-    marginBottom: 5,
-    marginTop: 10,
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
   },
   titleText: {
     fontSize: 18,

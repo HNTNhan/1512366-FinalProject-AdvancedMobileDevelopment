@@ -1,73 +1,74 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {View, Text, StyleSheet, ScrollView, ActivityIndicator} from 'react-native';
-import {Button} from "react-native-elements";
+import {Button, Icon} from "react-native-elements";
 import InputTextSae from "../../Common/input-text-sae";
 import {AuthenticationContext} from "../../../provider/authentication-provider";
 import {ColorsContext} from "../../../provider/colors-provider";
-import NetInfo from "@react-native-community/netinfo";
-import {getStoreUserInfo, setStoreUserInfo} from "../../../core/local_storage/authentication-storage";
+// import NetInfo from "@react-native-community/netinfo";
+// import {getStoreUserInfo, setStoreUserInfo} from "../../../core/local_storage/authentication-storage";
 import {LanguageContext} from "../../../provider/language-provider";
-import * as Google from 'expo-google-app-auth';
-import {androidClientID} from "../../../core/services/authentication-services";
+// import * as Google from 'expo-google-app-auth';
+// import * as GoogleSignIn from 'expo-google-sign-in';
+// import {androidClientID} from "../../../core/services/authentication-services";
 
 
 const Login = (props) => {
   const {theme} = useContext(ColorsContext)
   const {language} =  useContext(LanguageContext)
   const authContext = useContext(AuthenticationContext)
-  const [email, setEmail] = useState('hnmfrv@gmail.com');
-  const [password, setPassword] = useState('12345678');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [pressedSignIn, setPressedSignIn] = useState(false);
-  const [storageData, setStorageData] = useState([]);
-  const [isGoogleSignIn, setIsGoogleSignIn] = useState(false);
+  //const [storageData, setStorageData] = useState([]);
+  // const [isGoogleSignIn, setIsGoogleSignIn] = useState(false);
 
-  useEffect(() => {
-    NetInfo.fetch().then(state => {
-      authContext.changeOnlineStatus(state.isConnected)
-      getStoreUserInfo().then((res) => {
-        if(res.status===200) {
-          if(res.data && res.data.length) {
-            setStorageData(res.data)
-          } else {
-            setStorageData([])
-          }
-        } else {
-          setStorageData(null)
-        }
-      })
-    });
-  }, [])
+  // useEffect(() => {
+  //   NetInfo.fetch().then(state => {
+  //     authContext.changeOnlineStatus(state.isConnected)
+  //     getStoreUserInfo().then((res) => {
+  //       if(res.status===200) {
+  //         if(res.data && res.data.length) {
+  //           setStorageData(res.data)
+  //         } else {
+  //           setStorageData([])
+  //         }
+  //       } else {
+  //         setStorageData(null)
+  //       }
+  //     })
+  //   });
+  // }, [])
 
   useEffect(() => {
     if(authContext.state.isUpdatingProfile) {
 
     } else {
       if(authContext.state.isAuthenticated) {
-        if(authContext.state.isOnline) {
-          const currentDate = new Date();
-          const userInfo = {...authContext.state.userInfo, currentDate: currentDate, password: password};
-          if(storageData) {
-            let temp = [...storageData];
-            if(storageData.length) {
-              let check=false
-              for(let i=0; i<storageData.length; i++) {
-                if(storageData[i].email===email && storageData[i].password===password) {
-                  check=true;
-                  temp[i] = userInfo;
-                  setStoreUserInfo(temp).then()
-                  break;
-                } else {}
-              }
-              if(!check) {
-                temp.push(userInfo);
-                setStoreUserInfo(temp).then()
-              } else {}
-            } else {
-              temp.push(userInfo);
-              setStoreUserInfo(temp).then()
-            }
-          } else {}
-        } else {}
+        // if(authContext.state.isOnline) {
+        //   const currentDate = new Date();
+        //   const userInfo = {...authContext.state.userInfo, currentDate: currentDate, password: password};
+        //   if(storageData) {
+        //     let temp = [...storageData];
+        //     if(storageData.length) {
+        //       let check=false
+        //       for(let i=0; i<storageData.length; i++) {
+        //         if(storageData[i].email===email && storageData[i].password===password) {
+        //           check=true;
+        //           temp[i] = userInfo;
+        //           setStoreUserInfo(temp).then()
+        //           break;
+        //         } else {}
+        //       }
+        //       if(!check) {
+        //         temp.push(userInfo);
+        //         setStoreUserInfo(temp).then()
+        //       } else {}
+        //     } else {
+        //       temp.push(userInfo);
+        //       setStoreUserInfo(temp).then()
+        //     }
+        //   } else {}
+        // } else {}
         props.navigation.replace('Main')
       } else {}
     }
@@ -98,62 +99,71 @@ const Login = (props) => {
   }
 
   const onPressSignIn = () => {
-    if(authContext.state.isOnline) {
-      authContext.login(email, password);
-      if(!pressedSignIn) {
-        setPressedSignIn(true)
-      } else {}
-    } else {
-      if(storageData) {
-        const currentDate = new Date();
-        let temp = [...storageData];
-
-        if(storageData.length) {
-          for(let i=0; i<storageData.length; i++) {
-            if(storageData[i].email===email && storageData[i].password===password) {
-              if((currentDate - (new Date(storageData[i].currentDate)))/1000/60/60/24 > 7) {
-                temp[i] = null;
-                setStoreUserInfo(temp).then(() => authContext.setUserInfoFromStorage(null))
-              } else {
-                authContext.setUserInfoFromStorage({...storageData[i]})
-              }
-              return;
-            } else {}
-          }
-          authContext.setUserInfoFromStorage(null)
-          alert('You need connect to internet to sign in!')
-        } else {}
-        alert('You need connect to internet to sign in!')
-      } else {
-        alert('You need connect to internet to sign in!')
-      }
-    }
+    authContext.login(email, password);
+    if(!pressedSignIn) {
+      setPressedSignIn(true)
+    } else {}
+    // if(authContext.state.isOnline) {
+    //   authContext.login(email, password);
+    //   if(!pressedSignIn) {
+    //     setPressedSignIn(true)
+    //   } else {}
+    // } else {
+    //   if(storageData) {
+    //     const currentDate = new Date();
+    //     let temp = [...storageData];
+    //
+    //     if(storageData.length) {
+    //       for(let i=0; i<storageData.length; i++) {
+    //         if(storageData[i].email===email && storageData[i].password===password) {
+    //           if((currentDate - (new Date(storageData[i].currentDate)))/1000/60/60/24 > 7) {
+    //             temp[i] = null;
+    //             setStoreUserInfo(temp).then(() => authContext.setUserInfoFromStorage(null))
+    //           } else {
+    //             authContext.setUserInfoFromStorage({...storageData[i]})
+    //           }
+    //           break;
+    //         } else {}
+    //       }
+    //       authContext.setUserInfoFromStorage(null)
+    //       alert('You need connect to internet to sign in!')
+    //     } else {}
+    //     alert('You need connect to internet to sign in!')
+    //   } else {
+    //     alert('You need connect to internet to sign in!')
+    //   }
+    // }
   }
 
-  const signInWithGoogle = async () => {
-    try {
-      const result = await Google.logInAsync({
-        androidClientId: androidClientID,
-        scopes: ['profile', 'email'],
-      });
-      setIsGoogleSignIn(true)
-      if (result.type === 'success') {
-        authContext.loginWithGoogle(result.user.email.replace('.', ''), result.user.id)
-        if(!pressedSignIn) {
-          setPressedSignIn(true)
-        } else {}
-      } else {
-        //console.log(result)
-      }
-    } catch (e) {
-      alert(e)
-    }
-  }
+  // _syncUserWithStateAsync = async () => {
+  //   const user = await GoogleSignIn.signInSilentlyAsync();
+  //   this.setState({ user });
+  // };
 
-  const onPressGoogleSignIn = async () => {
-    setIsGoogleSignIn(true)
-    await signInWithGoogle()
-  }
+  // signOutAsync = async () => {
+  //   await GoogleSignIn.signOutAsync();
+  //   this.setState({ user: null });
+  // };
+
+  // signInAsync = async () => {
+  //   try {
+  //     await GoogleSignIn.askForPlayServicesAsync();
+  //     const { type, user } = await GoogleSignIn.signInAsync();
+  //
+  //     if (type === 'success') {
+  //       setIsGoogleSignIn(false)
+  //       authContext.loginWithGoogle(user.email.replace('.', ''), user.id)
+  //     }
+  //   } catch ({ message }) {
+  //     setIsGoogleSignIn(false)
+  //     alert('login: Error:' + message);
+  //   }
+  // };
+  //
+  // const onPressGoogleSignIn = async () => {
+  //   setIsGoogleSignIn(true)
+  //   await this.signInAsync()
+  // }
 
   return <View style={{...styles.container, backgroundColor: theme.background}}>
       <ScrollView contentContainerStyle={{paddingBottom: 100}} showsVerticalScrollIndicator={false}>
@@ -167,13 +177,12 @@ const Login = (props) => {
           titleStyle={styles.signInButtonText}
           onPress={() => onPressSignIn()}
           title={language.login.buttonSignIn} />
-        <Button
-          disabled={!(email.length > 0 && password.length > 0)}
-          buttonStyle={styles.signInButton}
-          titleStyle={styles.signInButtonText}
-          onPress={() => onPressGoogleSignIn()}
-          loading={isGoogleSignIn}
-          title={language.login.buttonSignInWithGoogle} />
+        {/*<Button*/}
+        {/*  buttonStyle={styles.signInButton}*/}
+        {/*  titleStyle={styles.signInButtonText}*/}
+        {/*  onPress={() => onPressGoogleSignIn()}*/}
+        {/*  loading={isGoogleSignIn}*/}
+        {/*  title={language.login.buttonSignInWithGoogle} />*/}
         <Button
           buttonStyle={styles.button}
           titleStyle={styles.buttonText}

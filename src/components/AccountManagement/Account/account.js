@@ -5,10 +5,12 @@ import {AuthenticationContext} from "../../../provider/authentication-provider";
 import {Button, Icon, Image} from "react-native-elements";
 import ModalActivityIndicator from "../../Common/modal-activity-indicator";
 import {checkEmail, checkName, checkPhone} from "../../../core/services/authentication-services";
+import {LanguageContext} from "../../../provider/language-provider";
 // import * as ImagePicker from 'expo-image-picker';
 
 const Account = (props) => {
   const {theme} = useContext(ColorsContext);
+  const {language} = useContext(LanguageContext);
   const {state} = useContext(AuthenticationContext);
   const authContext = useContext(AuthenticationContext);
 
@@ -52,17 +54,15 @@ const Account = (props) => {
 
   const onPressChangeEmail = async () => {
     if(checkEmail(email.email)) {
-      console.log('check email success')
       await authContext.changeEmail(state.token, email.email)
       if(!authContext.isUpdatingProfile) {
-        Alert.alert('', 'Change email success!', [{}], { cancelable: true })
+        Alert.alert('', language.account.changeEmailSuccess, [{}], { cancelable: true })
         props.navigation.reset({
           index: 0,
           routes: [{ name: 'Authentication'}],
         })
       }
     } else {
-      console.log('check email fail')
       setEmail({...email, checkEmail: false})
     }
   }
@@ -84,7 +84,7 @@ const Account = (props) => {
   return <ScrollView style={{...styles.container, backgroundColor: theme.background}} showsVerticalScrollIndicator={false}>
     <View style={styles.sectionContainer}>
       <View style={styles.titleContainer}>
-        <Text style={{...styles.title, color: theme.text}}>Your Account</Text>
+        <Text style={{...styles.title, color: theme.text}}>{language.account.yourAccount}</Text>
       </View>
       <View>
         <View style={styles.imageContainer}>
@@ -94,7 +94,7 @@ const Account = (props) => {
               <Icon name={'user-circle'} size={100} type={"font-awesome-5"}/>
           }
         </View>
-        <Text style={{...styles.subTitle, color: theme.text}}>Avatar link</Text>
+        <Text style={{...styles.subTitle, color: theme.text}}>{language.account.avatarLink}</Text>
         <TextInput value={account.avatar}
                    multiline={true}
                    style={{...styles.textInput, backgroundColor: theme.background, color: theme.text}}
@@ -102,60 +102,59 @@ const Account = (props) => {
                    numberOfLines={1}
         />
 
-        <Text style={{...styles.subTitle, color: theme.text}}>Full name</Text>
+        <Text style={{...styles.subTitle, color: theme.text}}>{language.account.fullName}</Text>
         <TextInput value={account.fullName}
                    style={{...styles.textInput, backgroundColor: theme.background, color: theme.text}}
                    onChangeText={(text) => setAccount({...account, fullName: text})}/>
         {
           account.showCheck ? !account.checkFullName ?
-            <Text style={{...styles.checkText}}>Name cannot contain numbers or special characters like #,%, $,
-              ...!</Text> : null : null
+            <Text style={{...styles.checkText}}>{language.account.fullNameError}</Text> : null : null
         }
 
-        <Text style={{...styles.subTitle, color: theme.text}}>Phone</Text>
+        <Text style={{...styles.subTitle, color: theme.text}}>{language.account.phone}</Text>
         <TextInput value={account.phone}
                    style={{...styles.textInput, backgroundColor: theme.background, color: theme.text}}
                    onChangeText={(text) => setAccount({...account, phone: text})}/>
         {
           account.showCheck ? !account.checkPhone ?
-            <Text style={{...styles.checkText}}>Please enter a valid phone number!</Text> : null : null
+            <Text style={{...styles.checkText}}>{language.account.phoneError}</Text> : null : null
         }
 
         <TouchableOpacity style={{...styles.button, backgroundColor: theme.foreground1}} onPress={() => onPressUpdateAccount()}>
-          <Text style={{...styles.buttonText, color: theme.text}}>Update Account</Text>
+          <Text style={{...styles.buttonText, color: theme.text}}>{language.account.updateAccount}</Text>
         </TouchableOpacity>
       </View>
     </View>
 
     <View style={styles.sectionContainer}>
       <View style={styles.titleContainer}>
-        <Text style={{...styles.title, color: theme.text}}>Email address</Text>
-        <Text style={{...styles.text, color: theme.text}}>If you change your email, your account will be logged out and deactivated until you confirm new email.</Text>
-        <Text style={{...styles.text, color: theme.text}}>Other account information such as courses you like, payment history, course history, etc. will remain the same.</Text>
+        <Text style={{...styles.title, color: theme.text}}>{language.account.emailAddress}</Text>
+        <Text style={{...styles.text, color: theme.text}}>{language.account.emailNote1}</Text>
+        <Text style={{...styles.text, color: theme.text}}>{language.account.emailNote2}</Text>
       </View>
 
       <View>
         <View>
-          <Text style={{...styles.subTitle, color: theme.text}}>Email:</Text>
+          <Text style={{...styles.subTitle, color: theme.text}}>{language.account.email}</Text>
           <TextInput value={email.email}
                      style={{...styles.textInput, backgroundColor: theme.background, color: theme.text}}
                      onChangeText={(text) => setEmail({...email, email: text})}/>
           {
-            !email.checkEmail ? <Text style={{...styles.checkText}}>Invalid email!</Text> : null
+            !email.checkEmail ? <Text style={{...styles.checkText}}>{language.account.emailError}</Text> : null
           }
         </View>
         <TouchableOpacity style={{...styles.button, backgroundColor: theme.foreground1}} onPress={() => onPressChangeEmail()}>
-          <Text style={{...styles.buttonText, color: theme.text}}>Change Email</Text>
+          <Text style={{...styles.buttonText, color: theme.text}}>{language.account.changeEmail}</Text>
         </TouchableOpacity>
       </View>
     </View>
 
     <View style={styles.sectionContainer}>
       <View style={styles.titleContainer}>
-        <Text style={{...styles.title, color: theme.text}}>Password</Text>
+        <Text style={{...styles.title, color: theme.text}}>{language.account.password}</Text>
       </View>
       <View>
-        <Text style={{...styles.subTitle, color: theme.text}}>Current password</Text>
+        <Text style={{...styles.subTitle, color: theme.text}}>{language.account.currentPassword}</Text>
         <View>
           <TextInput secureTextEntry={!showPassword.showCurrentPassword}
                      value={password.currentPassword}
@@ -163,7 +162,7 @@ const Account = (props) => {
                      onChangeText={(text) => setPassword({...password, currentPassword: text})}/>
           {
             password.showCheck ? !password.checkCurrentPassword ?
-              <Text style={{...styles.checkText}}>Password must be between 8 and 20 characters!</Text> : null : null
+              <Text style={{...styles.checkText}}>{language.account.passwordError1}</Text> : null : null
           }
           {
             password.currentPassword.length ?
@@ -176,7 +175,7 @@ const Account = (props) => {
           }
         </View>
 
-        <Text style={{...styles.subTitle, color: theme.text}} >New password</Text>
+        <Text style={{...styles.subTitle, color: theme.text}} >{language.account.newPassword}</Text>
         <View>
           <TextInput secureTextEntry={!showPassword.showNewPassword}
                      value={password.newPassword}
@@ -184,9 +183,9 @@ const Account = (props) => {
                      onChangeText={(text) => setPassword({...password, newPassword: text})}/>
           {
             password.showCheck ? !password.checkCurrentPassword ?
-              <Text style={{...styles.checkText}}>Password must be between 8 and 20 characters!</Text> :
+              <Text style={{...styles.checkText}}>{language.account.passwordError1}</Text> :
               password.currentPassword===password.newPassword ?
-                <Text style={{...styles.checkText}}>Your new password cannot be the same as your current password</Text> : null : null
+                <Text style={{...styles.checkText}}>{language.account.passwordError2}</Text> : null : null
           }
           {
             password.newPassword.length ?
@@ -196,7 +195,7 @@ const Account = (props) => {
           }
         </View>
 
-        <Text style={{...styles.subTitle, color: theme.text}} >Confirm password</Text>
+        <Text style={{...styles.subTitle, color: theme.text}} >{language.account.confirmPassword}</Text>
         <View>
           <TextInput secureTextEntry={!showPassword.showConfirmPassword}
                      value={password.confirmPassword}
@@ -204,9 +203,9 @@ const Account = (props) => {
                      onChangeText={(text) => setPassword({...password, confirmPassword: text})}/>
           {
             password.showCheck ? !password.checkConfirmPassword ?
-              <Text style={{...styles.checkText}}>Password must be between 8 and 20 characters!</Text> :
+              <Text style={{...styles.checkText}}>{language.account.passwordError1}</Text> :
               password.newPassword!==password.confirmPassword ?
-                <Text style={{...styles.checkText}}>Password and Confirm Password do not match!</Text> : null : null
+                <Text style={{...styles.checkText}}>{language.account.passwordError3}</Text> : null : null
           }
           {
             password.confirmPassword.length ?
@@ -221,7 +220,7 @@ const Account = (props) => {
 
 
         <TouchableOpacity style={{...styles.button, backgroundColor: theme.foreground1}} onPress={() => onPressChangePassword()}>
-          <Text style={{...styles.buttonText, color: theme.text}}>Update</Text>
+          <Text style={{...styles.buttonText, color: theme.text}}>{language.account.update}</Text>
         </TouchableOpacity>
       </View>
     </View>

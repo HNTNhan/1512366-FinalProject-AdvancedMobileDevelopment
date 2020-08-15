@@ -3,9 +3,11 @@ import {Modal, ScrollView, Text, TouchableOpacity, StyleSheet, View} from 'react
 import CheckBox from "@react-native-community/checkbox";
 import {getAllCategory} from "../../core/services/category-service";
 import {ColorsContext} from "../../provider/colors-provider";
+import {LanguageContext} from "../../provider/language-provider";
 
 const SelectFilterModal = (props) => {
   const {theme} = useContext(ColorsContext);
+  const {language} = useContext(LanguageContext);
   const [categories, setCategories] = useState(null)
   const [showFilter, setShowFilter] = useState({category: false, time: false, price: false})
   const [time, setTime] = useState([
@@ -16,7 +18,7 @@ const SelectFilterModal = (props) => {
       {label: '>20h', status: false, value: {min:20}}
     ]);
   const [price, setPrice] = useState([
-      {label: 'Free', status: false, value: {max: 0}},
+      {label: language.search.selectFilterModal.free, status: false, value: {max: 0}},
       {label: '0đ-200.000đ', status: false, value: {min: 1, max: 200000}},
       {label: '200.000đ-500.000đ', status: false, value: {min: 200001, max: 500000}},
       {label: '500.000đ-1.000.000đ', status: false, value: {min: 500001, max: 1000000}},
@@ -51,17 +53,17 @@ const SelectFilterModal = (props) => {
     <View style={{...styles.centeredView}}>
       <View style={styles.modalView}>
         <View style={{...styles.modalTitleContainer}}>
-          <Text style={{...styles.modalTitle}}>Select Filter</Text>
+          <Text style={{...styles.modalTitle}}>{language.search.selectFilterModal.selectFilter}</Text>
           <TouchableOpacity style={{position: 'absolute', right: 5, top: 0}} onPress={() => {
             props.onPressClose(categories, time, price)
           }}>
-            <Text style={{fontSize: 20, paddingHorizontal: 10}}>OK</Text>
+            <Text style={{fontSize: 20, paddingHorizontal: 10}}>{language.same.buttonOK}</Text>
           </TouchableOpacity>
         </View>
 
         <ScrollView showsVerticalScrollIndicator={false}>
           <TouchableOpacity style={{...styles.modalTitleButton}} onPress={() => setShowFilter({...showFilter, category: !showFilter.category})}>
-            <Text style={styles.modalSubTitle}>Category</Text>
+            <Text style={styles.modalSubTitle}>{language.search.selectFilterModal.category}</Text>
           </TouchableOpacity>
           <View style={styles.itemContainer}>
             {categories && showFilter.category ? categories.map((item, index) => {
@@ -81,7 +83,7 @@ const SelectFilterModal = (props) => {
           </View>
 
           <TouchableOpacity style={{...styles.modalTitleButton}} onPress={() => setShowFilter({...showFilter, time: !showFilter.time})}>
-            <Text style={styles.modalSubTitle}>Time</Text>
+            <Text style={styles.modalSubTitle}>{language.search.selectFilterModal.time}</Text>
           </TouchableOpacity>
           <View style={styles.itemContainer}>
             {
@@ -104,7 +106,7 @@ const SelectFilterModal = (props) => {
 
 
           <TouchableOpacity style={{...styles.modalTitleButton}} onPress={() => setShowFilter({...showFilter, price: !showFilter.price})}>
-            <Text style={styles.modalSubTitle}>Price</Text>
+            <Text style={styles.modalSubTitle}>{language.search.selectFilterModal.price}</Text>
           </TouchableOpacity>
            <View style={styles.itemContainer}>
              {

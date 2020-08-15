@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "1512366-FinalProject-AdvancedMobileDevelopment",
-    "slug": "1512366-FinalProject-AdvancedMobileDevelopment",
+    "name": "ITEDU mobile",
+    "slug": "ITEDU_mobile",
     "platforms": [
       "ios",
       "android",
@@ -22,10 +22,14 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "se.hcmus.itedu",
+      "buildNumber": "1.0.0"
     },
     "android": {
-
+      "package": "se.hcmus.itedu",
+      "versionCode": 1,
+      "googleServicesFile": "./google-services.json"
     },
     "description": ""
   }

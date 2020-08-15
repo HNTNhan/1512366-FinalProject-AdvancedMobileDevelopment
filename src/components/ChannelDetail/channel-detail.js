@@ -5,9 +5,11 @@ import GeneralChannelDetail from "./GeneralChannelDetail/general-channel-detail"
 import ChannelProgress from "./ChannelProgress/channel-progress";
 import ItemsInChannel from "./ItemsInChannel/items-in-channel";
 import {ColorsContext} from "../../provider/colors-provider";
+import {LanguageContext} from "../../provider/language-provider";
 
 const ChannelDetail = (props) => {
   const {theme} = useContext(ColorsContext)
+  const {language} = useContext(LanguageContext)
   const [process, setProcess] = useState(0)
 
   useEffect(() => {
@@ -21,8 +23,8 @@ const ChannelDetail = (props) => {
 
   return <ScrollView style={{...globalStyles.container, backgroundColor: theme.background}}>
     <GeneralChannelDetail detail={props.route.params.channel.detail}/>
-    <ChannelProgress progress={process} />
-    <ItemsInChannel items={props.route.params.channel.items} navigation={props.navigation} route={props.route}/>
+    <ChannelProgress process={process} language={language}/>
+    <ItemsInChannel items={props.route.params.channel.items} navigation={props.navigation} route={props.route} language={language}/>
   </ScrollView>
 };
 

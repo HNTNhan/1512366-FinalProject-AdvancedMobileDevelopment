@@ -23,18 +23,23 @@ const SectionCourses = (props) => {
   }
 
   const renderChannelItems = () => {
-    return props.data.map( (item) =>
-      <ChannelItems key={item.detail.title} item={item} onPress={() => onPressItemInListChannel(item)} />);
+    return props.data.map( (item, index) =>
+      <ChannelItems key={item.detail.title} index={index} item={item} onPress={() => onPressItemInListChannel(item)} />);
   }
 
   return <View style={styles.container}>
     <View style={styles.title}>
-      <Text style={{...styles.titleText, color: theme.text}}>{props.title}</Text>
-      {
-        props.data.length ? <TouchableOpacity style={{...styles.button, backgroundColor: theme.foreground1}} onPress={props.pressSeeAll}>
+      <View style={{flex: 0.7}}>
+        <Text style={{...styles.titleText, color: theme.text}} numberOfLines={1}>{props.title}</Text>
+      </View>
+      <View style={{flex: 0.3}}>
+        {
+          props.data.length ? <TouchableOpacity style={{...styles.button, backgroundColor: theme.foreground1}} onPress={props.pressSeeAll}>
             <Text style={{color: theme.text}}>{language.home.sectionCourse.seeAll}</Text>
-        </TouchableOpacity> : null
-      }
+          </TouchableOpacity> : null
+        }
+      </View>
+
     </View>
     <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
       {props.type === 'Course' ? renderListItems() : renderChannelItems()}
@@ -56,7 +61,6 @@ const styles = StyleSheet.create({
     backgroundColor: 'red',
     padding: 2,
     borderRadius: 10,
-    marginRight: 20,
   },
   titleText: {
     fontSize: 18,

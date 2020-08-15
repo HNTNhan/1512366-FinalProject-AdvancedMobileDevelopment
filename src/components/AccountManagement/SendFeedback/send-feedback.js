@@ -5,9 +5,11 @@ import {Button} from "react-native-elements";
 import {apiSendFeedback} from "../../../core/services/user-services";
 import {AuthenticationContext} from "../../../provider/authentication-provider";
 import CenterActivityIndicator from "../../Common/center-activity-indicator";
+import {LanguageContext} from "../../../provider/language-provider";
 
 const SendFeedback = (props) => {
   const {theme} = useContext(ColorsContext);
+  const {language} = useContext(LanguageContext);
   const {state} = useContext(AuthenticationContext)
 
   const [feedback, setFeedback] = useState({subject: '', content: ''})
@@ -34,38 +36,38 @@ const SendFeedback = (props) => {
   if(isLoading.status) {
     if(isLoading.success===1) {
       return <View style={{...styles.centeredView, backgroundColor: theme.background}}>
-        <Text style={{...styles.text, color: theme.text}}>Success! Your feedback has been sent.</Text>
+        <Text style={{...styles.text, color: theme.text}}>{language.sendFeedback.success}</Text>
         <Button containerStyle={styles.button} buttonStyle={{paddingHorizontal: 20, backgroundColor: 'gray'}} titleStyle={{fontSize: 18}}
                 title={'OK'} onPress={() => props.navigation.goBack()}/>
       </View>
     } else if(isLoading.success===0) {
       return <View style={{...styles.centeredView, backgroundColor: theme.background}}>
-        <Text style={{...styles.subTitle, color: theme.text}}>Something went wrong! Please try again. {isLoading.message}</Text>
+        <Text style={{...styles.subTitle, color: theme.text}}>{language.sendFeedback.fail}{isLoading.message}</Text>
       </View>
     } else {
       return <CenterActivityIndicator/>
     }
   } else {
     return <ScrollView style={{...styles.centeredView, backgroundColor: theme.background}}>
-      <Text style={{...styles.modalTitle, color: theme.text}}>Feedback</Text>
+      <Text style={{...styles.modalTitle, color: theme.text}}>{language.sendFeedback.feedback}</Text>
       <View>
-        <Text style={{...styles.subTitle, color: theme.text}}>Subject</Text>
+        <Text style={{...styles.subTitle, color: theme.text}}>{language.sendFeedback.subject}</Text>
         <TextInput style={{...styles.textInput, backgroundColor: theme.background, color: theme.text}}
                    multiline={true} maxLength={200} onChangeText={(text) => setFeedback({...feedback, subject: text})}/>
         {
-          !check.subject && check.show ? <Text style={{...styles.text, color: 'red'}}>Please write something!</Text> : null
+          !check.subject && check.show ? <Text style={{...styles.text, color: 'red'}}>{language.sendFeedback.note}</Text> : null
         }
-        <Text style={{...styles.subTitle, color: theme.text}}>Content</Text>
+        <Text style={{...styles.subTitle, color: theme.text}}>{language.sendFeedback.content}</Text>
         <TextInput style={{...styles.textInput, backgroundColor: theme.background, color: theme.text}}
                    multiline={true} maxLength={500} onChangeText={(text) => setFeedback({...feedback, content: text})}/>
         {
-          !check.content && check.show ? <Text style={{...styles.text, color: 'red'}}>Please write something!</Text> : null
+          !check.content && check.show ? <Text style={{...styles.text, color: 'red'}}>{language.sendFeedback.note}</Text> : null
         }
       </View>
       <Button containerStyle={styles.button} buttonStyle={{paddingHorizontal: 20, backgroundColor: '#19B5FE'}} titleStyle={{fontSize: 18}}
-              title={'Send'} onPress={() => onPressSend()}/>
+              title={language.sendFeedback.send} onPress={() => onPressSend()}/>
       <Button containerStyle={styles.button} buttonStyle={{paddingHorizontal: 20, backgroundColor: 'gray'}} titleStyle={{fontSize: 18}}
-              title={'Cancel'} onPress={() => props.navigation.goBack()}/>
+              title={language.same.buttonCancel} onPress={() => props.navigation.goBack()}/>
     </ScrollView>
   }
 };

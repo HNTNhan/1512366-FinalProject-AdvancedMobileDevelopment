@@ -15,7 +15,7 @@ const ItemsInAuthor = (props) => {
   }
 
   return <View>
-    <Text style={{...styles.text, color: theme.text}}>Course</Text>
+    <Text style={{...styles.text, color: theme.text}}>{props.language.authorDetail.course}</Text>
     { props.courses.map((item) => <View key={item.id} style={globalStyles.borderSeparator}>
         <ListCourseItems item={{...item, instructorName: props.name}} onPress={() => onPressCourseItem(item.id)}/>
       </View>

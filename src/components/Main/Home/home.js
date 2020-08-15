@@ -46,6 +46,7 @@ const Home = (props) => {
   }
 
   useEffect(() =>{                                 //Lay cac khoa hoc thich va dang hoc
+    let mounted = true
     if(state.isAuthenticated) {
       if (!userContext.state.continueCouresRequest) {
         userContext.fetchContinueCourses(state.token)
@@ -54,13 +55,17 @@ const Home = (props) => {
         userContext.fetchFavoriteCourses(state.token)
       } else {}
       Promise.all([getCoursesNewRelease(0, 8), getCoursesTopRate(0, 8)]).then(res => {
-        setNewAndRecomendCourses([res[0].data.payload, res[1].data.payload])
-        setIsLoading(false)
+        if(mounted) {
+          setNewAndRecomendCourses([res[0].data.payload, res[1].data.payload])
+          setIsLoading(false)
+        } else {}
       }).catch((err) => {
         alert(err)
         setNewAndRecomendCourses([[], []])
       })
+      fetchChannel()
     } else {}
+    return () => mounted = false
   }, [])
 
   useEffect(() => {                               //Cap nhat channel

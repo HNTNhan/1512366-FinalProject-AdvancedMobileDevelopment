@@ -8,7 +8,7 @@ const NoResultPage = (props) => {
 
   return <View style={styles.container}>
     <Icon name={'search'} size={80} color={'gainsboro'}/>
-    <Text style={{...styles.text}}>Sorry, we couldn't find any matches for "{props.searchKey}"</Text>
+    <Text style={{...styles.text}}>{props.language.search.noResult}"{props.searchKey}"</Text>
   </View>
 };
 

@@ -37,8 +37,8 @@ const ChooseFavoriteCategoriesModal = (props) => {
         <TouchableWithoutFeedback onPress={null}>
           <View style={styles.modalView}>
             <View style={{...styles.modalTitleContainer}}>
-              <Text style={{...styles.modalTitle}}>Select favorite categories</Text>
-              <Text style={{fontSize: 16}}>(Please select at least one category)</Text>
+              <Text style={{...styles.modalTitle}}>{props.language.profile.chooseFavorite.title}</Text>
+              <Text style={{fontSize: 16}}>{props.language.profile.chooseFavorite.note}</Text>
             </View>
             <View style={styles.itemContainer}>
               {
@@ -60,7 +60,7 @@ const ChooseFavoriteCategoriesModal = (props) => {
               }
             </View>
             <TouchableOpacity style={styles.selectButton} onPress={() => getCategoriesSelected()}>
-              <Text style={{fontSize: 18}}>Select</Text>
+              <Text style={{fontSize: 18}}>{props.language.profile.chooseFavorite.select}</Text>
             </TouchableOpacity>
           </View>
         </TouchableWithoutFeedback>

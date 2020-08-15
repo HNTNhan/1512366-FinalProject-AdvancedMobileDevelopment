@@ -12,10 +12,13 @@ import ButtonSetting from "./ButtonSetting/button-setting";import {ColorsContext
 import {defaultColors} from "../../globles/constants";
 import {Icon} from "react-native-elements";
 import {AuthenticationContext} from "../../provider/authentication-provider";
+import {LanguageContext} from "../../provider/language-provider";
+import {defaultLanguage} from "../../globles/languages";
 
 const AccountManagement = (props) => {
   const {theme, setTheme} = useContext(ColorsContext);
-  const authContext = useContext(AuthenticationContext)
+  const authContext = useContext(AuthenticationContext);
+  const {language, setLanguage} = useContext(LanguageContext)
 
   const onPressSignOut = () => {
     authContext.logout()
@@ -38,16 +41,27 @@ const AccountManagement = (props) => {
   }
 
   return <ScrollView style={{...styles.container, backgroundColor: theme.background}} showsVerticalScrollIndicator={false}>
-    <ButtonSetting title={'Profile'} onPress={() => onPressProfile()}/>
-    <ButtonSetting title={'Account'} onPress={() => onPressAccount()}/>
+    <ButtonSetting title={language.accountManagement.profile} onPress={() => onPressProfile()}/>
+    <ButtonSetting title={language.accountManagement.account} onPress={() => onPressAccount()}/>
     {/*<ButtonSetting title={'Subscription'} />*/}
 
     <TouchableOpacity style={styles.itemContainer}
                       onPress={() => theme===defaultColors.themes.light ? setTheme(defaultColors.themes.dark) : setTheme(defaultColors.themes.light)}>
-      <Text style={{...styles.text, color: theme.text}}>Theme</Text>
+      <Text style={{...styles.text, color: theme.text}}>{language.accountManagement.theme}</Text>
       <View style={{flexDirection: 'row', alignItems: 'center',}}>
         <Text style={{fontSize: 18, color: theme.text}}>
-          {theme===defaultColors.themes.light ? 'Light' : 'Dark'}
+          {theme===defaultColors.themes.light ? language.accountManagement.light : language.accountManagement.dark}
+        </Text>
+        <Icon style={styles.icon} name={'chevron-right'} type={"font-awesome-5"} size={16} color={theme.text} />
+      </View>
+    </TouchableOpacity>
+
+    <TouchableOpacity style={styles.itemContainer}
+                      onPress={() => language===defaultLanguage.English ? setLanguage(defaultLanguage.Vietnamese) : setLanguage(defaultLanguage.English)}>
+      <Text style={{...styles.text, color: theme.text}}>{language.accountManagement.language}</Text>
+      <View style={{flexDirection: 'row', alignItems: 'center',}}>
+        <Text style={{fontSize: 18, color: theme.text}}>
+          {language.same.language}
         </Text>
         <Icon style={styles.icon} name={'chevron-right'} type={"font-awesome-5"} size={16} color={theme.text} />
       </View>
@@ -56,16 +70,16 @@ const AccountManagement = (props) => {
     {/*<ButtonSwitch title={'Require Wi-Fi for streaming'}/>*/}
     {/*<ButtonSwitch title={'Require Wi-Fi for downloading'}/>*/}
 
-    <ButtonSetting title={'Send feedback'} onPress={() => onPressSendFeedback()} />
+    <ButtonSetting title={language.accountManagement.sendFeedback} onPress={() => onPressSendFeedback()} />
     {/*<ButtonSetting title={'Contact support'} />*/}
 
     <TouchableOpacity disabled={true} style={styles.itemContainer}>
-      <Text style={{...styles.text, color: theme.text}}>App Version</Text>
+      <Text style={{...styles.text, color: theme.text}}>{language.accountManagement.appVersion}</Text>
       <Text style={{...styles.text, color: theme.text}}>1.00.0000</Text>
     </TouchableOpacity>
 
     <TouchableOpacity onPress={() => onPressSignOut()} style={styles.signOutButton}>
-      <Text style={{...styles.text, ...styles.signOutButtonText}}>SignOut</Text>
+      <Text style={{...styles.text, ...styles.signOutButtonText}}>{language.accountManagement.signOut}</Text>
     </TouchableOpacity>
   </ScrollView>
 };

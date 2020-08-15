@@ -36,6 +36,25 @@ export const searchCoursesHasAllParams = (body) => {
   return axios.post("https://api.itedu.me/course/search", body)
 }
 
+export const searchCoursesHasAllParamsV2 = (body) => {
+  return axios.post("https://api.itedu.me/course/searchV2", body)
+}
+
+export const getSearchHistory = (token) => {
+  const config = {
+    headers: { Authorization: `Bearer ${token}` }
+  };
+
+  return axios.get('https://api.itedu.me/course/search-history', config)
+}
+
+export const deleteSearchHistory = (id, token) => {
+  const config = {
+    headers: { Authorization: `Bearer ${token}` }
+  };
+
+  return axios.delete('https://api.itedu.me/course/delete-search-history/' + id, config)
+}
 
 export const getCourseInfo = (courseId, token) => {
   const config = {

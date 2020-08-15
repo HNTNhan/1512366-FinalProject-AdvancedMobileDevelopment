@@ -12,7 +12,7 @@ const Categories = (props) => {
 
   return <View style={styles.container}>
     <View style={styles.titleContainer}>
-      <Text style={{...styles.titleText, color: theme.text}}>Category</Text>
+      <Text style={{...styles.titleText, color: theme.text}}>{props.language.browse.category}</Text>
     </View>
     <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
       <FlatList

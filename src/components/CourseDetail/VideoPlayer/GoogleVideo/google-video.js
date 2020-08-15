@@ -1,16 +1,17 @@
 import React, {useContext, useState, useRef, useEffect} from 'react';
 import {Dimensions, StyleSheet, Text, TouchableOpacity, View, Alert} from 'react-native';
 import {Video} from "expo-av";
-import VideoPlayer from 'expo-video-player'
 import {Icon, Slider} from "react-native-elements";
 import * as ScreenOrientation from 'expo-screen-orientation';
 import {BottomTabBarContext} from "../../../../provider/bottom-tab-bar-provider";
 import {Menu, MenuOption, MenuOptions, MenuTrigger} from "react-native-popup-menu";
 import VolumeSlider from "../Components/volume-slider";
 import {finishLesson, updateVideoTime} from "../../../../core/services/lesson-services";
+import {LanguageContext} from "../../../../provider/language-provider";
 
 const GoogleVideo = (props) => {
   const {setShow} = useContext(BottomTabBarContext)
+  const {language} = useContext(LanguageContext)
   const [ref, setRef] = useState();
   const [showVolumeSlider, setShowVolumeSlider] = useState(false)
   const [paused, setPaused] = useState(true)
@@ -95,14 +96,14 @@ const GoogleVideo = (props) => {
 
   const onLoad = (status) => {
     if(props.pos) {
-      Alert.alert('', 'Continue your progress with this lesson?',
+      Alert.alert('', language.courseDetail.video.continue,
         [
           {
-            text: "Cancel",
+            text: language.same.buttonCancel,
             onPress: () => setVideoStatus({...videoStatus, duration: status.durationMillis}),
             style: "cancel"
           },
-          { text: "OK", onPress: () => ref.setPositionAsync(props.pos*1000*60).then(() => {
+          { text: language.same.buttonOK, onPress: () => ref.setPositionAsync(props.pos*1000*60).then(() => {
               setVideoStatus({...videoStatus, duration: status.durationMillis})
             }) }
         ],

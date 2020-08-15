@@ -15,10 +15,12 @@ const AuthenticationContext = React.createContext({});
 export const initialState = {
   isAuthenticated: false,
   isAuthenticating: false,
+  //isGoogleSignIn: false,
   isRegistered: null,
   isRegistering: false,
   isForgotPassword: null,
   isForgettingPassword: false,
+  favoriteCategories: [],
   isUpdatingProfile: false,
   isOnline: false,
   message: null,

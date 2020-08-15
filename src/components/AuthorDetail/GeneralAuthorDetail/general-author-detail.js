@@ -15,12 +15,12 @@ const GeneralAuthorDetail = (props) => {
       <Text style={{...styles.name, color: theme.text}}>{props.detail.name}</Text>
       <Text style={{...styles.text, color: theme.text}}>{props.detail.major}</Text>
     </View>
-    <Text style={{...styles.title, color: theme.text}}>Intro</Text>
-    <DescriptionOpenClose description={props.detail.intro} noLines={3} textSize={16} text={theme.text}/>
-    <Text style={{...styles.title, color: theme.text}}>Skill</Text>
+    <Text style={{...styles.title, color: theme.text}}>{props.language.authorDetail.intro}</Text>
+    <DescriptionOpenClose description={props.detail.intro} noLines={3} textSize={16} text={theme.text} language={props.language}/>
+    <Text style={{...styles.title, color: theme.text}}>{props.language.authorDetail.skill}</Text>
     <Text style={{...styles.text, paddingLeft: 15, color: theme.text}}>{props.detail.skills.join(', ')}</Text>
-    <Text style={{...styles.title, color: theme.text}}>Contact</Text>
-    <Text style={{...styles.text, paddingLeft: 15, color: theme.text}} onPress={() => console.log('link')}>{props.detail.email}</Text>
+    <Text style={{...styles.title, color: theme.text}}>{props.language.authorDetail.contact}</Text>
+    <Text style={{...styles.text, paddingLeft: 15, color: theme.text}}>{props.detail.email}</Text>
   </View>
 };
 

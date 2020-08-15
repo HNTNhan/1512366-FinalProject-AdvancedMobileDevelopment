@@ -7,7 +7,8 @@ import {
   FORGOT_PASSWORD_SUCCESS,
   LOGIN_FAIL,
   LOGIN_REQUEST,
-  LOGIN_SUCCESS, LOGIN_WITH_GOOGLE_FAIL, LOGIN_WITH_GOOGLE_SUCCESS,
+  LOGIN_SUCCESS,
+  //LOGIN_WITH_GOOGLE_FAIL, LOGIN_WITH_GOOGLE_SUCCESS,
   LOGOUT_SUCCESS,
   REGISTER_END,
   REGISTER_FAIL,
@@ -23,10 +24,12 @@ import {Alert} from "react-native";
 export const initialState = {
   isAuthenticated: false,
   isAuthenticating: false,
+  //isGoogleSignIn: false,
   isRegistered: null,
   isRegistering: false,
   isForgotPassword: null,
   isForgettingPassword: false,
+  favoriteCategories: [],
   isUpdatingProfile: false,
   isOnline: false,
   message: null,
@@ -42,10 +45,6 @@ export const reducer = (prevState, action) => {
     case LOGIN_SUCCESS:
       return {...prevState, isAuthenticated: true,  isAuthenticating: false, token: action.data.token, userInfo: action.data.userInfo, message: action.message}
     case LOGIN_FAIL:
-      return {...prevState, isAuthenticated: false, isAuthenticating: false, message: action.message}
-    case LOGIN_WITH_GOOGLE_SUCCESS:
-      return {...prevState, isAuthenticated: true,  isAuthenticating: false, token: action.data.token, userInfo: action.data.userInfo, message: action.message}
-    case LOGIN_WITH_GOOGLE_FAIL:
       return {...prevState, isAuthenticated: false, isAuthenticating: false, message: action.message}
     case LOGOUT_SUCCESS:
       return initialState
@@ -66,7 +65,7 @@ export const reducer = (prevState, action) => {
     case FORGOT_PASSWORD_END:
       return {...prevState, message: null, isForgotPassword: null}
     case UPDATE_FAVORITE_CATEGORIES_SUCCESS:
-      return {...prevState, userInfo: {...prevState.userInfo, favoriteCategories: action.data.categoriesIds}}
+      return {...prevState, userInfo: {...prevState.userInfo, favoriteCategories: action.data.categoriesIds || []}}
     case UPDATE_FAVORITE_CATEGORIES_FAIL:
       return {...prevState, message: action.message}
     case UPDATE_PROFILE_REQUEST:
@@ -76,10 +75,8 @@ export const reducer = (prevState, action) => {
     case UPDATE_PROFILE_FAIL:
       return {...prevState, isUpdatingProfile: false, message: action.message}
     case CHANGE_EMAIL_SUCCESS:
-      console.log('change mail success')
       return initialState
     case CHANGE_EMAIL_FAIL:
-      console.log('change mail fail', action.message)
       return {...prevState, isUpdatingProfile: false, message: action.message}
     case CHANGE_PASSWORD_SUCCESS:
       Alert.alert('', 'Success! Your password has beeen changed!', [{}], {cancelable: true})

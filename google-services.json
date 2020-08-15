@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "270563007138",
+    "firebase_url": "https://itedu-mobile.firebaseio.com",
+    "project_id": "itedu-mobile",
+    "storage_bucket": "itedu-mobile.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:270563007138:android:12d11cab6f0518c9e715fb",
+        "android_client_info": {
+          "package_name": "se.hcmus.itedu"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "270563007138-n8si977eesgmcc3o4g1rma1q0usnlmd5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "se.hcmus.itedu",
+            "certificate_hash": "aa8b250a5b3fad95d4ffc0cf1fb9647e71425146"
+          }
+        },
+        {
+          "client_id": "270563007138-rqtistofgrmbcpt9kis2ivudpldq04bu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCv1u5P8blRBH_gvsxY6MtlkapPLi-eeZg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "270563007138-rqtistofgrmbcpt9kis2ivudpldq04bu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

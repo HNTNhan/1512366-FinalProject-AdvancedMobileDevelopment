@@ -14,12 +14,14 @@ import {convertDate, convertTime} from "../../Common/convert-data";
 import {getInstructorInfo} from "../../../core/services/instructor-services";
 import RatingCourse from "../../Common/rating-course";
 import {DownloadContext} from "../../../provider/download-provider";
-import {alertSignIn} from "../../../globles/alert";
+import {alertPayment, alertSignIn} from "../../../globles/alert";
 import SectionCourses from "../../Main/Home/SectionCourses/section-courses";
 import {getCourseProcess} from "../../../core/services/course-services";
+import {LanguageContext} from "../../../provider/language-provider";
 
 const GeneralCourseDetail = (props) => {
   const {theme} = useContext(ColorsContext);
+  const {language} = useContext(LanguageContext);
   const {state} = useContext(AuthenticationContext);
   const {startDownload} = useContext(DownloadContext)
   const userContext = useContext(UserContext);
@@ -42,15 +44,13 @@ const GeneralCourseDetail = (props) => {
           if (mounted2) {
             if (res.status === 200) {
               setInstructorInfo(res.data.payload)
-            } else {
-            }
+            } else {}
           } else {
           }
         }).catch(err => {
           alert(err.response.data.message || err)
         })
         getCourseProcess(courseDetail.id, state.token).then(res => {
-          console.log(res.data.payload)
           setProcess(res.data.payload)
         }).catch(err => {
           setProcess(0)
@@ -69,7 +69,7 @@ const GeneralCourseDetail = (props) => {
           }
         })
         .catch((err) => {
-          console.log('getFavorite: ', err.response.data.message || err)
+          alert(err.response.data.message || err)
         })
     } else {}
 
@@ -138,50 +138,54 @@ const GeneralCourseDetail = (props) => {
         </ScrollView>
         <View style={{...styles.subInfo, alignItems: 'flex-start'}}>
             <Text style={{fontSize: 14, color: theme.text}}>
-              {convertDate(courseDetail.updatedAt, 1) + ' . '}{process ? convertTime(courseDetail.totalHours * process / 100) + '/': null}{convertTime(courseDetail.totalHours)}
+              {convertDate(courseDetail.updatedAt, 1, language.same.lang) + ' . '}{process ? convertTime(courseDetail.totalHours * process / 100) + '/': null}{convertTime(courseDetail.totalHours)}
             </Text>
             <RatingStart rating={(courseDetail.formalityPoint + courseDetail.contentPoint + courseDetail.presentationPoint)/3.0} size={14}/>
         </View>
       </View>
       {
         !props.checkOwn ?<View>
-          <Button title={'Payment'} type={'outline'} buttonStyle={styles.buttonStyle} titleStyle={styles.buttonTitle}
+          <Button title={language.courseDetail.generalDetail.payment} type={'outline'} buttonStyle={styles.buttonStyle} titleStyle={styles.buttonTitle}
                   icon={<Icon name={'shopping-cart'} type={"font-awesome-5"} size={18} color={'#19B5FE'}/>} iconRight
                   onPress={() => {
-                    state.isAuthenticated ? props.navigation.push('Payment', {id: courseDetail.id}) : alertSignIn()
+                    state.isAuthenticated ? props.navigation.push('Payment', {id: courseDetail.id, name: language.courseDetail.generalDetail.payment})
+                      : alertSignIn()
                   }}/>
         </View> : null
       }
     </View>
 
     <View style={styles.activeContainer}>
-      <IconButton name='bookmark-border' title={favorite ? 'UnFavorite' : 'Favorite'} onPress={() => onPressFavortie()}/>
-      <IconButton name='cast-connected' title='Channel' onPress={() => onSelectAddToChannel()}/>
-      <IconButton name='share' title='Share' onPress={() => onSelectShare()}/>
+      <IconButton name='bookmark-border'
+                  title={favorite ? language.courseDetail.generalDetail.unFavorite : language.courseDetail.generalDetail.favorite}
+                  onPress={() => onPressFavortie()}/>
+      <IconButton name='cast-connected' title={language.courseDetail.generalDetail.channel} onPress={() => onSelectAddToChannel()}/>
+      <IconButton name='share' title={language.courseDetail.generalDetail.share} onPress={() => onSelectShare()}/>
       <IconButton downloadId={props.downloadId} isDownloading={startDownload} id={courseDetail.id} type={'download'}
-                  name='get-app' title={'Download'} onPress={async () => await props.onPressDownload()}/>
+                  name='get-app' title={language.courseDetail.generalDetail.download}
+                  onPress={async () => props.checkOwn ? await props.onPressDownload() : alertPayment()}/>
     </View>
 
     <View style={{...styles.descriptionContainer}}>
-      <Text style={{...styles.subTitle, color: theme.text}}>Description: </Text>
+      <Text style={{...styles.subTitle, color: theme.text}}>{language.courseDetail.generalDetail.description}</Text>
       <DescriptionOpenClose description={courseDetail.description} noLines={3} text={theme.text} foreground={theme.foreground1}/>
-      <Text style={{...styles.subTitle, color: theme.text}}>{'Requirement: '}</Text>
+      <Text style={{...styles.subTitle, color: theme.text}}>{language.courseDetail.generalDetail.requirement}</Text>
       <Text style={{...styles.text, color: theme.text}}>{courseDetail.requirement.join(`\n`)}</Text>
-      <Text style={{...styles.subTitle, color: theme.text}}>{'Learn what: '}</Text>
+      <Text style={{...styles.subTitle, color: theme.text}}>{language.courseDetail.generalDetail.learnWhat}</Text>
       <Text style={{...styles.text, color: theme.text}}>{courseDetail.learnWhat.join('\n')}</Text>
     </View>
 
     <Button
-      title='Rating course'
+      title={language.courseDetail.generalDetail.rating}
       type='outline'
       icon={
         <Icon name='star' type='font-awesome-5' color='#19B5FE' iconStyle={{marginHorizontal: 8}}/>
       }
-      onPress={() => setRating(!rating)}
+      onPress={() => props.checkOwn ? setRating(!rating) : alertPayment()}
       containerStyle={{marginVertical: 5}}
     />
     <Button
-      title='Take a learning check'
+      title={language.courseDetail.generalDetail.check}
       type='outline'
       icon={
         <Icon name='tasks' type='font-awesome-5' color='#19B5FE' iconStyle={{marginHorizontal: 8}}/>
@@ -193,15 +197,15 @@ const GeneralCourseDetail = (props) => {
     <AddToChannelDialog modalVisible={modalVisible} courseDetail={props.detail} closeModel={() => setModalVisible(false)}/>
     {
       props.coursesLikeCategory ?
-        <SectionCourses title='Courses like category'
+        <SectionCourses title={language.courseDetail.generalDetail.courseLike}
                        type='Course'
                        navigation={props.navigation}
                        route={props.route}
-                       data={props.coursesLikeCategory}
+                       data={props.coursesLikeCategory.slice(0, 8)}
                        pressSeeAll={() => props.navigation.push('ListCourses', {
                          data: props.coursesLikeCategory,
                          title: false,
-                         name: 'Courses like category'
+                         name: language.courseDetail.generalDetail.courseLike
                        })}/> : null
     }
   </ScrollView>

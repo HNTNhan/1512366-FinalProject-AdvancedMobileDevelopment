@@ -10,6 +10,7 @@ const ChannelItems = (props) => {
   const {theme} = useContext(ColorsContext)
   const {state} = useContext(AuthenticationContext)
   const userContext = useContext(UserContext)
+  const index = props.index%4+1
 
   const onPressRemove = () => {
     getChannel().then(async res => {
@@ -33,7 +34,13 @@ const ChannelItems = (props) => {
   }
 
   return <TouchableOpacity style={{...styles.item, backgroundColor: theme.foreground1}} onPress={props.onPress}>
-    <Image source={require('../../../../../assets/ic_course.png')} style={styles.image}/>
+    <Image
+      source={index===1 ? require('../../../../../assets/channel1.jpg') :
+        index===2 ? require('../../../../../assets/channel2.jpg') :
+        index===3 ? require('../../../../../assets/channel3.jpg') :
+          require('../../../../../assets/channel4.jpg')
+      }
+           style={styles.image}/>
     <View style={styles.detail}>
       <Text style={{fontSize: 16, color: theme.text}}>{props.item.detail.title}</Text>
     </View>

@@ -1,12 +1,14 @@
-import React, {useState, useRef, useEffect} from 'react';
+import React, {useState, useRef, useEffect, useContext} from 'react';
 import {Alert, Dimensions, StyleSheet, View} from 'react-native';
 import YoutubePlayer from 'react-native-youtube-iframe';
 import {Icon} from "react-native-elements";
 import {finishLesson, updateVideoTime} from "../../../../core/services/lesson-services";
 import CenterActivityIndicator from "../../../Common/center-activity-indicator";
+import {LanguageContext} from "../../../../provider/language-provider";
 
 
 const YoutubeVideo = (props) => {
+  const {language} = useContext(LanguageContext)
   const playerRef = useRef(null);
   const [buffering, setBuffering] = useState(false);
   const [pos, setPos] = useState(Math.floor(props.pos*60));
@@ -45,17 +47,17 @@ const YoutubeVideo = (props) => {
 
   const onReady = () => {
     if(pos) {
-      Alert.alert('', 'Continue your progress with this lesson?',
+      Alert.alert('', language.courseDetail.video.continue,
         [
           {
-            text: "Cancel",
+            text: language.same.buttonCancel,
             onPress: () => {
               setPos(0)
               setTime(0)
             },
             style: "cancel"
           },
-          { text: "OK", onPress: () => {setTime(pos)}}
+          { text: language.same.buttonOK, onPress: () => {setTime(pos)}}
         ],
       )
     } else {
@@ -76,10 +78,9 @@ const YoutubeVideo = (props) => {
       case 'ended':
         if(props.id) {
           finishLesson(props.id, props.token).then((res) => {
-            console.log(res)
             setOverlay(true)
           }).catch(err => {
-            console.log(err.response.data.message)
+            alert(err.response.data.message || err)
           })
         } else {
           setOverlay(true)
@@ -100,12 +101,12 @@ const YoutubeVideo = (props) => {
       ref={playerRef}
       height={Dimensions.get('window').width / 1.9}
       width={Dimensions.get('window').width}
-      videoId={props.uri.slice(props.uri.indexOf('embed')+6)}
+      videoId={props.videoId}
       play={false}
       onChangeState={event => onChangeState(event)}
       onReady={() => onReady()}
-      onError={e => console.log('error: ', e)}
-      //onPlaybackQualityChange={q => console.log('quality', q)}
+      onError={e => alert(e)}
+      onPlaybackQualityChange={q => console.log('quality', q)}
       volume={100}
       playbackRate={1}
       initialPlayerParams={{

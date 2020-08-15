@@ -1,8 +1,8 @@
-export const extractData = (data) => {
+export const extractData = (data, lang) => {
   let temp = {...data}
   const  overview = {
     numberOrder: 0,
-    name: 'Course Overview',
+    name: lang==='vi' ? 'Giới thiệu' : 'Course Overview',
     sumHours: 0,
     data: [
       {

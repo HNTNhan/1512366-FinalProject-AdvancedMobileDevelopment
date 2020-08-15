@@ -7,9 +7,11 @@ import {Button, Icon} from "react-native-elements";
 import {ColorsContext} from "../../../provider/colors-provider";
 import * as WebBrowser from 'expo-web-browser';
 import {UserContext} from "../../../provider/user-provider";
+import {LanguageContext} from "../../../provider/language-provider";
 
 const Payment = (props) => {
   const {state} = useContext(AuthenticationContext)
+  const {language} = useContext(LanguageContext)
   const {theme} = useContext(ColorsContext)
   const [paymentInfo, setPaymentInfo] = useState({});
   const [isLoading, setIsLoading] = useState(true)
@@ -75,14 +77,14 @@ const Payment = (props) => {
     if(paymentSuccess) {
       return <View style={{...styles.container, backgroundColor: theme.background, alignItems: 'center', justifyContent: 'center'}}>
         <Icon name={'check-circle'} type={"font-awesome-5"} color={'green'} size={50}/>
-        <Text style={styles.mainTitle}>Payment Success</Text>
-        <Text style={styles.title}>Thank you for using our services!</Text>
+        <Text style={styles.mainTitle}>{language.payment.success}</Text>
+        <Text style={styles.title}>{language.payment.successNote}</Text>
         <View style={{flexDirection: 'row'}}>
-          <Button buttonStyle={{marginHorizontal: 5, borderColor: theme.text}} titleStyle={{color: theme.text}} title={'Home'}
+          <Button buttonStyle={{marginHorizontal: 5, borderColor: theme.text}} titleStyle={{color: theme.text}} title={language.payment.buttonHome}
                   type={"outline"} icon={<Icon name={'home'} type={"font-awesome-5"} size={18} color={theme.text} />}
                   onPress={() => props.navigation.reset({index: 0, routes: [{name: 'Home'}]})}
           />
-          <Button buttonStyle={{marginHorizontal: 5, backgroundColor: '#19B5FE'}} title={'Course'}
+          <Button buttonStyle={{marginHorizontal: 5, backgroundColor: '#19B5FE'}} title={language.payment.buttonCourse}
                   icon={<Icon name={'leanpub'} type={"font-awesome-5"} size={18} color={'white'} />}
                   onPress={() => {
                     props.navigation.goBack()
@@ -94,11 +96,11 @@ const Payment = (props) => {
     } else {
       return <ScrollView showsVerticalScrollIndicator={false} style={{...styles.container, backgroundColor: theme.background}}>
         <View style={{alignItems: 'center', marginVertical: 10}}>
-          <Text style={{...styles.mainTitle, color: theme.text}}>Payment</Text>
+          <Text style={{...styles.mainTitle, color: theme.text}}>{language.payment.payment}</Text>
         </View>
         <View>
           <View>
-            <Text style={{...styles.title, color: theme.text}}>Course Detail: </Text>
+            <Text style={{...styles.title, color: theme.text}}>{language.payment.course}</Text>
           </View>
           <View style={styles.infoContainer}>
             <Image source={{uri: paymentInfo.payload.imageUrl}} style={styles.courseImage}/>
@@ -106,14 +108,14 @@ const Payment = (props) => {
               <Text style={{...styles.text, color: theme.text}}>
                 <Text>{paymentInfo.payload.title} {'\n'}</Text>
                 <Text>{paymentInfo.payload.instructorName} {'\n'}</Text>
-                <Text style={{fontSize: 18, color: 'red'}}>{paymentInfo.payload.price ? <Text>{paymentInfo.payload.price}đ</Text> : <Text>Free</Text> } {'\n'}</Text>
+                <Text style={{fontSize: 18, color: 'red'}}>{paymentInfo.payload.price ? <Text>{paymentInfo.payload.price}đ</Text> : <Text>{language.payment.free}</Text> } {'\n'}</Text>
               </Text>
             </View>
           </View>
         </View>
         <View>
           <View>
-            <Text style={{...styles.title, color: theme.text}}>User Detail: </Text>
+            <Text style={{...styles.title, color: theme.text}}>{language.payment.user}</Text>
           </View>
           <View style={styles.infoContainer}>
             <Image source={{uri: state.userInfo.avatar}} style={styles.userAvatar}/>
@@ -126,7 +128,7 @@ const Payment = (props) => {
             </View>
           </View>
         </View>
-        <Button title={'Payment'} buttonStyle={{alignSelf: 'center'}} onPress={() => onPressPayment()}/>
+        <Button title={language.payment.payment} buttonStyle={{alignSelf: 'center', marginBottom: 20}} onPress={() => onPressPayment()}/>
       </ScrollView>
     }
   }
@@ -135,7 +137,6 @@ const Payment = (props) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 5,
   },
   mainTitle: {
     fontSize: 30,

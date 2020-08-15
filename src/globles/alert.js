@@ -6,3 +6,10 @@ export const alertSignIn = () => Alert.alert(
   [],
   { cancelable: true })
 
+export const alertPayment = () => Alert.alert(
+  '',
+  'Please payment courses to continue this action!',
+  [],
+  { cancelable: true })
+
+

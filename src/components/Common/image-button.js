@@ -2,7 +2,35 @@ import React from 'react';
 import {View, Text, ImageBackground, TouchableOpacity, StyleSheet} from 'react-native';
 
 const ImageButton = (props) => {
-  return <ImageBackground style={styles.imageButton} source={{uri: 'https://toppng.com/uploads/preview/cool-backgrounds-hd-11553723106ceelmiacll.jpeg'}}>
+  const RandomNumber = Math.floor(Math.random() * 8) + 1 ;
+  let source;
+  switch (RandomNumber) {
+    case 1:
+      source=require('../../../assets/1.jpg')
+      break
+    case 2:
+      source=require('../../../assets/2.jpg')
+      break
+    case 3:
+      source=require('../../../assets/3.jpg')
+      break
+    case 4:
+      source=require('../../../assets/4.jpg')
+      break
+    case 5:
+      source=require('../../../assets/5.jpg')
+      break
+    case 6:
+      source=require('../../../assets/6.jpg')
+      break
+    case 7:
+      source=require('../../../assets/7.jpg')
+      break
+    default:
+      source=require('../../../assets/8.jpg')
+  }
+
+  return <ImageBackground style={styles.imageButton} source={source}>
     <TouchableOpacity
       style={styles.touch}
       onPress={props.onPress}

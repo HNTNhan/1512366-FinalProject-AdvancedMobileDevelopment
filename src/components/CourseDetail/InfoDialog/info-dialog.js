@@ -1,8 +1,11 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {Modal, StyleSheet, TouchableOpacity, TouchableWithoutFeedback, View} from 'react-native';
 import {Text} from "react-native-elements";
+import {LanguageContext} from "../../../provider/language-provider";
 
 const InfoDialog = (props) => {
+  const {language} = useContext(LanguageContext)
+
   return <Modal
     animationType="fade"
     transparent={true}
@@ -12,20 +15,20 @@ const InfoDialog = (props) => {
       <View style={styles.centeredView}>
         <TouchableWithoutFeedback onPress={null}>
           <View style={styles.modalView}>
-            <Text style={styles.text}>This course isn't included with your current subscription.</Text>
+            <Text style={styles.text}>{language.courseDetail.infoDialog.content}</Text>
             <View style={styles.buttonContainer}>
               <TouchableOpacity
                 style={styles.button}
                 onPress={props.closeModel}
               >
-                <Text style={styles.buttonText}>Cancel</Text>
+                <Text style={styles.buttonText}>{language.same.buttonOK}</Text>
               </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.button}
-                onPress={() => alert('Unlock')}
-              >
-                <Text style={styles.buttonText}>Unlock</Text>
-              </TouchableOpacity>
+              {/*<TouchableOpacity*/}
+              {/*  style={styles.button}*/}
+              {/*  onPress={() => alert('Unlock')}*/}
+              {/*>*/}
+              {/*  <Text style={styles.buttonText}>Unlock</Text>*/}
+              {/*</TouchableOpacity>*/}
             </View>
           </View>
         </TouchableWithoutFeedback>

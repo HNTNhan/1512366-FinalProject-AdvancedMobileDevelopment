@@ -13,7 +13,7 @@ const ItemsInChannel = (props) => {
 
   return <View>
     <View>
-      <Text style={{...styles.title, color: theme.text}}>Courses in channel</Text>
+      <Text style={{...styles.title, color: theme.text}}>{props.language.channelDetail.courseInChannel}</Text>
     </View>
     {
       props.items.map((item, index) => {

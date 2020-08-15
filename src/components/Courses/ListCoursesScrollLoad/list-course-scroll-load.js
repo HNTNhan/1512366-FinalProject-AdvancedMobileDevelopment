@@ -83,10 +83,10 @@ const ListCoursesScrollLoad = (props) => {
       })
     } else {
       const paramSearch = props.route.params.paramSearch;
-      searchCourses("", paramSearch.attribute, paramSearch.rule,paramSearch.category,undefined,undefined,20, data.nextPage*20)
+      searchCourses("", paramSearch.attribute, paramSearch.rule, paramSearch.category,undefined,undefined,20, data.nextPage*20)
         .then(res => {
           if(res.status === 200) {
-            if(res.data.payload.length>0) {
+            if(res.data.payload.count>0) {
               let temp = {...data}
               temp.nextPage += 1
               temp.isLoading = false
@@ -129,7 +129,9 @@ const ListCoursesScrollLoad = (props) => {
           onEndReachedThreshold={0.00001}
           ListFooterComponent={() => {
             if(!footerLoading) return null
-            return <ActivityIndicator size={"large"} color={'blue'}/>
+            return <View style={{alignItems: 'center', justifyContent: 'center', paddingVertical: 20}}>
+              <ActivityIndicator size={"large"} color={'blue'}/>
+            </View>
           }}
         />
     }

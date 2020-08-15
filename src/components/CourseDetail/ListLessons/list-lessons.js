@@ -12,9 +12,9 @@ const ListLessons = (props) => {
   const [loading, setLoading] = useState(true);
   const [section, setSection] = useState(props.courseDetail.section)
 
-  if(props.isAuthenticated || props.courseDownload) {
+  if(props.isAuthenticated) {
     useEffect(() => {
-      if(props.courseDownload) {
+      if(props.courseDownload && props.checkDownload) {
         setSection(props.courseDownload.section)
         setLoading(false)
       } else {
@@ -33,9 +33,15 @@ const ListLessons = (props) => {
             renderItem={({item, section: {downloaded}}) =>
               <ListLessonItems item={item} checkOwn={props.checkOwn} courseId={props.courseId} videoLoading={props.videoLoading} downloaded={downloaded}
                                type={item.numberOrder!==0 ? 'lesson' : 'overview'} onPress={props.onPressLesson} showInfoDialog={props.showInfoDialog}/>}
-            renderSectionHeader={({section: {name, sumHours, numberOrder, data, downloaded, id, index}}) =>
-              <ListLessonTitle index={numberOrder} title={name} totalDuration={sumHours} downloaded={downloaded} id={id} checkOwn={props.checkOwn}
-                               onPressDownloadSection={() => props.onPressDownloadSection(data, numberOrder)}/>}
+            renderSectionHeader={({section: {name, sumHours, numberOrder, data, downloaded, id}}) => {
+              let index;
+              if(props.courseDownload) {
+                index = numberOrder % (props.courseDownload.section.length + 1)
+              } else {}
+
+              return <ListLessonTitle index={numberOrder} title={name} totalDuration={sumHours} id={id} checkOwn={props.checkOwn}
+                               downloaded={props.courseDownload ? props.courseDownload.section[index].downloaded : downloaded}
+                               onPressDownloadSection={() => props.onPressDownloadSection(data, numberOrder)}/>}}
             SectionSeparatorComponent={() => <View style={globalStyles.separator} />}
           />
         </View>

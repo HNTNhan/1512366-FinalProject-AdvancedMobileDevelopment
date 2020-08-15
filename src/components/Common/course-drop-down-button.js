@@ -10,10 +10,12 @@ import AddToChannelDialog from "./add-to-channel-dialog";
 import {getCoursesDownload, storeCoursesDownload} from "../../core/local_storage/courses-download-storage";
 import * as FileSystem from "expo-file-system";
 import {ColorsContext} from "../../provider/colors-provider";
+import {LanguageContext} from "../../provider/language-provider";
 
 const CourseDropDownButton = (props) => {
   const {state} = useContext(AuthenticationContext);
   const {theme} = useContext(ColorsContext)
+  const {language} = useContext(LanguageContext)
   const userContext = useContext(UserContext);
   const [favorite, setFavorite] = useState(false);
   const [modalVisible, setModalVisible] = useState(false)
@@ -68,10 +70,6 @@ const CourseDropDownButton = (props) => {
     return () => mounted = false
   }
 
-  const onSelectDownload = () => {
-
-  }
-
   const onSelectAddToChannel = () => {
     setModalVisible(true)
   }
@@ -105,12 +103,11 @@ const CourseDropDownButton = (props) => {
       </MenuTrigger>
       <MenuOptions>
         <MenuOption onSelect={() => state.isAuthenticated ? onSelectFavorite() : alertSignIn()} >
-          <Text>{favorite ? 'UnFavorite' : 'Favorite'}</Text>
+          <Text>{favorite ? language.courseDropDownButton.unFavorite : language.courseDropDownButton.favorite}</Text>
         </MenuOption>
-        {/*<MenuOption onSelect={() => state.isAuthenticated ? onSelectDownload() : alertSignIn()} text={'Download'} />*/}
-        <MenuOption onSelect={() => state.isAuthenticated ? onSelectAddToChannel() : alertSignIn()} text={'Add to channel'} />
+        <MenuOption onSelect={() => state.isAuthenticated ? onSelectAddToChannel() : alertSignIn()} text={language.courseDropDownButton.addChannel} />
         {
-          props.type==='download' ? <MenuOption onSelect={() => onPressRemove()} text={'Remove'}/> : null
+          props.type==='download' ? <MenuOption onSelect={() => onPressRemove()} text={language.courseDropDownButton.remove}/> : null
         }
       </MenuOptions>
     </Menu>
@@ -123,7 +120,6 @@ const CourseDropDownButton = (props) => {
     {
       props.courseDetail ? <AddToChannelDialog modalVisible={modalVisible} courseDetail={props.courseDetail} closeModel={() => setModalVisible(false)}/> : null
     }
-    {/*<AddToChannelDialog modalVisible={modalVisible} courseDetail={props.courseDetail} closeModel={() => setModalVisible(false)}/>*/}
   </View>
 };
 

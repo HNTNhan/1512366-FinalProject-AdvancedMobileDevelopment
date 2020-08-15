@@ -10,7 +10,7 @@ const ForgotPassword = (props) => {
   const {theme} = useContext(ColorsContext)
   const {language} = useContext(LanguageContext)
   const authContext = useContext(AuthenticationContext)
-  const [email, setEmail] = useState('test@gmail.com');
+  const [email, setEmail] = useState('');
 
   useEffect(() => {
     const backAction = () => {

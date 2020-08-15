@@ -14,10 +14,12 @@ import {getChannel, storeChannel} from "../../core/local_storage/channel-storage
 import {UserContext} from "../../provider/user-provider";
 import {getCourseInfo, getCourseProcess} from "../../core/services/course-services";
 import {checkOwnCourse} from "../../core/services/user-services";
+import {LanguageContext} from "../../provider/language-provider";
 
 const AddToChannelDialog = (props) => {
   const {state} = useContext(AuthenticationContext);
   const userContext = useContext(UserContext);
+  const {language} = useContext(LanguageContext)
 
   const [modalVisible, setModalVisible] = useState(false);
   const [newChannel, setNewChannel] = useState('');
@@ -72,7 +74,7 @@ const AddToChannelDialog = (props) => {
             setChannelStorageData({data: [], index: -1})
           }
         } else {
-          console.log('err: ', res.data.e)
+          //console.log('err: ', res.data.e)
         }
         setIsLoading(false)
       }).catch(err => {
@@ -106,10 +108,9 @@ const AddToChannelDialog = (props) => {
       },
       items: [courseDetail]
     };
-    console.log(0)
+
     let tempChannels = channelsStorageData.index!==-1 ? [...channelsStorageData.data[channelsStorageData.index].channels] : []
     let tempChannelsStorage = [...channelsStorageData.data]
-    console.log(1)
     tempChannels.push(channel)
 
     if(channelsStorageData.index!==-1) {
@@ -134,7 +135,7 @@ const AddToChannelDialog = (props) => {
       disabled={!!check}
     >
       <Icon name={!check ? 'cast-connected' : 'check'} size={18} />
-      <Text style={styles.textStyle}>  {propsModal.channel.detail.title} {!check ? '' : '(added)'}</Text>
+      <Text style={styles.textStyle}>  {propsModal.channel.detail.title} {!check ? '' : language.channelDialog.added}</Text>
     </TouchableOpacity>
   }
 
@@ -152,7 +153,7 @@ const AddToChannelDialog = (props) => {
             <TouchableWithoutFeedback onPress={null}>
               <View style={styles.modalView}>
                 <ScrollView>
-                  <Text style={styles.modalTitle}>Add to Channel</Text>
+                  <Text style={styles.modalTitle}>{language.channelDialog.addChannel}</Text>
 
                   <TouchableOpacity
                     style={{ ...styles.channelButton}}
@@ -161,7 +162,7 @@ const AddToChannelDialog = (props) => {
                       setModalVisible(true)}}
                   >
                     <Icon name={'plus'} type={"font-awesome-5"} size={14} />
-                    <Text style={styles.textStyle}>  New channel</Text>
+                    <Text style={styles.textStyle}>{language.channelDialog.buttonNewChannel}</Text>
                   </TouchableOpacity>
                   {
                     channelsStorageData.index!==-1 ?
@@ -184,15 +185,15 @@ const AddToChannelDialog = (props) => {
           <View style={styles.centeredView}>
             <TouchableWithoutFeedback onPress={null}>
               <View style={styles.modalView}>
-                <Text style={styles.modalTitle}>Create channel</Text>
-                <InputTextSae title='Channel title' value={newChannel} onChangeText={onChangeNewChannel}/>
+                <Text style={styles.modalTitle}>{language.channelDialog.createChannel}</Text>
+                <InputTextSae title={language.channelDialog.channelTitle} value={newChannel} onChangeText={onChangeNewChannel}/>
 
                 <View style={styles.createChannelButtonContainer}>
                   <TouchableOpacity
                     style={styles.creatChannelButton}
                     onPress={() => setModalVisible(false)}
                   >
-                    <Text style={styles.creatChannelButtonText}>Cancel</Text>
+                    <Text style={styles.creatChannelButtonText}>{language.same.buttonCancel}</Text>
                   </TouchableOpacity>
                   <TouchableOpacity
                     style={styles.creatChannelButton}
@@ -201,7 +202,7 @@ const AddToChannelDialog = (props) => {
                         channel => channel.detail.title===newChannel) ? onPressSaveNewChannel() : null}
                     }
                   >
-                    <Text style={styles.creatChannelButtonText}>Save</Text>
+                    <Text style={styles.creatChannelButtonText}>{language.same.buttonSave}</Text>
                   </TouchableOpacity>
                 </View>
               </View>

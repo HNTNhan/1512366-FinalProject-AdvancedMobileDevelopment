@@ -7,9 +7,11 @@ import {getAllCategory} from "../../../core/services/category-service";
 import {Button, Icon} from "react-native-elements";
 import {convertDate} from "../../Common/convert-data";
 import ChooseFavoriteCategoriesModal from "../../Common/choose-favorite-categories-modal";
+import {LanguageContext} from "../../../provider/language-provider";
 
 const Profile = (props) => {
   const {theme} = useContext(ColorsContext);
+  const {language} = useContext(LanguageContext);
   const authContext = useContext(AuthenticationContext);
   const {state} =useContext(AuthenticationContext);
 
@@ -53,48 +55,48 @@ const Profile = (props) => {
       {
         categories ? <View style={{...styles.subContainer}}>
           <View style={{...styles.favoriteTitleCategoriesContainer}}>
-            <Text style={{...styles.title, color: theme.text}}>Favorite Categories</Text>
+            <Text style={{...styles.title, color: theme.text}}>{language.profile.favoriteCategories}</Text>
             <Button
               buttonStyle={styles.changeButton}
               titleStyle={{...styles.changeButtonText, color: theme.text}}
               onPress={() => setShowModal(true)}
-              title = 'Change'/>
+              title={language.profile.change}/>
           </View>
 
-          <FavoriteCategories title={'Favorite Categories'} allCategories={categories} favoriteCategories={state.userInfo.favoriteCategories}
-                              navigation={props.navigation} route={props.route}/>
+          <FavoriteCategories allCategories={categories} favoriteCategories={state.userInfo.favoriteCategories}
+                              navigation={props.navigation} route={props.route} language={language}/>
           {
             !state.userInfo.favoriteCategories.length ?
               <Button
                 buttonStyle={styles.button}
                 titleStyle={{...styles.buttonText}}
                 onPress={() => setShowModal(true)}
-                title = 'Choose your favorite categories'/> : null
+                title={language.profile.buttonChooseFavorite}/> : null
 
           }
-          <ChooseFavoriteCategoriesModal showModal={showModal} categories={categories} onPressClose={onPressClose}/>
+          <ChooseFavoriteCategoriesModal showModal={showModal} categories={categories} onPressClose={onPressClose} language={language}/>
         </View>: null
       }
 
 
       <View style={styles.subContainer}>
-        <Text style={{...styles.title, color: theme.text}}>User</Text>
+        <Text style={{...styles.title, color: theme.text}}>{language.profile.user}</Text>
         <View>
-          <Text style={{...styles.text, color: theme.text}}>TYPE: {state.userInfo.type}</Text>
-          <Text style={{...styles.text, color: theme.text}}>POINT: {state.userInfo.point}</Text>
-          <Text style={{...styles.text, color: theme.text}}>CREATE AT: {convertDate(state.userInfo.createdAt)}</Text>
-          <Text style={{...styles.text, color: theme.text}}>LAST UPDATE: {convertDate(state.userInfo.updatedAt)}</Text>
+          <Text style={{...styles.text, color: theme.text}}>{language.profile.type}{state.userInfo.type}</Text>
+          <Text style={{...styles.text, color: theme.text}}>{language.profile.point}{state.userInfo.point}</Text>
+          <Text style={{...styles.text, color: theme.text}}>{language.profile.createAt}{convertDate(state.userInfo.createdAt, null, language.same.lang)}</Text>
+          <Text style={{...styles.text, color: theme.text}}>{language.profile.lastUpdate}{convertDate(state.userInfo.updatedAt, null, language.same.lang)}</Text>
         </View>
       </View>
     </View>
   } else {
     return <View style={{...styles.containerSignIn, backgroundColor: theme.background}}>
-      <Text style={{...styles.text, color: theme.text}}>Please sign in to view your profile</Text>
+      <Text style={{...styles.text, color: theme.text}}>{language.profile.alertSignIn}</Text>
       <Button
         buttonStyle={styles.button}
         titleStyle={styles.buttonText}
         onPress={() => props.navigation.replace('Authentication')}
-        title = 'SIGN IN'/>
+        title={language.profile.signIn}/>
     </View>
   }
 

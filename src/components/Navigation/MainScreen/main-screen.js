@@ -9,6 +9,7 @@ import SearchScreen from "../SearchScreen/search-screen";
 import {Icon} from "react-native-elements";
 import {ColorsContext} from "../../../provider/colors-provider";
 import {BottomTabBarContext} from "../../../provider/bottom-tab-bar-provider";
+import {LanguageContext} from "../../../provider/language-provider";
 
 const bottomTabIcons = (route, focused) => {
   {
@@ -45,6 +46,7 @@ const MainTab = createBottomTabNavigator();
 const MainScreen = (props) => {
   const {theme} = useContext(ColorsContext);
   const {show} = useContext(BottomTabBarContext)
+  const {language} = useContext(LanguageContext)
 
   return <MainTab.Navigator
     screenOptions={({route}) => ({
@@ -53,10 +55,10 @@ const MainScreen = (props) => {
     })}
     tabBarOptions={{...objectsConstant.bottomTabOption, style: {backgroundColor: theme.foreground1, paddingBottom: 0, paddingTop: 0, height: 60}}}
   >
-    <MainTab.Screen name="Home" component={HomeScreen}/>
-    <MainTab.Screen name='Download' component={DownloadScreen}/>
-    <MainTab.Screen name='Browse' component={BrowseScreen}/>
-    <MainTab.Screen name='Search' component={SearchScreen} options={{headerShown: false}}/>
+    <MainTab.Screen name="Home" component={HomeScreen} options={{title: language.navigation.signIn}}/>
+    <MainTab.Screen name='Download' component={DownloadScreen} options={{title: language.navigation.download}}/>
+    <MainTab.Screen name='Browse' component={BrowseScreen} options={{title: language.navigation.browse}}/>
+    <MainTab.Screen name='Search' component={SearchScreen} options={{headerShown: false, title: language.navigation.search}}/>
   </MainTab.Navigator>
 };
 
